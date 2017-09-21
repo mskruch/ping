@@ -1,5 +1,15 @@
 <web-app xmlns="http://java.sun.com/xml/ns/javaee" version="2.5">
- <servlet>
+
+    <servlet>
+        <servlet-name>ping</servlet-name>
+        <servlet-class>pl.mskruch.Ping</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ping</servlet-name>
+        <url-pattern>/ping</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>test</servlet-name>
         <servlet-class>pl.mskruch.Test</servlet-class>
     </servlet>
@@ -7,4 +17,5 @@
         <servlet-name>test</servlet-name>
         <url-pattern>/*</url-pattern>
     </servlet-mapping>
+
 </web-app>
