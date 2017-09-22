@@ -24,6 +24,9 @@ apply plugin: 'com.google.cloud.tools.appengine'  // App Engine tasks
 dependencies {
   providedCompile group: 'javax.servlet', name: 'servlet-api', version:'2.5'
   compile 'com.google.appengine:appengine:+'
+//  compile 'com.google.apis:google-api-services-appengine:+'
+  compile 'com.google.appengine:appengine-api-1.0-sdk:+'
+
 // Add your dependencies here.
     // The production code uses the SLF4J logging API at compile time
     compile 'org.slf4j:slf4j-api:1.7.21'
@@ -46,7 +49,7 @@ appengine {  // App Engine tasks configuration
   }
 }
 
-group = 'com.example.appengine'   // Generated output GroupId
+group = 'pl.mskruch'   // Generated output GroupId
 version = '1.0-SNAPSHOT'          // Version in generated output
 
 sourceCompatibility = 1.7  // App Engine Standard uses Java 7
