@@ -67,9 +67,9 @@ public class Ping extends HttpServlet
 				}
 				write(resp, "<b>Bytes: </b> " + bytes);
 			} catch (SocketTimeoutException e) {
-				write(resp, "<b>Timeout: </b> " + e.getMessage())
+				write(resp, "<b>Timeout: </b> " + e.getMessage());
 			} catch (IOException e) {
-				write(resp, "<b>Error: </b> " + e.getMessage())
+				write(resp, "<b>Error: </b> " + e.getMessage());
 			}
 		}
 
