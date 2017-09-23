@@ -1,6 +1,7 @@
 package pl.mskruch;
 
 import com.googlecode.objectify.ObjectifyService;
+import pl.mskruch.data.Check;
 import pl.mskruch.data.User;
 
 import javax.servlet.ServletException;
@@ -12,6 +13,7 @@ import java.io.IOException;
 public class StartupServlet extends HttpServlet {
     static {
         ObjectifyService.register(User.class);
+        ObjectifyService.register(Check.class);
     }
 
     @Override

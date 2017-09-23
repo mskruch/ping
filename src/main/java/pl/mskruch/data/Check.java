@@ -16,8 +16,26 @@ public class Check
 
 	Date created;
 	String url;
-	// Boolean active;
+
+	Check()
+	{
+	}
+
+	public Check(String ownerEmail, String url)
+	{
+		this.ownerEmail = ownerEmail;
+		this.url = url;
+		this.created = new Date();
+	}
+	// Boolean paused;
 
 	// Date lastCheck;
 	// Long secondsDown;
+
+	@Override
+	public String toString()
+	{
+		return "Check{" + "id=" + id + ", ownerEmail='" + ownerEmail + '\''
+			+ ", created=" + created + ", url='" + url + '\'' + '}';
+	}
 }
