@@ -18,6 +18,11 @@ public class User {
     User() {
     }
 
+    public String email()
+    {
+        return email;
+    }
+
     @Override
     public String toString() {
         return "User{" + "id=" + id + ", email='" + email + '\'' + '}';
