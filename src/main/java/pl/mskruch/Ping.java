@@ -4,8 +4,12 @@ import static com.googlecode.objectify.ObjectifyService.ofy;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.SocketTimeoutException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
@@ -45,17 +49,28 @@ public class Ping extends HttpServlet
 			}
 
 			URL url = new URL("http://google.pl");
-			BufferedReader reader = new BufferedReader(
-				new InputStreamReader(url.openStream()));
-			StringBuffer response = new StringBuffer();
-			String line;
+			long start = System.currentTimeMillis();
+			HttpURLConnection connection = (HttpURLConnection) url
+				.openConnection();
+			connection.setRequestMethod("GET");
+			connection.connect();
+			long elapsed = System.currentTimeMillis() - start;
 
-			while ((line = reader.readLine()) != null) {
-				response.append(line);
+			try {
+				int code = connection.getResponseCode();
+				write(resp, "<b>Response: </b> " + code);
+				write(resp, "<b>Time: </b> " + elapsed + " ms");
+				InputStream in = connection.getInputStream();
+				long bytes = 0;
+				while (in.read() != -1) {
+					bytes++;
+				}
+				write(resp, "<b>Bytes: </b> " + bytes);
+			} catch (SocketTimeoutException e) {
+				write(resp, "<b>Timeout: </b> " + e.getMessage())
+			} catch (IOException e) {
+				write(resp, "<b>Error: </b> " + e.getMessage())
 			}
-			reader.close();
-
-			write(resp, "<b>Response:</b> " + response.toString());
 		}
 
 	}
