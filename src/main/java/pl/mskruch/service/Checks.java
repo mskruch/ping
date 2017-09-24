@@ -46,9 +46,10 @@ public class Checks
 		return check.getId();
 	}
 
-	public void update(Check check, Result result)
+	public boolean update(Check check, Result result)
 	{
-		check.setStatus(result.status());
+		boolean changed = check.setStatus(result.status());
 		ofy().save().entity(check).now();
+		return changed;
 	}
 }

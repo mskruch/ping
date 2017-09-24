@@ -14,13 +14,15 @@
 	<tr>
 		<th>id</th>
 		<th>url</th>
+		<th>checked</th>
 		<th>status</th>
 	</tr>
 	<c:forEach items="${checks}" var="check">
 		<tr>
 			<td>${check.id}</td>
 			<td>${check.url}</td>
-			<td>${check.lastCheck}: ${check.status}</td>
+			<td>${check.lastCheckDuration}</td>
+			<td>${check.status} since ${check.statusSinceDuration}</td>
 		</tr>
 	</c:forEach>
 </table>
