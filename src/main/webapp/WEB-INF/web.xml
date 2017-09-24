@@ -2,7 +2,7 @@
 
 	<servlet>
 		<servlet-name>ping</servlet-name>
-		<servlet-class>pl.mskruch.Ping</servlet-class>
+		<servlet-class>pl.mskruch.servlet.PingServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>ping</servlet-name>
@@ -20,7 +20,7 @@
 
 	<servlet>
 		<servlet-name>startup</servlet-name>
-		<servlet-class>pl.mskruch.StartupServlet</servlet-class>
+		<servlet-class>pl.mskruch.servlet.StartupServlet</servlet-class>
 		<load-on-startup>0</load-on-startup>
 	</servlet>
 
@@ -51,6 +51,16 @@
 		<auth-constraint>
 			<role-name>admin</role-name> <!--for now only admin-->
 			<!--<role-name>*</role-name>-->
+		</auth-constraint>
+	</security-constraint>
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>ping</web-resource-name>
+			<url-pattern>/ping</url-pattern>
+			<url-pattern>/</url-pattern>
+		</web-resource-collection>
+		<auth-constraint>
+			<role-name>admin</role-name>
 		</auth-constraint>
 	</security-constraint>
 </web-app>

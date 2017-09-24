@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import pl.mskruch.service.Checks;
 import pl.mskruch.service.Users;
-import pl.mskruch.service.Writer;
 
 public class MainServlet extends HttpServlet
 {

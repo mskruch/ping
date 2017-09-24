@@ -23,8 +23,13 @@ public class Checks
 
 	public List<Check> list()
 	{
-		return ofy().load().type(Check.class).filter("ownerEmail", currentUser())
-			.list();
+		return ofy().load().type(Check.class)
+			.filter("ownerEmail", currentUser()).list();
+	}
+
+	public List<Check> all()
+	{
+		return ofy().load().type(Check.class).list();
 	}
 
 	private String currentUser()
@@ -39,5 +44,11 @@ public class Checks
 		ofy().save().entity(check).now(); // async without the now()
 		logger.info("check created: " + check);
 		return check.getId();
+	}
+
+	public void update(Check check, Result result)
+	{
+		check.setStatus(result.status());
+		ofy().save().entity(check).now();
 	}
 }
