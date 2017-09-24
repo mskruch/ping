@@ -23,6 +23,8 @@ apply plugin: 'com.google.cloud.tools.appengine'  // App Engine tasks
 
 dependencies {
     providedCompile group: 'javax.servlet', name: 'servlet-api', version: '2.5'
+    providedCompile 'javax.servlet:jstl:1.2'
+
     compile 'com.google.appengine:appengine:+'
 //  compile 'com.google.apis:google-api-services-appengine:+'
     compile 'com.google.appengine:appengine-api-1.0-sdk:+'
@@ -40,8 +42,8 @@ dependencies {
 }
 
 appengine {  // App Engine tasks configuration
-    run {      // local (dev_appserver) configuration (standard environments only)
-        port = 8080                 // default
+    run {
+        port = 8080
     }
 
     deploy {   // deploy configuration

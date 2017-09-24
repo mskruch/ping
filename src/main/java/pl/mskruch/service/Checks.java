@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pl.mskruch.data.Check;
-import pl.mskruch.data.User;
 
 public class Checks
 {
@@ -33,11 +32,12 @@ public class Checks
 		return req.getUserPrincipal().getName();
 	}
 
-	public void add(String url)
+	public Long add(String url)
 	{
 		logger.debug("create check for {}", url);
 		Check check = new Check(currentUser(), url);
 		ofy().save().entity(check).now(); // async without the now()
 		logger.info("check created: " + check);
+		return check.getId();
 	}
 }

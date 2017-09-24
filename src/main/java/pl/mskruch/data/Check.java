@@ -32,6 +32,16 @@ public class Check
 	// Date lastCheck;
 	// Long secondsDown;
 
+	public Long getId()
+	{
+		return id;
+	}
+
+	public String getUrl()
+	{
+		return url;
+	}
+
 	@Override
 	public String toString()
 	{
