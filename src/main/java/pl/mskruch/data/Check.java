@@ -16,6 +16,7 @@ public class Check
 
 	Date created;
 	String url;
+	Status status;
 
 	Check()
 	{
@@ -29,7 +30,7 @@ public class Check
 	}
 	// Boolean paused;
 
-	// Date lastCheck;
+	 Date lastCheck;
 	// Long secondsDown;
 
 	public Long getId()
@@ -40,6 +41,22 @@ public class Check
 	public String getUrl()
 	{
 		return url;
+	}
+
+	public void setStatus(Status status)
+	{
+		this.status = status;
+		this.lastCheck = new Date();
+	}
+
+	public Date getLastCheck()
+	{
+		return lastCheck;
+	}
+
+	public Status getStatus()
+	{
+		return status;
 	}
 
 	@Override

@@ -14,13 +14,15 @@
 	<tr>
 		<th>id</th>
 		<th>url</th>
+		<th>status</th>
 	</tr>
-	<tr>
-		<c:forEach items="${checks}" var="check">
+	<c:forEach items="${checks}" var="check">
+		<tr>
 			<td>${check.id}</td>
 			<td>${check.url}</td>
-		</c:forEach>
-	</tr>
+			<td>${check.lastCheck}: ${check.status}</td>
+		</tr>
+	</c:forEach>
 </table>
 
 <hr>

@@ -1,4 +1,4 @@
-package pl.mskruch;
+package pl.mskruch.servlet;
 
 import com.googlecode.objectify.ObjectifyService;
 import pl.mskruch.data.Check;
