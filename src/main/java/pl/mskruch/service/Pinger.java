@@ -5,6 +5,7 @@ import static pl.mskruch.data.Status.UP;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.util.logging.Logger;
@@ -15,14 +16,15 @@ public class Pinger
 
 	public Result ping(String urlString) throws IOException
 	{
-		URL url = new URL(urlString);
-		long start = System.currentTimeMillis();
-		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-		connection.setRequestMethod("GET");
-		connection.connect();
-
-		long elapsed = System.currentTimeMillis() - start;
 		try {
+			URL url = new URL(urlString);
+			long start = System.currentTimeMillis();
+			HttpURLConnection connection = (HttpURLConnection) url
+				.openConnection();
+			connection.setRequestMethod("GET");
+			connection.connect();
+
+			long elapsed = System.currentTimeMillis() - start;
 			int code = connection.getResponseCode();
 			// InputStream in = connection.getInputStream();
 			// long bytes = 0;
@@ -35,6 +37,8 @@ public class Pinger
 			} else {
 				return new Result(DOWN);
 			}
+		} catch (MalformedURLException e) {
+			return new Result(DOWN);
 		} catch (SocketTimeoutException e) {
 			return new Result(DOWN);
 		} catch (IOException e) {
