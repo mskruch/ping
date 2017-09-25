@@ -40,7 +40,7 @@ public class Users
 
 	public boolean isEnabled()
 	{
-		if (req.getUserPrincipal() == null) {
+		if (req.getUserPrincipal() == null || req.getUserPrincipal().getName() == null) {
 			return false;
 		}
 		String name = req.getUserPrincipal().getName();
