@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import pl.mskruch.service.Checks;
+import pl.mskruch.service.Users;
 
 public class ManageServlet extends HttpServlet
 {
@@ -21,6 +22,11 @@ public class ManageServlet extends HttpServlet
 		throws ServletException, IOException
 	{
 		logger.fine("create check requested");
+		Users users = new Users(req);
+		if (!users.isEnabled()) {
+			resp.sendError(HttpServletResponse.SC_FORBIDDEN);
+			return;
+		}
 		BufferedReader reader = new BufferedReader(
 			new InputStreamReader(req.getInputStream()));
 		String line = reader.readLine();

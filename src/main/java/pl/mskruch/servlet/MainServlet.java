@@ -19,8 +19,12 @@ public class MainServlet extends HttpServlet
 		Users users = new Users(req);
 		Checks checks = new Checks(req);
 
-		req.setAttribute("checks", checks.list());
+		if (users.isEnabled()){
+			req.setAttribute("checks", checks.list());
+		}
+
 		req.setAttribute("logoutUrl", users.logoutURL());
+		req.setAttribute("admin", req.isUserInRole("admin"));
 
 		req.getRequestDispatcher("/WEB-INF/jsp/main.jsp").forward(req, resp);
 	}

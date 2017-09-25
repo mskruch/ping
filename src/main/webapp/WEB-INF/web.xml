@@ -34,6 +34,15 @@
 	</servlet-mapping>
 
 	<servlet>
+		<servlet-name>admin</servlet-name>
+		<servlet-class>pl.mskruch.servlet.AdminServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>admin</servlet-name>
+		<url-pattern>/admin/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
 		<servlet-name>manage</servlet-name>
 		<servlet-class>pl.mskruch.servlet.ManageServlet</servlet-class>
 	</servlet>
@@ -44,20 +53,20 @@
 
 	<security-constraint>
 		<web-resource-collection>
-			<web-resource-name>manage</web-resource-name>
+			<web-resource-name>standard user area</web-resource-name>
 			<url-pattern>/manage/*</url-pattern>
 			<url-pattern>/</url-pattern>
 		</web-resource-collection>
 		<auth-constraint>
-			<role-name>admin</role-name> <!--for now only admin-->
+			<role-name>*</role-name> <!--for now only admin-->
 			<!--<role-name>*</role-name>-->
 		</auth-constraint>
 	</security-constraint>
 	<security-constraint>
 		<web-resource-collection>
-			<web-resource-name>ping</web-resource-name>
+			<web-resource-name>ping secure resources</web-resource-name>
 			<url-pattern>/ping</url-pattern>
-			<url-pattern>/</url-pattern>
+			<url-pattern>/admin</url-pattern>
 		</web-resource-collection>
 		<auth-constraint>
 			<role-name>admin</role-name>
