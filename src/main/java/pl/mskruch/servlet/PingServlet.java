@@ -44,7 +44,7 @@ public class PingServlet extends HttpServlet
 			if (checks.update(check, result)) {
 				logger.info("status changed, sending notification");
 
-				notify(req.getUserPrincipal().getName(), check, result);
+				notify(check, result);
 			}
 		}
 
@@ -57,7 +57,7 @@ public class PingServlet extends HttpServlet
 
 	}
 
-	private void notify(String email, Check check, Result result)
+	private void notify(Check check, Result result)
 	{
 		Properties props = new Properties();
 		Session session = Session.getDefaultInstance(props, null);
@@ -67,7 +67,7 @@ public class PingServlet extends HttpServlet
 			msg.setFrom(
 				new InternetAddress("noreply@czasowki-feeder.appspotmail.com", "Ping"));
 			msg.addRecipient(Message.RecipientType.TO,
-				new InternetAddress(email));
+				new InternetAddress(check.getOwnerEmail()));
 			msg.setSubject("Ping status changed to " + result.status());
 			msg.setText("Ping status changed to  " + result.status() + " for " + check.getUrl());
 			Transport.send(msg);

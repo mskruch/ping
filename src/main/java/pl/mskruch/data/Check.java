@@ -92,6 +92,10 @@ public class Check
 		return status;
 	}
 
+	public String getOwnerEmail() {
+		return ownerEmail;
+	}
+
 	@Override
 	public String toString()
 	{
