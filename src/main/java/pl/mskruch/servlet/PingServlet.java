@@ -44,7 +44,12 @@ public class PingServlet extends HttpServlet
 			if (checks.update(check, result)) {
 				logger.info("status changed, sending notification");
 
-				notify(check, result);
+				try {
+					notify(check, result);
+				} catch (Exception e) {
+					logger.severe(
+							"unable to send notification: " + e.getMessage());
+				}
 			}
 		}
 
