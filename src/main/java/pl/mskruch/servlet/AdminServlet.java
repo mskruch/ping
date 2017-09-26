@@ -1,5 +1,6 @@
 package pl.mskruch.servlet;
 
+import pl.mskruch.service.Config;
 import pl.mskruch.service.Users;
 
 import javax.servlet.ServletException;
@@ -22,6 +23,7 @@ public class AdminServlet extends HttpServlet {
         }
 
         req.setAttribute("users", users.all());
+        req.setAttribute("configEntries", new Config().all());
         req.getRequestDispatcher("/WEB-INF/jsp/admin.jsp").forward(req, resp);
     }
 }
