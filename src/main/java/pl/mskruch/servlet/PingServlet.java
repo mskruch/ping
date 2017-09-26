@@ -18,6 +18,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.appengine.api.datastore.Email;
+import com.google.appengine.api.mail.MailService;
+import com.google.appengine.api.mail.MailServiceFactory;
 import pl.mskruch.data.Check;
 import pl.mskruch.service.Checks;
 import pl.mskruch.service.Pinger;
@@ -25,7 +28,8 @@ import pl.mskruch.service.Result;
 
 public class PingServlet extends HttpServlet
 {
-	static Logger logger = Logger.getLogger(PingServlet.class.getName());
+    public static final String SENDER = "noreply@czasowki-feeder.appspotmail.com";
+    static Logger logger = Logger.getLogger(PingServlet.class.getName());
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -49,6 +53,9 @@ public class PingServlet extends HttpServlet
 				} catch (Exception e) {
 					logger.severe(
 							"unable to send notification: " + e.getMessage());
+					MailServiceFactory.getMailService()
+						.sendToAdmins(new MailService.Message(SENDER, null,
+							"Unable to send notification", e.getMessage()));
 				}
 			}
 		}
@@ -70,7 +77,7 @@ public class PingServlet extends HttpServlet
 		try {
 			Message msg = new MimeMessage(session);
 			msg.setFrom(
-				new InternetAddress("noreply@czasowki-feeder.appspotmail.com", "Ping"));
+				new InternetAddress(SENDER, "Ping"));
 			msg.addRecipient(Message.RecipientType.TO,
 				new InternetAddress(check.getOwnerEmail()));
 			msg.setSubject("Ping status changed to " + result.status());
