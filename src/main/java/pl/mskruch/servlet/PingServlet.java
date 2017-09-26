@@ -23,13 +23,14 @@ import com.google.appengine.api.mail.MailService;
 import com.google.appengine.api.mail.MailServiceFactory;
 import pl.mskruch.data.Check;
 import pl.mskruch.service.Checks;
+import pl.mskruch.service.Mailgun;
 import pl.mskruch.service.Pinger;
 import pl.mskruch.service.Result;
 
 public class PingServlet extends HttpServlet
 {
-    public static final String SENDER = "noreply@czasowki-feeder.appspotmail.com";
-    static Logger logger = Logger.getLogger(PingServlet.class.getName());
+	public static final String SENDER = "noreply@czasowki-feeder.appspotmail.com";
+	static Logger logger = Logger.getLogger(PingServlet.class.getName());
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -42,6 +43,7 @@ public class PingServlet extends HttpServlet
 		logger.info(all.size() + " checks found");
 
 		Pinger pinger = new Pinger();
+		Mailgun mailgun = new Mailgun();
 		for (Check check : all) {
 			Result result = pinger.ping(check.getUrl());
 			logger.info("ping " + check.getUrl() + " " + result.status());
@@ -49,10 +51,13 @@ public class PingServlet extends HttpServlet
 				logger.info("status changed, sending notification");
 
 				try {
-					notify(check, result);
+					// notify(check, result);
+					mailgun.send(check.getOwnerEmail(),
+						check.getUrl() + " is " + result.status(),
+						check.getUrl() + " is " + result.status());
 				} catch (Exception e) {
 					logger.severe(
-							"unable to send notification: " + e.getMessage());
+						"unable to send notification: " + e.getMessage());
 					MailServiceFactory.getMailService()
 						.sendToAdmins(new MailService.Message(SENDER, null,
 							"Unable to send notification", e.getMessage()));
@@ -76,12 +81,12 @@ public class PingServlet extends HttpServlet
 
 		try {
 			Message msg = new MimeMessage(session);
-			msg.setFrom(
-				new InternetAddress(SENDER, "Ping"));
+			msg.setFrom(new InternetAddress(SENDER, "Ping"));
 			msg.addRecipient(Message.RecipientType.TO,
 				new InternetAddress(check.getOwnerEmail()));
 			msg.setSubject("Ping status changed to " + result.status());
-			msg.setText("Ping status changed to  " + result.status() + " for " + check.getUrl());
+			msg.setText("Ping status changed to  " + result.status() + " for "
+				+ check.getUrl());
 			Transport.send(msg);
 		} catch (AddressException e) {
 			logger.severe(e.getMessage());

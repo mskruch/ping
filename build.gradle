@@ -31,7 +31,7 @@ dependencies {
     compile 'com.googlecode.objectify:objectify:+'
 
     compile 'org.ocpsoft.prettytime:prettytime:3.2.5.Final'
-
+    compile 'com.sun.jersey:jersey-client:1.17'
 
     // The production code uses the SLF4J logging API at compile time
     compile 'org.slf4j:slf4j-api:1.7.21'
