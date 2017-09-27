@@ -1,5 +1,6 @@
 package pl.mskruch.service;
 
+import static java.lang.System.currentTimeMillis;
 import static pl.mskruch.data.Status.DOWN;
 import static pl.mskruch.data.Status.UP;
 
@@ -16,22 +17,20 @@ public class Pinger
 
 	public Result ping(String urlString) throws IOException
 	{
+		long start = currentTimeMillis();
+		return pingInternal(urlString).inMilliseconds(currentTimeMillis() - start);
+
+	}
+
+	private Result pingInternal(String urlString) {
 		try {
 			URL url = new URL(urlString);
-			long start = System.currentTimeMillis();
 			HttpURLConnection connection = (HttpURLConnection) url
 				.openConnection();
 			connection.setRequestMethod("GET");
 			connection.connect();
 
-			long elapsed = System.currentTimeMillis() - start;
 			int code = connection.getResponseCode();
-			// InputStream in = connection.getInputStream();
-			// long bytes = 0;
-			// while (in.read() != -1) {
-			// bytes++;
-			// }
-			logger.fine("response status code: " + code);
 			if (code >= 200 && code < 300) {
 				return new Result(UP);
 			} else {
@@ -40,9 +39,13 @@ public class Pinger
 		} catch (MalformedURLException e) {
 			return new Result(DOWN);
 		} catch (SocketTimeoutException e) {
-			return new Result(DOWN, e.getMessage());
+			return new Result(DOWN, formatException(e));
 		} catch (IOException e) {
-			return new Result(DOWN, e.getMessage());
+			return new Result(DOWN, formatException(e));
 		}
+	}
+
+	private String formatException(Exception e) {
+		return e.getClass() + ": " + e.getMessage();
 	}
 }

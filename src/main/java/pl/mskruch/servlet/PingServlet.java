@@ -18,7 +18,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.appengine.api.datastore.Email;
 import com.google.appengine.api.mail.MailService;
 import com.google.appengine.api.mail.MailServiceFactory;
 import pl.mskruch.data.Check;
@@ -52,10 +51,14 @@ public class PingServlet extends HttpServlet
 
 				try {
 					// notify(check, result);
+					String durationString = result.elapsedInMilliseconds() != null
+						? (result.elapsedInMilliseconds() / 1000) + " seconds"
+						: "";
 					mailgun.send(check.getOwnerEmail(),
 						check.getUrl() + " is " + result.status(),
 						check.getUrl() + " is " + result.status() + "\n"
 							+ "Status code: " + result.responseCode() + "\n"
+							+ "Time: " + durationString + "\n"
 							+ "Details: " + result.message());
 				} catch (Exception e) {
 					logger.severe(
