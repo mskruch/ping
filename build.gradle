@@ -33,6 +33,10 @@ dependencies {
     compile 'org.ocpsoft.prettytime:prettytime:3.2.5.Final'
     compile 'com.sun.jersey:jersey-client:1.17'
 
+
+    compile 'org.springframework:spring-context:3.1.1.RELEASE'
+    compile 'org.springframework:spring-webmvc:3.1.1.RELEASE'
+
     // The production code uses the SLF4J logging API at compile time
     compile 'org.slf4j:slf4j-api:1.7.21'
 
