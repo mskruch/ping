@@ -35,4 +35,23 @@ public class Config
 			.filter("key", key).first().now();
 		return fetched != null ? fetched.getValue() : null;
 	}
+
+	public int getInt(String key, int defaultValue)
+	{
+		String value = get(key);
+		if (value == null) {
+			return defaultValue;
+		}
+		Integer number = toInteger(value);
+		return number != null ? number.intValue() : defaultValue;
+	}
+
+	private Integer toInteger(String value)
+	{
+		try {
+			return Integer.parseInt(value);
+		} catch (NumberFormatException e) {
+			return null;
+		}
+	}
 }

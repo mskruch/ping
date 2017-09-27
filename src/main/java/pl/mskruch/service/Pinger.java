@@ -15,18 +15,30 @@ public class Pinger
 {
 	static Logger logger = Logger.getLogger(Pinger.class.getName());
 
+	private Config config = new Config();
+
 	public Result ping(String urlString) throws IOException
 	{
 		long start = currentTimeMillis();
-		return pingInternal(urlString).inMilliseconds(currentTimeMillis() - start);
+		return pingInternal(urlString)
+			.inMilliseconds(currentTimeMillis() - start);
 
 	}
 
-	private Result pingInternal(String urlString) {
+	private Result pingInternal(String urlString)
+	{
 		try {
+			int connectTimeout = config.getInt("http.connectTimeout", 10000);
+			int readTimeout = config.getInt("http.readTimeout", 30000);
+
+			logger.fine("Using connection timeout " + connectTimeout
+				+ " and read timeout " + readTimeout);
+
 			URL url = new URL(urlString);
 			HttpURLConnection connection = (HttpURLConnection) url
 				.openConnection();
+			connection.setConnectTimeout(connectTimeout);
+			connection.setReadTimeout(readTimeout);
 			connection.setRequestMethod("GET");
 			connection.connect();
 
@@ -45,7 +57,8 @@ public class Pinger
 		}
 	}
 
-	private String formatException(Exception e) {
+	private String formatException(Exception e)
+	{
 		return e.getClass() + ": " + e.getMessage();
 	}
 }
