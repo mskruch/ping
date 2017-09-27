@@ -35,14 +35,14 @@ public class Pinger
 			if (code >= 200 && code < 300) {
 				return new Result(UP);
 			} else {
-				return new Result(DOWN);
+				return new Result(DOWN, code);
 			}
 		} catch (MalformedURLException e) {
 			return new Result(DOWN);
 		} catch (SocketTimeoutException e) {
-			return new Result(DOWN);
+			return new Result(DOWN, e.getMessage());
 		} catch (IOException e) {
-			return new Result(DOWN);
+			return new Result(DOWN, e.getMessage());
 		}
 	}
 }

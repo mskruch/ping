@@ -36,25 +36,27 @@ public class PingServlet extends HttpServlet
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 		throws ServletException, IOException
 	{
-		logger.info("ping checks requested");
+		logger.fine("ping checks requested");
 
 		Checks checks = new Checks(req);
 		List<Check> all = checks.all();
-		logger.info(all.size() + " checks found");
+		logger.fine(all.size() + " checks found");
 
 		Pinger pinger = new Pinger();
 		Mailgun mailgun = new Mailgun();
 		for (Check check : all) {
 			Result result = pinger.ping(check.getUrl());
-			logger.info("ping " + check.getUrl() + " " + result.status());
+			logger.fine("ping " + check.getUrl() + " " + result.status());
 			if (checks.update(check, result)) {
-				logger.info("status changed, sending notification");
+				logger.info("status changed, sending notification, result: " + result);
 
 				try {
 					// notify(check, result);
 					mailgun.send(check.getOwnerEmail(),
 						check.getUrl() + " is " + result.status(),
-						check.getUrl() + " is " + result.status());
+						check.getUrl() + " is " + result.status() + "\n"
+							+ "Status code: " + result.responseCode() + "\n"
+							+ "Details: " + result.message());
 				} catch (Exception e) {
 					logger.severe(
 						"unable to send notification: " + e.getMessage());
