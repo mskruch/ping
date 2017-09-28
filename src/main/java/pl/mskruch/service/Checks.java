@@ -25,8 +25,13 @@ public class Checks
 
 	public List<Check> list()
 	{
+		String email = currentUser();
+		return list(email);
+	}
+
+	private List<Check> list(String email) {
 		return ofy().load().type(Check.class)
-			.filter("ownerEmail", currentUser()).list();
+			.filter("ownerEmail", email).list();
 	}
 
 	public List<Check> all()

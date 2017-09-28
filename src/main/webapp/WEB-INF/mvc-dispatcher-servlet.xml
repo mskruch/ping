@@ -18,7 +18,8 @@
         </property>
     </bean>
     <bean class="pl.mskruch.resource.CheckController" autowire="constructor" />
-    <bean class="pl.mskruch.service.Checks" autowire="constructor">
-    </bean>
+    <bean class="pl.mskruch.resource.UserController" autowire="constructor" />
+    <bean class="pl.mskruch.service.Checks" autowire="constructor"/>
+    <bean class="pl.mskruch.service.Users" autowire="constructor"/>
 
 </beans>

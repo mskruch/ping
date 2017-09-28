@@ -2,7 +2,6 @@ package pl.mskruch.service;
 
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
-import pl.mskruch.data.Check;
 import pl.mskruch.data.User;
 
 import javax.servlet.http.HttpServletRequest;
@@ -44,8 +43,7 @@ public class Users
 			return false;
 		}
 		String name = req.getUserPrincipal().getName();
-		User fetched = ofy().load().type(User.class).filter("email", name)
-			.first().now();
+		User fetched = find(name);
 
 		if (fetched == null) {
 			User user = new User(name);
@@ -54,6 +52,11 @@ public class Users
 		}
 
 		return req.isUserInRole("admin") || fetched.isEnabled();
+	}
+
+	public User find(String email) {
+		return ofy().load().type(User.class).filter("email", email)
+			.first().now();
 	}
 
 	public List<User> all()
@@ -65,7 +68,7 @@ public class Users
 	    if (id == null){
 	        return;
         }
-        User user = ofy().load().type(User.class).id(Long.valueOf(id)).now();
+        User user = get(id);
 	    if (user.isEnabled()){
 	        user.disable();
         } else {
@@ -73,4 +76,17 @@ public class Users
         }
         ofy().save().entity(user).now();
     }
+
+	public User get(String id) {
+		return get(Long.valueOf(id));
+	}
+
+	public User get(Long id) {
+		return ofy().load().type(User.class).id(id).now();
+	}
+
+	public void delete(Long id) {
+		User user = get(id);
+		ofy().delete().entity(user);
+	}
 }
