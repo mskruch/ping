@@ -31,9 +31,6 @@ public class Pinger
 			int connectTimeout = config.getInt("http.connectTimeout", 10000);
 			int readTimeout = config.getInt("http.readTimeout", 30000);
 
-			logger.fine("Using connection timeout " + connectTimeout
-				+ " and read timeout " + readTimeout);
-
 			URL url = new URL(urlString);
 			HttpURLConnection connection = (HttpURLConnection) url
 				.openConnection();
@@ -44,7 +41,7 @@ public class Pinger
 
 			int code = connection.getResponseCode();
 			if (code >= 200 && code < 300) {
-				return new Result(UP);
+				return new Result(UP, code);
 			} else {
 				return new Result(DOWN, code);
 			}
