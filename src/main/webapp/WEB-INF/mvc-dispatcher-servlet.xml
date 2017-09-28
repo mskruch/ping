@@ -17,5 +17,6 @@
             <value>Hello World</value>
         </property>
     </bean>
+    <bean class="pl.mskruch.resource.CheckController" />
 
 </beans>
