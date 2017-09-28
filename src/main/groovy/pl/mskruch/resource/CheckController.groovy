@@ -1,16 +1,16 @@
 package pl.mskruch.resource
 
-import groovy.transform.ToString
 import org.springframework.stereotype.Controller
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.ResponseBody
 import pl.mskruch.data.Check
 import pl.mskruch.service.Checks
 
 import java.util.logging.Logger
 
-import static org.springframework.web.bind.annotation.RequestMethod.DELETE
-import static org.springframework.web.bind.annotation.RequestMethod.GET
-import static org.springframework.web.bind.annotation.RequestMethod.PATCH
+import static org.springframework.web.bind.annotation.RequestMethod.*
 
 @Controller
 @RequestMapping("/checks")
@@ -48,9 +48,4 @@ class CheckController {
     delete(@PathVariable("id") Long id){
         checks.delete(id)
     }
-}
-
-@ToString
-class CheckUpdate {
-    Long delay
 }
