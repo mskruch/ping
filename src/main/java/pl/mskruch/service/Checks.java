@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.googlecode.objectify.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import pl.mskruch.data.Check;
@@ -55,7 +56,15 @@ public class Checks
 	}
 
 	public Check get(Long id) {
-		return ofy().load().type(Check.class).id(id).now();
+		Check check = ofy().load().type(Check.class).id(id).now();
+		if (check == null){
+			throw new NotFoundException();
+		}
+		logger.info("check owner " + check.getOwnerEmail() + " current user " + currentUser());
+		if (!currentUser().equals(check.getOwnerEmail())){
+			throw new NotFoundException();
+		}
+		return check;
 	}
 
 	public Check patch(Check patch)
@@ -67,5 +76,10 @@ public class Checks
 		}
 		ofy().save().entity(check).now();
 		return check;
+	}
+
+	public void delete(Long id) {
+		Check check = get(id);
+		ofy().delete().entity(check);
 	}
 }
