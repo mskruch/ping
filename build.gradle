@@ -17,13 +17,15 @@ repositories {   // repositories for Jar's you access in your code
     mavenCentral()
 }
 
-apply plugin: 'java'                              // standard Java tasks
+apply plugin: 'groovy'
 apply plugin: 'war'                               // standard Web Archive plugin
 apply plugin: 'com.google.cloud.tools.appengine'  // App Engine tasks
 
 dependencies {
     providedCompile group: 'javax.servlet', name: 'servlet-api', version: '2.5'
     providedCompile 'javax.servlet:jstl:1.2'
+
+    compile 'org.codehaus.groovy:groovy-all:2.4.7'
 
     compile 'com.google.appengine:appengine:+'
 //  compile 'com.google.apis:google-api-services-appengine:+'
