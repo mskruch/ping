@@ -17,6 +17,8 @@
             <value>Hello World</value>
         </property>
     </bean>
-    <bean class="pl.mskruch.resource.CheckController" />
+    <bean class="pl.mskruch.resource.CheckController" autowire="constructor" />
+    <bean class="pl.mskruch.service.Checks" autowire="constructor">
+    </bean>
 
 </beans>

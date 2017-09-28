@@ -23,6 +23,8 @@ public class Check
 	Status status;
 	Date statusSince;
 
+	Long notificationDelayInMilliseconds;
+
 	Check()
 	{
 	}
@@ -94,6 +96,14 @@ public class Check
 
 	public String getOwnerEmail() {
 		return ownerEmail;
+	}
+
+	public Long getNotificationDelayInMilliseconds() {
+		return notificationDelayInMilliseconds;
+	}
+
+	public void setNotificationDelayInMilliseconds(Long notificationDelayInMilliseconds) {
+		this.notificationDelayInMilliseconds = notificationDelayInMilliseconds;
 	}
 
 	@Override
