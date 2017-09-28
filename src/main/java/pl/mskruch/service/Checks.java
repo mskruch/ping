@@ -54,10 +54,17 @@ public class Checks
 		return changed;
 	}
 
-	public Check updateDelay(Long id, Long delay)
+	public Check get(Long id) {
+		return ofy().load().type(Check.class).id(id).now();
+	}
+
+	public Check patch(Check patch)
 	{
-		Check check = ofy().load().type(Check.class).id(id).now();
-		check.setNotificationDelayInMilliseconds(delay);
+		Check check = get(patch.getId());
+		if (patch.getNotificationDelayInMilliseconds() != null) {
+			check.setNotificationDelayInMilliseconds(
+				patch.getNotificationDelayInMilliseconds());
+		}
 		ofy().save().entity(check).now();
 		return check;
 	}

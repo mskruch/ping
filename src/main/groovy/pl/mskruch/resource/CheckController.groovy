@@ -8,6 +8,9 @@ import pl.mskruch.service.Checks
 
 import java.util.logging.Logger
 
+import static org.springframework.web.bind.annotation.RequestMethod.GET
+import static org.springframework.web.bind.annotation.RequestMethod.PATCH
+
 @Controller
 @RequestMapping("/checks")
 class CheckController {
@@ -19,15 +22,18 @@ class CheckController {
         this.checks = checks
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "/{id}", method = PATCH)
     @ResponseBody
-    Check update(@PathVariable("id") Long checkId, @RequestBody CheckUpdate body) {
-        logger.info("update check " + checkId + " with " + body)
-        if (body.delay != null) {
-            checks.updateDelay(checkId, body.delay)
-        } else {
-            null
-        }
+    Check update(@PathVariable("id") Long id, @RequestBody Check body) {
+        logger.info("update check " + id + " with " + body)
+        body.id = id
+        checks.patch(body)
+    }
+
+    @RequestMapping(value = "/{id}", method = GET)
+    @ResponseBody
+    Check get(@PathVariable("id") Long id){
+        checks.get(id)
     }
 }
 
