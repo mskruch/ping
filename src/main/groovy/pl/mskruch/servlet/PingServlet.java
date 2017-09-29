@@ -42,64 +42,38 @@ public class PingServlet extends HttpServlet
 		logger.fine(all.size() + " checks found");
 
 		Pinger pinger = new Pinger();
-		Mailgun mailgun = new Mailgun();
+
 		for (Check check : all) {
 			Result result = pinger.ping(check.getUrl());
 			logger.fine("ping " + check.getUrl() + " " + result.status());
-			if (checks.update(check, result)) {
-				logger.info("status changed, sending notification, result: " + result);
-
-				try {
-					// notify(check, result);
-					String durationString = result.elapsedInMilliseconds() != null
-						? (result.elapsedInMilliseconds() / 1000) + " seconds"
-						: "";
-					String name = check.getName() != null ? check.getName() : check.getUrl();
-					mailgun.send(check.getOwnerEmail(),
-						name + " is " + result.status(),
-						check.getUrl() + " is " + result.status() + "\n"
-							+ "Status code: " + result.responseCode() + "\n"
-							+ "Time: " + durationString + "\n"
-							+ "Details: " + result.message());
-				} catch (Exception e) {
-					logger.severe(
-						"unable to send notification: " + e.getMessage());
-					MailServiceFactory.getMailService()
-						.sendToAdmins(new MailService.Message(SENDER, null,
-							"Unable to send notification", e.getMessage()));
-				}
+			boolean updated = checks.update(check, result);
+			if (updated) {
+				logger.info(
+					"status changed, sending notification, result: " + result);
+				notify(check, result);
 			}
 		}
-
-		// if (req.getUserPrincipal() != null) {
-		// String name = req.getUserPrincipal().getName();
-		// User fetched = ofy().load().type(User.class).filter("email", name)
-		// .first().now();
-		// User user = new User(name);
-		// ofy().save().entity(user).now(); // async without the now()
-
 	}
 
-	private void notify(Check check, Result result)
+	private void notify(Check check, Result result) throws IOException
 	{
-		Properties props = new Properties();
-		Session session = Session.getDefaultInstance(props, null);
-
+		Mailgun mailgun = new Mailgun();
 		try {
-			Message msg = new MimeMessage(session);
-			msg.setFrom(new InternetAddress(SENDER, "Ping"));
-			msg.addRecipient(Message.RecipientType.TO,
-				new InternetAddress(check.getOwnerEmail()));
-			msg.setSubject("Ping status changed to " + result.status());
-			msg.setText("Ping status changed to  " + result.status() + " for "
-				+ check.getUrl());
-			Transport.send(msg);
-		} catch (AddressException e) {
-			logger.severe(e.getMessage());
-		} catch (MessagingException e) {
-			logger.severe(e.getMessage());
-		} catch (UnsupportedEncodingException e) {
-			logger.severe(e.getMessage());
+			String durationString = result.elapsedInMilliseconds() != null
+				? (result.elapsedInMilliseconds() / 1000) + " seconds"
+				: "";
+			String name = check.getName() != null ? check.getName()
+				: check.getUrl();
+			mailgun.send(check.getOwnerEmail(), name + " is " + result.status(),
+				check.getUrl() + " is " + result.status() + "\n"
+					+ "Status code: " + result.responseCode() + "\n" + "Time: "
+					+ durationString + "\n" + "Details: " + result.message());
+		} catch (Exception e) {
+			logger.severe("unable to send notification: " + e.getMessage());
+			MailServiceFactory.getMailService()
+				.sendToAdmins(new MailService.Message(SENDER, null,
+					"Unable to send notification", e.getMessage()));
 		}
 	}
+
 }
