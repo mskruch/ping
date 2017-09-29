@@ -24,6 +24,12 @@ class Checks
 		this.auth = auth
 	}
 
+	/* only for servlets */
+	@Deprecated
+	Checks(HttpServletRequest req){
+		this.auth = new Auth(req)
+	}
+
 	List<Check> list()
 	{
 		return ofy().load().type(Check.class)
