@@ -15,6 +15,8 @@ public class Check
 	Long id;
 	@Index
 	String ownerEmail;
+	@Index
+	String name;
 
 	Date created;
 	String url;
@@ -104,6 +106,16 @@ public class Check
 
 	public void setNotificationDelayInMilliseconds(Long notificationDelayInMilliseconds) {
 		this.notificationDelayInMilliseconds = notificationDelayInMilliseconds;
+	}
+
+	public String getName()
+	{
+		return name;
+	}
+
+	public void setName(String name)
+	{
+		this.name = name;
 	}
 
 	@Override

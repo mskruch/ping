@@ -14,6 +14,7 @@
     <table>
         <tr>
             <th>id</th>
+            <th>name</th>
             <th>url</th>
             <th>checked</th>
             <th>status</th>
@@ -21,6 +22,7 @@
         <c:forEach items="${checks}" var="check">
             <tr>
                 <td>${check.id}</td>
+                <td><c:out value="${check.name}"/></td>
                 <td><c:out value="${check.url}"/></td>
                 <td>${check.lastCheckDuration}</td>
                 <td>${check.status} since ${check.statusSinceDuration}</td>

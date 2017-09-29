@@ -23,11 +23,14 @@ public class Mailgun
 		Config config = new Config();
 		key = config.get("mailgun.key");
 		host = config.get("mailgun.host");
-		if (key == null || key.isEmpty()) {
-			throw new IllegalStateException("<mailgun.key> not configured");
-		}
-		if (host == null || host.isEmpty()) {
-			throw new IllegalStateException("<mailgun.host> not configured");
+		if (isProduction()) {
+			if (key == null || key.isEmpty()) {
+				throw new IllegalStateException("<mailgun.key> not configured");
+			}
+			if (host == null || host.isEmpty()) {
+				throw new IllegalStateException(
+					"<mailgun.host> not configured");
+			}
 		}
 	}
 
@@ -47,10 +50,9 @@ public class Mailgun
 		// MediaType.APPLICATION_FORM_URLENCODED_TYPE));
 		// logger.info("Mail sent : " + response);
 
-		if (SystemProperty.environment
-			.value() != SystemProperty.Environment.Value.Production) {
+		if (key == null || host == null) {
 			System.out.println(
-				"Email not sent - not production environment: " + subject);
+				"Email not sent (not configured): " + subject);
 			return;
 		}
 
@@ -73,5 +75,11 @@ public class Mailgun
 
 		logger.info("Email sent successfully : " + output);
 
+	}
+
+	private boolean isProduction()
+	{
+		return SystemProperty.environment
+			.value() == SystemProperty.Environment.Value.Production;
 	}
 }

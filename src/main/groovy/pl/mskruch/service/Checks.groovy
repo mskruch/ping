@@ -1,4 +1,6 @@
-package pl.mskruch.service;
+package pl.mskruch.service
+
+import pl.mskruch.exception.NotFound;
 
 import static com.googlecode.objectify.ObjectifyService.ofy;
 
@@ -62,29 +64,35 @@ class Checks
 	{
 		Check check = ofy().load().type(Check.class).id(id).now();
 		if (check == null) {
-			throw new NotFoundException();
+			throw new NotFound("check",id);
 		}
-		logger.info("check owner " + check.getOwnerEmail() + " current user " + currentUser());
-		if (!currentUser().equals(check.getOwnerEmail())) {
-			throw new NotFoundException();
+		if (!auth.email().equals(check.getOwnerEmail())) {
+			throw new NotFound("check",id);
 		}
 		return check;
 	}
 
-	public Check patch(Check patch)
+	Check patch(Check patch)
 	{
 		Check check = get(patch.getId());
 		if (patch.getNotificationDelayInMilliseconds() != null) {
 			check.setNotificationDelayInMilliseconds(
 					patch.getNotificationDelayInMilliseconds());
 		}
+		if (patch.name) {
+			check.setName(patch.name)
+		}
 		ofy().save().entity(check).now();
 		return check;
 	}
 
-	public void delete(Long id)
+	def delete(Long id)
 	{
-		Check check = get(id);
-		ofy().delete().entity(check);
+		try {
+			Check check = get(id);
+			ofy().delete().entity(check);
+		} catch (NotFound e) {
+			/* already deleted - still fine */
+		}
 	}
 }

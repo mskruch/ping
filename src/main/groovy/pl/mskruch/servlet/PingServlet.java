@@ -54,8 +54,9 @@ public class PingServlet extends HttpServlet
 					String durationString = result.elapsedInMilliseconds() != null
 						? (result.elapsedInMilliseconds() / 1000) + " seconds"
 						: "";
+					String name = check.getName() != null ? check.getName() : check.getUrl();
 					mailgun.send(check.getOwnerEmail(),
-						check.getUrl() + " is " + result.status(),
+						name + " is " + result.status(),
 						check.getUrl() + " is " + result.status() + "\n"
 							+ "Status code: " + result.responseCode() + "\n"
 							+ "Time: " + durationString + "\n"
