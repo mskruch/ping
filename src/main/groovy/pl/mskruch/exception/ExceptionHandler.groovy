@@ -31,4 +31,20 @@ class ExceptionHandler {
         logger.log(Level.SEVERE, uuid + ': ' + e.message, e)
         ['message': "internal server error", 'id': uuid]
     }
+
+    @SpringExceptionHandler(Unauthorized.class)
+    @ResponseBody
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    unauthorized(Unauthorized e)
+    {
+        ['message': "unauthorized"]
+    }
+
+    @SpringExceptionHandler(Forbidden.class)
+    @ResponseBody
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    forbidden(Unauthorized e)
+    {
+        ['message': "forbidden"]
+    }
 }

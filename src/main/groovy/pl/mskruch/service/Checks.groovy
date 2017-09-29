@@ -12,42 +12,34 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import pl.mskruch.data.Check;
 
-public class Checks
+class Checks
 {
 	static Logger logger = Logger.getLogger(Checks.class.getName());
-	private HttpServletRequest req;
+
+	private final Auth auth
 
 	@Autowired
-	public Checks(HttpServletRequest req)
+	Checks(Auth auth)
 	{
-		this.req = req;
+		this.auth = auth
 	}
 
-	public List<Check> list()
+	List<Check> list()
 	{
-		String email = currentUser();
-		return list(email);
-	}
-
-	private List<Check> list(String email) {
 		return ofy().load().type(Check.class)
-			.filter("ownerEmail", email).list();
+				.filter("ownerEmail", auth.email()).list();
 	}
+
 
 	public List<Check> all()
 	{
 		return ofy().load().type(Check.class).list();
 	}
 
-	private String currentUser()
-	{
-		return req.getUserPrincipal().getName();
-	}
-
 	public Long add(String url)
 	{
 		logger.fine("create check for " + url);
-		Check check = new Check(currentUser(), url);
+		Check check = new Check(auth.email(), url);
 		ofy().save().entity(check).now(); // async without the now()
 		logger.info("check created: " + check);
 		return check.getId();
@@ -60,13 +52,14 @@ public class Checks
 		return changed;
 	}
 
-	public Check get(Long id) {
+	public Check get(Long id)
+	{
 		Check check = ofy().load().type(Check.class).id(id).now();
-		if (check == null){
+		if (check == null) {
 			throw new NotFoundException();
 		}
 		logger.info("check owner " + check.getOwnerEmail() + " current user " + currentUser());
-		if (!currentUser().equals(check.getOwnerEmail())){
+		if (!currentUser().equals(check.getOwnerEmail())) {
 			throw new NotFoundException();
 		}
 		return check;
@@ -77,13 +70,14 @@ public class Checks
 		Check check = get(patch.getId());
 		if (patch.getNotificationDelayInMilliseconds() != null) {
 			check.setNotificationDelayInMilliseconds(
-				patch.getNotificationDelayInMilliseconds());
+					patch.getNotificationDelayInMilliseconds());
 		}
 		ofy().save().entity(check).now();
 		return check;
 	}
 
-	public void delete(Long id) {
+	public void delete(Long id)
+	{
 		Check check = get(id);
 		ofy().delete().entity(check);
 	}
