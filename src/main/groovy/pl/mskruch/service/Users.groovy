@@ -3,6 +3,7 @@ package pl.mskruch.service;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import pl.mskruch.data.User;
+import pl.mskruch.exception.NotFound;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -82,7 +83,11 @@ public class Users
 	}
 
 	public User get(Long id) {
-		return ofy().load().type(User.class).id(id).now();
+		User user = ofy().load().type(User.class).id(id).now();
+		if (user == null){
+			throw new NotFound('user', id);
+		}
+		return user;
 	}
 
 	public void delete(Long id) {

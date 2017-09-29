@@ -1,11 +1,10 @@
 package pl.mskruch.service;
 
-import com.google.appengine.api.mail.MailService;
-import com.google.appengine.api.mail.MailServiceFactory;
-import pl.mskruch.servlet.ManageServlet;
-
 import java.io.IOException;
 import java.util.logging.Logger;
+
+import com.google.appengine.api.mail.MailService;
+import com.google.appengine.api.mail.MailServiceFactory;
 
 public class AdminMail
 {
