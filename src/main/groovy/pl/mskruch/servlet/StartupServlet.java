@@ -4,6 +4,7 @@ import com.googlecode.objectify.ObjectifyService;
 import pl.mskruch.data.Check;
 import pl.mskruch.data.ConfigEntry;
 import pl.mskruch.data.User;
+import pl.mskruch.ping.data.CheckStatus;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -16,6 +17,7 @@ public class StartupServlet extends HttpServlet {
         ObjectifyService.register(User.class);
         ObjectifyService.register(Check.class);
         ObjectifyService.register(ConfigEntry.class);
+        ObjectifyService.register(CheckStatus.class);
     }
 
     @Override
