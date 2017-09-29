@@ -4,7 +4,7 @@ import static com.googlecode.objectify.ObjectifyService.ofy;
 
 import java.util.List;
 
-import pl.mskruch.data.ConfigEntry;
+import pl.mskruch.ping.data.ConfigEntry;
 
 public class Config
 {

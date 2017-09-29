@@ -2,12 +2,10 @@ package pl.mskruch.service;
 
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
-import pl.mskruch.data.User;
+import pl.mskruch.ping.data.User;
 import pl.mskruch.exception.NotFound;
 
-import javax.servlet.http.HttpServletRequest;
-
-import java.util.List;
+import javax.servlet.http.HttpServletRequest
 
 import static com.googlecode.objectify.ObjectifyService.ofy;
 

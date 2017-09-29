@@ -4,12 +4,9 @@ import com.google.appengine.api.log.InvalidRequestException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import pl.mskruch.data.User;
+import org.springframework.web.bind.annotation.ResponseBody
 import pl.mskruch.service.Checks;
-import pl.mskruch.service.Users;
-
-import java.util.logging.Logger
+import pl.mskruch.service.Users
 
 import static java.util.logging.Logger.getLogger;
 import static org.springframework.web.bind.annotation.RequestMethod.DELETE;

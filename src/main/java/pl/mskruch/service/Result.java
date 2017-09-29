@@ -1,6 +1,6 @@
 package pl.mskruch.service;
 
-import pl.mskruch.data.Status;
+import pl.mskruch.ping.data.Status;
 
 public class Result
 {

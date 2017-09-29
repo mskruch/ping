@@ -1,4 +1,4 @@
-package pl.mskruch.data;
+package pl.mskruch.ping.data;
 
 public enum Status
 {

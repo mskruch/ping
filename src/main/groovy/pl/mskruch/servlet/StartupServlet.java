@@ -1,9 +1,9 @@
 package pl.mskruch.servlet;
 
 import com.googlecode.objectify.ObjectifyService;
-import pl.mskruch.data.Check;
-import pl.mskruch.data.ConfigEntry;
-import pl.mskruch.data.User;
+import pl.mskruch.ping.data.Check;
+import pl.mskruch.ping.data.ConfigEntry;
+import pl.mskruch.ping.data.User;
 import pl.mskruch.ping.data.CheckStatus;
 
 import javax.servlet.ServletException;

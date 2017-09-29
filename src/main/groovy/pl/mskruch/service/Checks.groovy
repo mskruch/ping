@@ -2,17 +2,15 @@ package pl.mskruch.service
 
 import pl.mskruch.exception.NotFound;
 
-import static com.googlecode.objectify.ObjectifyService.ofy;
+import static com.googlecode.objectify.ObjectifyService.ofy
 
-import java.util.List;
 import java.util.logging.Logger;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequest
 
-import com.googlecode.objectify.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import pl.mskruch.data.Check;
+import pl.mskruch.ping.data.Check;
 
 class Checks
 {

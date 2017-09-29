@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseBody
-import pl.mskruch.data.Check
+import pl.mskruch.ping.data.Check
 import pl.mskruch.service.Checks
 
 import java.util.logging.Logger

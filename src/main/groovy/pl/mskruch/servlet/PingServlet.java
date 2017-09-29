@@ -1,18 +1,9 @@
 package pl.mskruch.servlet;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.List;
-import java.util.Properties;
 import java.util.logging.Logger;
 
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -20,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.appengine.api.mail.MailService;
 import com.google.appengine.api.mail.MailServiceFactory;
-import pl.mskruch.data.Check;
+import pl.mskruch.ping.data.Check;
 import pl.mskruch.service.Checks;
 import pl.mskruch.service.Mailgun;
 import pl.mskruch.service.Pinger;
