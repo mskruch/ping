@@ -1,4 +1,0 @@
-cron:
-- description: "default ping task"
-  url: /ping
-  schedule: every 1 minutes

@@ -19,6 +19,6 @@ class CheckStatus
 
 	@Index
 	Date since;
-	Date updated;
-	Boolean notified;
+	Date checked;
+	Date notified;
 }
