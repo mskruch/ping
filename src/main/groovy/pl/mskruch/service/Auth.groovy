@@ -20,4 +20,8 @@ class Auth
 		}
 		email
 	}
+
+	def isAdmin() {
+		request.isUserInRole("admin")
+	}
 }

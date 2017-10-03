@@ -25,15 +25,6 @@
 	</servlet>
 
 	<servlet>
-		<servlet-name>main</servlet-name>
-		<servlet-class>pl.mskruch.servlet.MainServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>main</servlet-name>
-		<url-pattern>/</url-pattern>
-	</servlet-mapping>
-
-	<servlet>
 		<servlet-name>admin</servlet-name>
 		<servlet-class>pl.mskruch.servlet.AdminServlet</servlet-class>
 	</servlet>
@@ -63,10 +54,11 @@
 	<security-constraint>
 		<web-resource-collection>
 			<web-resource-name>test</web-resource-name>
-			<url-pattern>/resources/test/*</url-pattern>
+			<url-pattern>/test/*</url-pattern>
 		</web-resource-collection>
 		<!-- OMIT auth-constraint -->
 	</security-constraint>
+
 	<security-constraint>
 		<web-resource-collection>
 			<web-resource-name>standard user area</web-resource-name>
@@ -74,8 +66,7 @@
 			<url-pattern>/</url-pattern>
 		</web-resource-collection>
 		<auth-constraint>
-			<role-name>*</role-name> <!--for now only admin-->
-			<!--<role-name>*</role-name>-->
+			<role-name>*</role-name>
 		</auth-constraint>
 	</security-constraint>
 	<security-constraint>
@@ -84,13 +75,11 @@
 			<url-pattern>/ping</url-pattern>
 			<url-pattern>/admin</url-pattern>
 			<url-pattern>/admin/*</url-pattern>
-			<url-pattern>/resources/admin/*</url-pattern>
 		</web-resource-collection>
 		<auth-constraint>
 			<role-name>admin</role-name>
 		</auth-constraint>
 	</security-constraint>
-
 
 	<servlet>
 		<servlet-name>mvc-dispatcher</servlet-name>
@@ -102,7 +91,7 @@
 
 	<servlet-mapping>
 		<servlet-name>mvc-dispatcher</servlet-name>
-		<url-pattern>/resources/*</url-pattern>
+		<url-pattern>/</url-pattern>
 	</servlet-mapping>
 
 	<context-param>
