@@ -19,4 +19,6 @@
     <bean class="pl.mskruch.service.Checks" autowire="constructor"/>
     <bean class="pl.mskruch.service.Users" autowire="constructor"/>
 
+    <bean class="pl.mskruch.ping.test.TestResource" autowire="constructor"/>
+
 </beans>

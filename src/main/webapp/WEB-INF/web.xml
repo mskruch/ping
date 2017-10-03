@@ -62,6 +62,13 @@
 
 	<security-constraint>
 		<web-resource-collection>
+			<web-resource-name>test</web-resource-name>
+			<url-pattern>/resources/test/*</url-pattern>
+		</web-resource-collection>
+		<!-- OMIT auth-constraint -->
+	</security-constraint>
+	<security-constraint>
+		<web-resource-collection>
 			<web-resource-name>standard user area</web-resource-name>
 			<url-pattern>/manage/*</url-pattern>
 			<url-pattern>/</url-pattern>
