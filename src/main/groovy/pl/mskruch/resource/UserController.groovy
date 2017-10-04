@@ -5,7 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody
-import pl.mskruch.ping.service.Checks;
+import pl.mskruch.ping.check.Checks;
 import pl.mskruch.ping.service.Users
 
 import static java.util.logging.Logger.getLogger;

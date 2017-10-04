@@ -12,7 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.appengine.api.mail.MailService;
 import com.google.appengine.api.mail.MailServiceFactory;
 import pl.mskruch.ping.check.Check;
-import pl.mskruch.ping.service.Checks;
+import pl.mskruch.ping.check.Checks;
+import pl.mskruch.ping.check.ChecksRoot;
 import pl.mskruch.ping.service.Mailgun;
 import pl.mskruch.ping.service.Pinger;
 import pl.mskruch.ping.service.Result;
@@ -28,7 +29,7 @@ public class PingServlet extends HttpServlet
 	{
 		logger.fine("ping checks requested");
 
-		Checks checks = new Checks(req);
+		ChecksRoot checks = new ChecksRoot();
 		List<Check> all = checks.all();
 		logger.fine(all.size() + " checks found");
 

@@ -12,11 +12,13 @@
 
     <mvc:annotation-driven />
 
+    <bean class="pl.mskruch.ping.check.CheckResource" autowire="constructor" />
+    <bean class="pl.mskruch.ping.check.Checks" autowire="constructor"/>
+    <bean class="pl.mskruch.ping.check.ChecksRoot" autowire="constructor"/>
+
     <bean class="pl.mskruch.exception.ExceptionHandler" autowire="constructor" />
     <bean class="pl.mskruch.ping.service.Auth" autowire="constructor" />
-    <bean class="pl.mskruch.ping.check.CheckResource" autowire="constructor" />
     <bean class="pl.mskruch.resource.UserController" autowire="constructor" />
-    <bean class="pl.mskruch.ping.service.Checks" autowire="constructor"/>
     <bean class="pl.mskruch.ping.service.Users" autowire="constructor"/>
 
     <bean class="pl.mskruch.ping.home.HomeController" autowire="constructor" />
