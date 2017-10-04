@@ -16,6 +16,8 @@
     <bean class="pl.mskruch.ping.check.Checks" autowire="constructor"/>
     <bean class="pl.mskruch.ping.check.ChecksRoot" autowire="constructor"/>
 
+    <bean class="pl.mskruch.ping.engine.PingController" autowire="constructor" />
+
     <bean class="pl.mskruch.exception.ExceptionHandler" autowire="constructor" />
     <bean class="pl.mskruch.ping.service.Auth" autowire="constructor" />
     <bean class="pl.mskruch.ping.user.UserController" autowire="constructor" />
