@@ -3,9 +3,9 @@ package pl.mskruch.ping.home
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.RequestMapping
-import pl.mskruch.service.Auth
-import pl.mskruch.service.Checks
-import pl.mskruch.service.Users
+import pl.mskruch.ping.service.Auth
+import pl.mskruch.ping.service.Checks
+import pl.mskruch.ping.service.Users
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET
 

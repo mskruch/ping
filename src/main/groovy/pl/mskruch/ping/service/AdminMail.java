@@ -1,4 +1,4 @@
-package pl.mskruch.service;
+package pl.mskruch.ping.service;
 
 import java.io.IOException;
 import java.util.logging.Logger;

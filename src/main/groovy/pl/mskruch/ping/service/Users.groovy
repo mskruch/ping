@@ -1,4 +1,4 @@
-package pl.mskruch.service;
+package pl.mskruch.ping.service;
 
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;

@@ -1,4 +1,4 @@
-package pl.mskruch.service;
+package pl.mskruch.ping.service;
 
 import static com.googlecode.objectify.ObjectifyService.ofy;
 

@@ -12,10 +12,10 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.appengine.api.mail.MailService;
 import com.google.appengine.api.mail.MailServiceFactory;
 import pl.mskruch.ping.check.Check;
-import pl.mskruch.service.Checks;
-import pl.mskruch.service.Mailgun;
-import pl.mskruch.service.Pinger;
-import pl.mskruch.service.Result;
+import pl.mskruch.ping.service.Checks;
+import pl.mskruch.ping.service.Mailgun;
+import pl.mskruch.ping.service.Pinger;
+import pl.mskruch.ping.service.Result;
 
 public class PingServlet extends HttpServlet
 {

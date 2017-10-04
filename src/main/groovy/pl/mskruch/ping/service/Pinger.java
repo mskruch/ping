@@ -1,4 +1,4 @@
-package pl.mskruch.service;
+package pl.mskruch.ping.service;
 
 import static java.lang.System.currentTimeMillis;
 import static pl.mskruch.ping.check.Status.DOWN;
