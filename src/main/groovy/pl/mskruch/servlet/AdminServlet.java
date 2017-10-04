@@ -1,7 +1,7 @@
 package pl.mskruch.servlet;
 
 import pl.mskruch.ping.service.Config;
-import pl.mskruch.ping.service.Users;
+import pl.mskruch.ping.user.Users;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -13,14 +13,6 @@ public class AdminServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Users users = new Users(req);
-        if (req.getPathInfo() != null && req.getPathInfo().length() > 1){
-            String id = req.getPathInfo();
-            if (id.startsWith("/")){
-                id = id.substring(1);
-            }
-            users.switchEnabled(id);
-            resp.sendRedirect("/admin");
-        }
 
         req.setAttribute("users", users.all());
         req.setAttribute("configEntries", new Config().all());

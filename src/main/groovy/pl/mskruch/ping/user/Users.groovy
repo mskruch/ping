@@ -1,8 +1,8 @@
-package pl.mskruch.ping.service;
+package pl.mskruch.ping.user;
 
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
-import pl.mskruch.ping.data.User;
+import pl.mskruch.ping.user.User;
 import pl.mskruch.exception.NotFound;
 
 import javax.servlet.http.HttpServletRequest
@@ -53,9 +53,10 @@ public class Users
 		return req.isUserInRole("admin") || fetched.isEnabled();
 	}
 
-	public User find(String email) {
+	public User find(String email)
+	{
 		return ofy().load().type(User.class).filter("email", email)
-			.first().now();
+				.first().now();
 	}
 
 	public List<User> all()
@@ -63,33 +64,33 @@ public class Users
 		return ofy().load().type(User.class).list();
 	}
 
-    public void switchEnabled(String id) {
-	    if (id == null){
-	        return;
-        }
-        User user = get(id);
-	    if (user.isEnabled()){
-	        user.disable();
-        } else {
-	        user.enable();
-        }
-        ofy().save().entity(user).now();
-    }
-
-	public User get(String id) {
-		return get(Long.valueOf(id));
+	void switchEnabled(Long id)
+	{
+		User user = get(id)
+		if (user.isEnabled()) {
+			user.disable()
+		} else {
+			user.enable()
+		}
+		ofy().save().entity(user).now()
 	}
 
-	public User get(Long id) {
-		User user = ofy().load().type(User.class).id(id).now();
-		if (user == null){
+	User get(Long id)
+	{
+		User user = ofy().load().type(User.class).id(id).now()
+		if (user == null) {
 			throw new NotFound('user', id);
 		}
 		return user;
 	}
 
-	public void delete(Long id) {
-		User user = get(id);
-		ofy().delete().entity(user);
+	void delete(Long id)
+	{
+		try {
+			User user = get(id);
+			ofy().delete().entity(user);
+		} catch (NotFound e) {
+			/* already deleted - fine */
+		}
 	}
 }

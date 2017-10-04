@@ -20,7 +20,7 @@
         <tr>
             <td>${user.id}</td>
             <td>${user.email}</td>
-            <td><a href="<c:url value="/admin/${user.id}" />">${user.enabled}</a></td>
+            <td><a href="<c:url value="/admin/users/${user.id}" />">${user.enabled}</a></td>
         </tr>
     </c:forEach>
 </table>

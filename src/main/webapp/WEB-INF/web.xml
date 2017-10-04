@@ -30,7 +30,7 @@
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>admin</servlet-name>
-		<url-pattern>/admin/*</url-pattern>
+		<url-pattern>/admin</url-pattern>
 	</servlet-mapping>
 
 	<servlet>

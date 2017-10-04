@@ -51,7 +51,7 @@ class ChecksRoot
 		try {
 			ofy().delete().entity(check);
 		} catch (NotFound e) {
-			/* already deleted - still fine */
+			/* already deleted - fine */
 		}
 	}
 

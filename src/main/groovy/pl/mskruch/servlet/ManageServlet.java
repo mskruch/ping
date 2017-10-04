@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import pl.mskruch.ping.check.Checks;
-import pl.mskruch.ping.service.Users;
+import pl.mskruch.ping.user.Users;
 
 public class ManageServlet extends HttpServlet
 {

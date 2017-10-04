@@ -47,4 +47,12 @@ class ExceptionHandler {
     {
         ['message': "forbidden"]
     }
+
+    @SpringExceptionHandler(BadRequest.class)
+    @ResponseBody
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    invalid(BadRequest e)
+    {
+        ['message': e.getMessage()]
+    }
 }
