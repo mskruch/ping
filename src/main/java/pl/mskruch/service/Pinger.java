@@ -1,8 +1,8 @@
 package pl.mskruch.service;
 
 import static java.lang.System.currentTimeMillis;
-import static pl.mskruch.ping.data.Status.DOWN;
-import static pl.mskruch.ping.data.Status.UP;
+import static pl.mskruch.ping.check.Status.DOWN;
+import static pl.mskruch.ping.check.Status.UP;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;

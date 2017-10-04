@@ -1,4 +1,4 @@
-package pl.mskruch.ping.data
+package pl.mskruch.ping.check
 
 import com.googlecode.objectify.Key
 import com.googlecode.objectify.annotation.Entity
@@ -13,7 +13,7 @@ class CheckStatus
 	Long id;
 
 	@Parent
-	Key<Check> check;
+	Key<Check> checkKey;
 
 	Status status;
 

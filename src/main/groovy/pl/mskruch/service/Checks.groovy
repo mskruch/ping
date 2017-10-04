@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import pl.mskruch.ping.data.Check;
+import pl.mskruch.ping.check.Check;
 
 class Checks
 {

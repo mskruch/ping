@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.appengine.api.mail.MailService;
 import com.google.appengine.api.mail.MailServiceFactory;
-import pl.mskruch.ping.data.Check;
+import pl.mskruch.ping.check.Check;
 import pl.mskruch.service.Checks;
 import pl.mskruch.service.Mailgun;
 import pl.mskruch.service.Pinger;

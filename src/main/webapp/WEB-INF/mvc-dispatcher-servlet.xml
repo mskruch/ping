@@ -14,7 +14,7 @@
 
     <bean class="pl.mskruch.exception.ExceptionHandler" autowire="constructor" />
     <bean class="pl.mskruch.service.Auth" autowire="constructor" />
-    <bean class="pl.mskruch.resource.CheckController" autowire="constructor" />
+    <bean class="pl.mskruch.ping.check.CheckResource" autowire="constructor" />
     <bean class="pl.mskruch.resource.UserController" autowire="constructor" />
     <bean class="pl.mskruch.service.Checks" autowire="constructor"/>
     <bean class="pl.mskruch.service.Users" autowire="constructor"/>
