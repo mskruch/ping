@@ -1,13 +1,15 @@
 package pl.mskruch.ping.service;
 
+import groovy.transform.ToString;
 import pl.mskruch.ping.check.Status;
 
+@ToString
 public class Result
 {
-	private Status status;
-	private Integer responseCode;
-	private String message;
-	private Long elapsedInMilliseconds;
+	Status status;
+	Integer responseCode;
+	String message;
+	Long elapsedInMilliseconds;
 
 	public Result(Status status)
 	{
@@ -51,9 +53,4 @@ public class Result
 		return elapsedInMilliseconds;
 	}
 
-	@Override
-	public String toString() {
-		return "Result{" + "status=" + status + ", responseCode=" + responseCode + ", message='" + message + '\'' + "," +
-				" elapsedInMilliseconds=" + elapsedInMilliseconds + '}';
-	}
 }
