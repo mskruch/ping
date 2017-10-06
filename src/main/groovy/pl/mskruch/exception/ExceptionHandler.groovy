@@ -1,6 +1,6 @@
 package pl.mskruch.exception
 
-import org.springframework.http.HttpStatus
+import org.springframework.web.HttpMediaTypeNotSupportedException
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler as SpringExceptionHandler
 import org.springframework.web.bind.annotation.ResponseBody
@@ -11,6 +11,7 @@ import java.util.logging.Level
 import java.util.logging.Logger
 
 import static java.util.logging.Logger.getLogger
+import static org.springframework.http.HttpStatus.*
 
 @ControllerAdvice
 class ExceptionHandler {
@@ -18,14 +19,14 @@ class ExceptionHandler {
 
     @SpringExceptionHandler(NotFound.class)
     @ResponseBody
-    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseStatus(NOT_FOUND)
     handleNotFound(NotFound e, WebRequest request) {
         ['message': e.name + " not found"]
     }
 
     @SpringExceptionHandler(Exception.class)
     @ResponseBody
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseStatus(INTERNAL_SERVER_ERROR)
     safetyNet(Exception e, WebRequest request) {
         def uuid = UUID.randomUUID().toString()
         logger.log(Level.SEVERE, uuid + ': ' + e.message, e)
@@ -34,7 +35,7 @@ class ExceptionHandler {
 
     @SpringExceptionHandler(Unauthorized.class)
     @ResponseBody
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ResponseStatus(UNAUTHORIZED)
     unauthorized(Unauthorized e)
     {
         ['message': "unauthorized"]
@@ -42,7 +43,7 @@ class ExceptionHandler {
 
     @SpringExceptionHandler(Forbidden.class)
     @ResponseBody
-    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ResponseStatus(FORBIDDEN)
     forbidden(Unauthorized e)
     {
         ['message': "forbidden"]
@@ -50,9 +51,18 @@ class ExceptionHandler {
 
     @SpringExceptionHandler(BadRequest.class)
     @ResponseBody
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(BAD_REQUEST)
     invalid(BadRequest e)
     {
         ['message': e.getMessage()]
+    }
+
+    @SpringExceptionHandler(HttpMediaTypeNotSupportedException.class)
+    @ResponseBody
+    @ResponseStatus(UNSUPPORTED_MEDIA_TYPE)
+    mediaTypeNotSupported(HttpMediaTypeNotSupportedException e)
+    {
+        ['message': 'unsupported content type',
+         'type'   : e.contentType?.toString()]
     }
 }

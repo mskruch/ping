@@ -2,11 +2,7 @@ package pl.mskruch.ping.check
 
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Controller
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.ResponseBody
-import org.springframework.web.bind.annotation.ResponseStatus
+import org.springframework.web.bind.annotation.*
 
 import java.util.logging.Logger
 
@@ -16,37 +12,42 @@ import static org.springframework.web.bind.annotation.RequestMethod.*
 @RequestMapping("/checks")
 class CheckResource
 {
-    static Logger logger = Logger.getLogger(CheckResource.class.getName());
+	static Logger logger = Logger.getLogger(CheckResource.class.getName());
 
-    Checks checks;
+	Checks checks;
 
-    CheckResource(Checks checks) {
-        this.checks = checks
-    }
+	CheckResource(Checks checks)
+	{
+		this.checks = checks
+	}
 
-    @RequestMapping(value = "/{id}", method = PATCH)
-    @ResponseBody
-    Check update(@PathVariable("id") Long id, @RequestBody Check body) {
-        logger.info("update check " + id + " with " + body)
-        body.id = id
-        checks.patch(body)
-    }
+	@RequestMapping(value = "/{id}", method = PATCH)
+	@ResponseBody
+	Check update(@PathVariable("id") Long id, @RequestBody Check body)
+	{
+		logger.info("update check " + id + " with " + body)
+		body.id = id
+		checks.patch(body)
+	}
 
-    @RequestMapping(value = "/{id}", method = GET)
-    @ResponseBody
-    Check get(@PathVariable("id") Long id){
-        checks.get(id)
-    }
+	@RequestMapping(value = "/{id}", method = GET)
+	@ResponseBody
+	Check get(@PathVariable("id") Long id)
+	{
+		checks.get(id)
+	}
 
-    @RequestMapping(value = "/", method = GET)
-    @ResponseBody
-    List<Check> list(){
-        checks.list()
-    }
+	@RequestMapping(value = "/", method = GET)
+	@ResponseBody
+	List<Check> list()
+	{
+		checks.list()
+	}
 
-    @RequestMapping(value = "/{id}", method = DELETE)
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    void delete(@PathVariable("id") Long id){
-        checks.delete(id)
-    }
+	@RequestMapping(value = "/{id}", method = DELETE)
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	void delete(@PathVariable("id") Long id)
+	{
+		checks.delete(id)
+	}
 }
