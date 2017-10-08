@@ -42,7 +42,7 @@ class PingController
 		Pinger pinger = new Pinger();
 		Result result = pinger.ping(check.getUrl());
 		logger.fine("ping " + check.getUrl() + " " + result.status());
-		boolean updated = checks.update(check, result);
+		boolean updated = checks.update(check.id, result)
 		if (updated) {
 			logger.info(
 					"status changed, sending notification, result: " + result);

@@ -16,11 +16,12 @@ class ChecksRoot
 		return ofy().load().type(Check.class).list();
 	}
 
-	boolean update(Check check, Result result)
+	boolean update(Long id, Result result)
 	{
-		boolean changed = check.setStatus(result.status());
-		ofy().save().entity(check).now();
-		return changed;
+		def check = get(id)
+		boolean changed = check.setStatus(result.status())
+		ofy().save().entity(check).now()
+		return changed
 	}
 
 	List<Check> ownedBy(String email)
