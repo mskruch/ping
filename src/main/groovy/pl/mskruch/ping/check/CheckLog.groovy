@@ -7,18 +7,22 @@ import com.googlecode.objectify.annotation.Index
 import com.googlecode.objectify.annotation.Parent
 
 @Entity
-class CheckStatus
+class CheckLog
 {
 	@Id
-	Long id;
+	Long id
 
 	@Parent
-	Key<Check> checkKey;
+	Key<Check> checkKey
 
-	Status status;
+	Status status
+	Long duration
 
 	@Index
-	Date since;
-	Date checked;
-	Date notified;
+	Date created
+
+	CheckLog(Key<Check> checkKey)
+	{
+		this.checkKey = checkKey
+	}
 }

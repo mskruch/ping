@@ -1,5 +1,6 @@
 package pl.mskruch.ping.check
 
+import com.googlecode.objectify.Key
 import pl.mskruch.exception.NotFound
 import pl.mskruch.ping.service.Result
 
@@ -16,10 +17,10 @@ class ChecksRoot
 		return ofy().load().type(Check.class).list();
 	}
 
-	boolean update(Long id, Result result)
+	boolean update(Long id, Status status)
 	{
 		def check = get(id)
-		boolean changed = check.setStatus(result.status())
+		boolean changed = check.setStatus(status)
 		ofy().save().entity(check).now()
 		return changed
 	}
@@ -60,5 +61,11 @@ class ChecksRoot
 	{
 		ofy().save().entity(check).now()
 		check
+	}
+
+	Outage outage(Long checkId)
+	{
+		def checkKey = Key.create(Check.class, checkId)
+		ofy().load().type(Outage.class).ancestor(checkKey).filter('finished = ', null).first().now()
 	}
 }
