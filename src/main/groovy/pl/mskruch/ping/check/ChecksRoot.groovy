@@ -2,7 +2,6 @@ package pl.mskruch.ping.check
 
 import com.googlecode.objectify.Key
 import pl.mskruch.exception.NotFound
-import pl.mskruch.ping.service.Result
 
 import java.util.logging.Logger
 

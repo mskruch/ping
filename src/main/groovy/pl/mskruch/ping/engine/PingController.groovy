@@ -5,7 +5,6 @@ import com.google.appengine.api.mail.MailServiceFactory
 import com.google.appengine.api.taskqueue.Queue
 import com.google.appengine.api.taskqueue.QueueFactory
 import com.google.appengine.api.taskqueue.TaskOptions
-import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
@@ -16,11 +15,7 @@ import pl.mskruch.ping.check.Check
 import pl.mskruch.ping.check.ChecksRoot
 import pl.mskruch.ping.check.Status
 import pl.mskruch.ping.service.Mailgun
-import pl.mskruch.ping.service.Pinger
-import pl.mskruch.ping.service.Result
-import sun.misc.Request
 
-import javax.xml.ws.Response
 import java.util.logging.Logger
 
 import static com.google.appengine.api.taskqueue.TaskOptions.Builder.withUrl
@@ -53,7 +48,9 @@ class PingController
 
 		Pinger pinger = new Pinger();
 		Result result = pinger.ping(check.getUrl());
+
 		logger.fine("ping " + check.getUrl() + " " + result.status());
+
 		Queue queue = QueueFactory.getDefaultQueue();
 		queue.addAsync(withUrl("/ping/" + check.getId()).param("status", result.status().toString())
 				.method(TaskOptions.Method.POST));

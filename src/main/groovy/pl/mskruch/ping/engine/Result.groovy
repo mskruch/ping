@@ -1,4 +1,4 @@
-package pl.mskruch.ping.service;
+package pl.mskruch.ping.engine;
 
 import groovy.transform.ToString;
 import pl.mskruch.ping.check.Status;
