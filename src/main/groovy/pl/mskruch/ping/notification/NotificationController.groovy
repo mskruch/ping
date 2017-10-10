@@ -16,9 +16,9 @@ class NotificationController
 {
 	static Logger logger = Logger.getLogger(NotificationController.class.getName());
 
-	Mailgun mailing
+	Mailing mailing
 
-	NotificationController(Mailgun mailing)
+	NotificationController(Mailing mailing)
 	{
 		this.mailing = mailing
 	}
