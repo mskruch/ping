@@ -1,36 +1,24 @@
 package pl.mskruch.ping.engine
 
-import com.google.appengine.api.mail.MailService
-import com.google.appengine.api.mail.MailServiceFactory
 import com.google.appengine.api.taskqueue.Queue
 import com.google.appengine.api.taskqueue.QueueFactory
 import com.google.appengine.api.taskqueue.TaskOptions
+import groovy.util.logging.Log
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseBody
-import org.springframework.web.bind.annotation.ResponseStatus
 import pl.mskruch.ping.check.Check
 import pl.mskruch.ping.check.ChecksRoot
-import pl.mskruch.ping.check.Status
-import pl.mskruch.ping.service.Mailgun
-
-import java.util.logging.Logger
 
 import static com.google.appengine.api.taskqueue.TaskOptions.Builder.withUrl
-import static org.springframework.http.HttpStatus.NO_CONTENT
 import static org.springframework.web.bind.annotation.RequestMethod.GET
-import static org.springframework.web.bind.annotation.RequestMethod.POST
+
 
 @Controller
+@Log
 class PingController
 {
-	public static
-	final String SENDER = "noreply@czasowki-feeder.appspotmail.com";
-
-	static Logger logger = Logger.getLogger(PingController.class.getName());
-
 	ChecksRoot checks
 
 	PingController(ChecksRoot checks)
@@ -42,56 +30,38 @@ class PingController
 	@ResponseBody
 	def processSingleCheck(@PathVariable("id") Long id)
 	{
-		logger.info("processing " + id)
+		def checkTime = new Date()
+		log.info("processing $id at $checkTime")
 
 		def check = checks.get(id)
 
 		Pinger pinger = new Pinger();
 		Result result = pinger.ping(check.getUrl());
 
-		logger.fine("ping " + check.getUrl() + " " + result.status());
+		log.fine("ping " + check.getUrl() + " " + result.status());
 
-		Queue queue = QueueFactory.getDefaultQueue();
-		queue.addAsync(withUrl("/ping/" + check.getId()).param("status", result.status().toString())
-				.method(TaskOptions.Method.POST));
-
-		boolean updated = checks.update(check.id, result.status())
+		boolean updated = checks.update(check.id, result.status(), checkTime)
 		if (updated) {
-			logger.info(
-					"status changed, sending notification, result: " + result);
-			notify(check, result);
+			notify(check, result, checkTime)
 		}
 	}
 
-	@RequestMapping(value = "/ping/{id}", method = POST)
-	@ResponseStatus(NO_CONTENT)
-	void updateStatus(@PathVariable("id") Long id, @RequestParam Status status)
+	private notify(Check check, Result result, Date checkTime) throws IOException
 	{
-		logger.info("post with $id and status $status")
+		String name = check.name ?: check.url
+		name + " is " + result.status()
 
-//		def updated = checks.update(id, status)
-//		if (updated){
-//			//TODO: notify
-//		}
-	}
+		def durationString = result.elapsedInMilliseconds() != null ? (result.elapsedInMilliseconds() / 1000) + " seconds" : ""
+		def body = "At $checkTime, $check.url was $result.status\n" +
+				"Status code: $result.responseCode\n" +
+				"Time: $durationString\n" +
+				"Details: $result.message" //TODO: html
 
-
-	private void notify(Check check, Result result) throws IOException
-	{
-		Mailgun mailgun = new Mailgun();
-		try {
-			String durationString = result.elapsedInMilliseconds() != null ? (result.elapsedInMilliseconds() / 1000) + " seconds" : "";
-			String name = check.getName() != null ? check.getName()
-					: check.getUrl();
-			mailgun.send(check.getOwnerEmail(), name + " is " + result.status(),
-					check.getUrl() + " is " + result.status() + "\n"
-							+ "Status code: " + result.responseCode() + "\n" + "Time: "
-							+ durationString + "\n" + "Details: " + result.message());
-		} catch (Exception e) {
-			logger.severe("unable to send notification: " + e.getMessage());
-			MailServiceFactory.getMailService()
-					.sendToAdmins(new MailService.Message(SENDER, null,
-					"Unable to send notification", e.getMessage()));
-		}
+		Queue queue = QueueFactory.getDefaultQueue()
+		queue.addAsync(withUrl("/task/mail")
+				.param("to", check.getOwnerEmail())
+				.param("subject", "$name is $result.status")
+				.param("body", body)
+				.method(TaskOptions.Method.POST))
 	}
 }

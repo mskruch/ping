@@ -1,26 +1,33 @@
-package pl.mskruch.ping.service;
+package pl.mskruch.ping.notification
 
-import java.util.logging.Logger;
+import com.google.appengine.api.utils.SystemProperty
+import com.sun.jersey.api.client.Client
+import com.sun.jersey.api.client.ClientResponse
+import com.sun.jersey.api.client.WebResource
+import com.sun.jersey.api.client.filter.HTTPBasicAuthFilter
+import com.sun.jersey.core.util.MultivaluedMapImpl
+import pl.mskruch.ping.system.Config
 
-import javax.ws.rs.core.MediaType;
+import javax.annotation.PostConstruct
+import javax.ws.rs.core.MediaType
+import java.util.logging.Logger
 
-import com.google.appengine.api.utils.SystemProperty;
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.WebResource;
-import com.sun.jersey.api.client.filter.HTTPBasicAuthFilter;
-import com.sun.jersey.core.util.MultivaluedMapImpl;
-
-public class Mailgun
+class Mailgun
 {
-	static Logger logger = Logger.getLogger(Mailgun.class.getName());
+	static Logger logger = Logger.getLogger(Mailgun.class.getName())
 
-	private final String key;
-	private final String host;
+	private String key
+	private String host
+	private Config config
 
-	public Mailgun()
+	Mailgun(Config config)
 	{
-		Config config = new Config();
+		this.config = config
+	}
+
+	@PostConstruct
+	def init()
+	{
 		key = config.get("mailgun.key");
 		host = config.get("mailgun.host");
 		if (isProduction()) {
@@ -29,12 +36,13 @@ public class Mailgun
 			}
 			if (host == null || host.isEmpty()) {
 				throw new IllegalStateException(
-					"<mailgun.host> not configured");
+						"<mailgun.host> not configured");
 			}
 		}
 	}
 
-	public void send(String to, String subject, String body)
+
+	def send(String to, String subject, String body)
 	{
 		// ClientConfig clientConfigMail = new ClientConfig();
 		// Client clientMail = ClientBuilder.newClient(clientConfigMail);
@@ -52,15 +60,15 @@ public class Mailgun
 
 		if (key == null || host == null) {
 			System.out.println(
-				"Email not sent (not configured): " + subject);
-			return;
+					"Email not sent (not configured): " + subject);
+			return
 		}
 
 		Client client = Client.create();
 		client.addFilter(new HTTPBasicAuthFilter("api", key));
 
 		WebResource webResource = client
-			.resource("https://api.mailgun.net/v2/" + host + "/messages");
+				.resource("https://api.mailgun.net/v2/" + host + "/messages");
 
 		MultivaluedMapImpl formData = new MultivaluedMapImpl();
 		formData.add("from", "Ping <ping@" + host + ">");
@@ -69,8 +77,8 @@ public class Mailgun
 		formData.add("html", body);
 
 		ClientResponse clientResponse = webResource
-			.type(MediaType.APPLICATION_FORM_URLENCODED)
-			.post(ClientResponse.class, formData);
+				.type(MediaType.APPLICATION_FORM_URLENCODED)
+				.post(ClientResponse.class, formData);
 		String output = clientResponse.getEntity(String.class);
 
 		logger.info("Email sent successfully : " + output);
@@ -80,6 +88,6 @@ public class Mailgun
 	private boolean isProduction()
 	{
 		return SystemProperty.environment
-			.value() == SystemProperty.Environment.Value.Production;
+				.value() == SystemProperty.Environment.Value.Production;
 	}
 }

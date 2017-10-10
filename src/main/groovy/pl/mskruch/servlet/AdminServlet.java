@@ -1,6 +1,6 @@
 package pl.mskruch.servlet;
 
-import pl.mskruch.ping.service.Config;
+import pl.mskruch.ping.system.Config;
 import pl.mskruch.ping.user.Users;
 
 import javax.servlet.ServletException;

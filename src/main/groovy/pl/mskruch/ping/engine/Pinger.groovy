@@ -1,7 +1,7 @@
 package pl.mskruch.ping.engine
 
 import pl.mskruch.exception.MultipleFailure
-import pl.mskruch.ping.service.Config
+import pl.mskruch.ping.system.Config
 
 import java.util.logging.Logger
 

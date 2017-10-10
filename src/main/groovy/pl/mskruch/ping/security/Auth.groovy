@@ -1,4 +1,4 @@
-package pl.mskruch.ping.service
+package pl.mskruch.ping.security
 
 import pl.mskruch.exception.Unauthorized
 

@@ -16,9 +16,13 @@ class ChecksRoot
 		return ofy().load().type(Check.class).list();
 	}
 
-	boolean update(Long id, Status status)
+	boolean update(Long id, Status status, Date checkTime)
 	{
 		def check = get(id)
+		if (check.lastCheck > checkTime){
+			logger.warning("last check was at $check.lastCheck and trying to update with check at $checkTime - ignore")
+			return false
+		}
 		boolean changed = check.setStatus(status)
 		ofy().save().entity(check).now()
 		return changed

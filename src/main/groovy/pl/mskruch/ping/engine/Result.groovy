@@ -4,12 +4,12 @@ import groovy.transform.ToString;
 import pl.mskruch.ping.check.Status;
 
 @ToString
-public class Result
+class Result
 {
-	Status status;
-	Integer responseCode;
-	String message;
-	Long elapsedInMilliseconds;
+	Status status
+	Integer responseCode
+	String message
+	Long elapsedInMilliseconds
 
 	public Result(Status status)
 	{

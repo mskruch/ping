@@ -1,7 +1,7 @@
 package pl.mskruch.ping.check
 
 import pl.mskruch.exception.NotFound
-import pl.mskruch.ping.service.Auth
+import pl.mskruch.ping.security.Auth
 
 import javax.servlet.http.HttpServletRequest
 import java.util.logging.Logger

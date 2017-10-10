@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import pl.mskruch.ping.service.Config;
+import pl.mskruch.ping.system.Config;
 
 public class ConfigServlet extends HttpServlet
 {
