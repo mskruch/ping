@@ -30,9 +30,23 @@ class NotificationController
 		logger.info("sending email to $to")
 
 		mailing.send(to, subject, body)
+	}
 
-//		MailServiceFactory.getMailService()
-//				.sendToAdmins(new MailService.Message(SENDER, null,
-//				"Unable to send notification", e.getMessage()));
+	@RequestMapping(value = "/mail/up", method = POST)
+	@ResponseStatus(OK)
+	sendUpMail(@RequestParam("to") String to, @RequestParam String subject, @RequestParam String url)
+	{
+		logger.info("sending up email to $to")
+
+		mailing.sendUp(to, subject, url)
+	}
+
+	@RequestMapping(value = "/mail/down", method = POST)
+	@ResponseStatus(OK)
+	sendUpMail(@RequestParam("to") String to, @RequestParam String subject, @RequestParam String url, @RequestParam String reason)
+	{
+		logger.info("sending up email to $to")
+
+		mailing.sendDown(to, subject, url, reason)
 	}
 }

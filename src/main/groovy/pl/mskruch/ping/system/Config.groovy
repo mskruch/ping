@@ -1,10 +1,8 @@
-package pl.mskruch.ping.system;
+package pl.mskruch.ping.system
 
-import static com.googlecode.objectify.ObjectifyService.ofy;
+import pl.mskruch.ping.data.ConfigEntry
 
-import java.util.List;
-
-import pl.mskruch.ping.data.ConfigEntry;
+import static com.googlecode.objectify.ObjectifyService.ofy
 
 public class Config
 {
@@ -29,16 +27,24 @@ public class Config
 		return entity.getId();
 	}
 
-	public String get(String key)
+	String get(String key)
 	{
-		ConfigEntry fetched = ofy().load().type(ConfigEntry.class)
-			.filter("key", key).first().now();
-		return fetched != null ? fetched.getValue() : null;
+		def value = _get(key)
+		if (!value) {
+			throw new IllegalStateException("<$key not configured")
+		}
+		return value
+	}
+
+	private String _get(String key)
+	{
+		ConfigEntry fetched = ofy().load().type(ConfigEntry.class).filter("key", key).first().now()
+		return fetched?.value
 	}
 
 	public int getInt(String key, int defaultValue)
 	{
-		String value = get(key);
+		String value = _get(key);
 		if (value == null) {
 			return defaultValue;
 		}

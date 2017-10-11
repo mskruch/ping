@@ -34,7 +34,7 @@ dependencies {
 
     compile 'org.ocpsoft.prettytime:prettytime:3.2.5.Final'
     compile 'com.sun.jersey:jersey-client:1.17'
-
+    compile 'com.sun.jersey.contribs:jersey-multipart:1.19.4'
 
     compile 'org.springframework:spring-context:3.2.18.RELEASE'
     compile 'org.springframework:spring-webmvc:3.2.18.RELEASE'

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseBody
 import pl.mskruch.ping.check.Check
 import pl.mskruch.ping.check.ChecksRoot
+import pl.mskruch.ping.check.Status
 
 import static com.google.appengine.api.taskqueue.TaskOptions.Builder.withUrl
 import static org.springframework.web.bind.annotation.RequestMethod.GET
@@ -49,19 +50,25 @@ class PingController
 	private notify(Check check, Result result, Date checkTime) throws IOException
 	{
 		String name = check.name ?: check.url
-		name + " is " + result.status()
-
-		def durationString = result.elapsedInMilliseconds() != null ? (result.elapsedInMilliseconds() / 1000) + " seconds" : ""
-		def body = "At $checkTime, $check.url was $result.status\n" +
-				"Status code: $result.responseCode\n" +
-				"Time: $durationString\n" +
-				"Details: $result.message" //TODO: html
 
 		Queue queue = QueueFactory.getDefaultQueue()
-		queue.addAsync(withUrl("/task/mail")
-				.param("to", check.getOwnerEmail())
-				.param("subject", "$name is $result.status")
-				.param("body", body)
-				.method(TaskOptions.Method.POST))
+
+		if (result.status() == Status.UP) {
+			queue.addAsync(withUrl("/task/mail/up")
+					.param("to", check.getOwnerEmail())
+					.param("subject", "$name is $result.status")
+					.param("url", check.url)
+					.method(TaskOptions.Method.POST))
+		} else {
+			def reason = result.responseCode ?
+					"response status code $result.responseCode" :
+					"lack of response due to $result.message"
+			queue.addAsync(withUrl("/task/mail/down")
+					.param("to", check.getOwnerEmail())
+					.param("subject", "$name is $result.status")
+					.param("url", check.url)
+					.param("reason", reason)
+					.method(TaskOptions.Method.POST))
+		}
 	}
 }
