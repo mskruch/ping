@@ -18,21 +18,21 @@ class Mailing
 		this.config = config
 	}
 
-	@PostConstruct
-	def init()
-	{
-		key = config.get("mailgun.key");
-		host = config.get("mailgun.host");
-		if (isProduction()) {
-			if (key == null || key.isEmpty()) {
-				throw new IllegalStateException("<mailgun.key> not configured");
-			}
-			if (host == null || host.isEmpty()) {
-				throw new IllegalStateException(
-						"<mailgun.host> not configured");
-			}
-		}
-	}
+//	@PostConstruct
+//	def init()
+//	{
+//		key = config.get("mailgun.key");
+//		host = config.get("mailgun.host");
+//		if (isProduction()) {
+//			if (key == null || key.isEmpty()) {
+//				throw new IllegalStateException("<mailgun.key> not configured");
+//			}
+//			if (host == null || host.isEmpty()) {
+//				throw new IllegalStateException(
+//						"<mailgun.host> not configured");
+//			}
+//		}
+//	}
 
 
 	def send(String to, String subject, String body)
@@ -50,12 +50,18 @@ class Mailing
 		// Response response = targetMail.request().post(Entity.entity(formData,
 		// MediaType.APPLICATION_FORM_URLENCODED_TYPE));
 		// logger.info("Mail sent : " + response);
-
-		if (key == null || host == null) {
-			System.out.println(
-					"Email not sent (not configured): " + subject);
-			return
+		key = config.get("mailgun.key");
+		host = config.get("mailgun.host");
+		if (isProduction()) {
+			if (!key) {
+				throw new IllegalStateException("<mailgun.key> not configured");
+			}
+			if (!host) {
+				throw new IllegalStateException(
+						"<mailgun.host> not configured");
+			}
 		}
+
 		new Mailgun(key, host).send(to, subject, body)
 	}
 
