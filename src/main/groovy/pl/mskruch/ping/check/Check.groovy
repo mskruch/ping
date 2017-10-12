@@ -3,13 +3,15 @@ package pl.mskruch.ping.check;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
+import groovy.transform.ToString;
 import org.ocpsoft.prettytime.PrettyTime;
 
 import java.util.Date;
 import java.util.Locale;
 
 @Entity
-public class Check
+@ToString
+class Check
 {
 	@Id
 	Long id;
@@ -116,12 +118,5 @@ public class Check
 	public void setName(String name)
 	{
 		this.name = name;
-	}
-
-	@Override
-	public String toString()
-	{
-		return "Check{" + "id=" + id + ", ownerEmail='" + ownerEmail + '\''
-			+ ", created=" + created + ", url='" + url + '\'' + '}';
 	}
 }
