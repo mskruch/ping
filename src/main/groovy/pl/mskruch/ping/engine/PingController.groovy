@@ -21,10 +21,12 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET
 class PingController
 {
 	ChecksRoot checks
+	Pinger pinger
 
-	PingController(ChecksRoot checks)
+	PingController(ChecksRoot checks, Pinger pinger)
 	{
 		this.checks = checks
+		this.pinger = pinger
 	}
 
 	@RequestMapping(value = "/ping/{id}", method = GET)
@@ -36,7 +38,6 @@ class PingController
 
 		def check = checks.get(id)
 
-		Pinger pinger = new Pinger();
 		Result result = pinger.ping(check.getUrl());
 
 		log.fine("ping " + check.getUrl() + " " + result.status());

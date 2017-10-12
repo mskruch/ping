@@ -12,7 +12,12 @@ import static pl.mskruch.ping.check.Status.UP
 @Log
 class Pinger
 {
-	private Config config = new Config();
+	Config config
+
+	Pinger(Config config)
+	{
+		this.config = config
+	}
 
 	Result ping(String urlString) throws IOException
 	{
