@@ -62,7 +62,7 @@ class PingController
 		} else {
 			def reason = result.responseCode ?
 					"response status code $result.responseCode" :
-					"lack of response due to $result.message"
+					"a lack of response due to $result.message"
 			queue.addAsync(withUrl("/task/mail/down")
 					.param("to", check.getOwnerEmail())
 					.param("subject", "$name is $result.status")
