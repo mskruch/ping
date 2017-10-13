@@ -24,10 +24,8 @@ class ChecksRoot
 			return false
 		}
 		boolean changed = check.setStatus(status)
-		if (changed) {
-			ofy().save().entity(check).now()
-			log.fine "saved changes in check $check"
-		}
+		ofy().save().entity(check).now()
+		log.fine "saved changes in check $check"
 		return changed
 	}
 
