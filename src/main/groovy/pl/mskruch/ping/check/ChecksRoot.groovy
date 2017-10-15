@@ -1,10 +1,12 @@
 package pl.mskruch.ping.check
 
 import com.googlecode.objectify.Key
+import com.googlecode.objectify.Work
 import groovy.util.logging.Log
 import pl.mskruch.exception.NotFound
 
 import static com.googlecode.objectify.ObjectifyService.ofy
+import static com.googlecode.objectify.ObjectifyService.run
 
 @Log
 class ChecksRoot
@@ -16,17 +18,18 @@ class ChecksRoot
 
 	boolean update(Long id, Status status, Date checkTime)
 	{
-		def check = get(id)
-
-		log.fine("check found: $check")
-		if (check.lastCheck > checkTime){
-			log.warning("last check was at $check.lastCheck and trying to update with check at $checkTime - ignore")
-			return false
-		}
-		boolean changed = check.setStatus(status)
-		ofy().save().entity(check).now()
-		log.fine "saved changes in check $check"
-		return changed
+		ofy().transact({
+			def check = get(id)
+			log.fine("check found: $check")
+			if (check.lastCheck > checkTime) {
+				log.warning("last check was at $check.lastCheck and trying to update with check at $checkTime - ignore")
+				return false
+			}
+			boolean changed = check.setStatus(status)
+			ofy().save().entity(check)
+			log.fine "saved changes in check $check"
+			return changed
+		})
 	}
 
 	List<Check> ownedBy(String email)

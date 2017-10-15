@@ -44,6 +44,7 @@ class PingController
 
 		boolean updated = checks.update(check.id, result.status(), checkTime)
 		if (updated) {
+			log.info("status changed to $result.status, sending notification")
 			notify(check, result, checkTime)
 		}
 	}
