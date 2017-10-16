@@ -1,7 +1,6 @@
 package pl.mskruch.ping.check
 
 import com.googlecode.objectify.Key
-import com.googlecode.objectify.Work
 import groovy.util.logging.Log
 import pl.mskruch.exception.NotFound
 
@@ -17,21 +16,18 @@ class ChecksRoot
 
 	boolean update(Long id, Status status, Date checkTime)
 	{
-		def changed = ofy().transact(new Work<Boolean>() {
-			Boolean run()
-			{
-				def check = get(id)
-				log.fine("check found: $check")
-				if (check.lastCheck > checkTime) {
-					log.warning("last check was at $check.lastCheck and trying to update with check at $checkTime - ignore")
-					return false
-				}
-				boolean changed = check.setStatus(status)
-				ofy().save().entity(check)
-				log.fine "saved changes in check $check returning $changed"
-				return changed
+		def changed = false
+		ofy().transact {
+			def check = get(id)
+			log.fine("check found: $check")
+			if (check.lastCheck > checkTime) {
+				log.warning("last check was at $check.lastCheck and trying to update with check at $checkTime - ignore")
+				return
 			}
-		})
+			changed = check.setStatus(status)
+			ofy().save().entity(check)
+			log.fine "saved changes in check $check returning $changed"
+		}
 		log.fine("returning $changed from the update method")
 		return changed
 	}
