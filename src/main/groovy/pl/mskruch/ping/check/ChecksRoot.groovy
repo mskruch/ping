@@ -6,7 +6,6 @@ import groovy.util.logging.Log
 import pl.mskruch.exception.NotFound
 
 import static com.googlecode.objectify.ObjectifyService.ofy
-import static com.googlecode.objectify.ObjectifyService.run
 
 @Log
 class ChecksRoot
@@ -18,18 +17,23 @@ class ChecksRoot
 
 	boolean update(Long id, Status status, Date checkTime)
 	{
-		ofy().transact({
-			def check = get(id)
-			log.fine("check found: $check")
-			if (check.lastCheck > checkTime) {
-				log.warning("last check was at $check.lastCheck and trying to update with check at $checkTime - ignore")
-				return false
+		def changed = ofy().transact(new Work<Boolean>() {
+			Boolean run()
+			{
+				def check = get(id)
+				log.fine("check found: $check")
+				if (check.lastCheck > checkTime) {
+					log.warning("last check was at $check.lastCheck and trying to update with check at $checkTime - ignore")
+					return false
+				}
+				boolean changed = check.setStatus(status)
+				ofy().save().entity(check)
+				log.fine "saved changes in check $check returning $changed"
+				return changed
 			}
-			boolean changed = check.setStatus(status)
-			ofy().save().entity(check)
-			log.fine "saved changes in check $check"
-			return changed
 		})
+		log.fine("returning $changed from the update method")
+		return changed
 	}
 
 	List<Check> ownedBy(String email)

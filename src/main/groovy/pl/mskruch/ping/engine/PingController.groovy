@@ -42,8 +42,9 @@ class PingController
 
 		log.fine("ping " + check.getUrl() + " " + result.status());
 
-		boolean updated = checks.update(check.id, result.status(), checkTime)
-		if (updated) {
+		boolean changed = checks.update(check.id, result.status(), checkTime)
+		log.fine"status changed: $changed"
+		if (changed) {
 			log.info("status changed to $result.status, sending notification")
 			notify(check, result, checkTime)
 		}
