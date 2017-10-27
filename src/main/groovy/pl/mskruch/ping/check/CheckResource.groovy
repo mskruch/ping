@@ -1,19 +1,17 @@
 package pl.mskruch.ping.check
 
+import groovy.util.logging.Log
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 
-import java.util.logging.Logger
-
 import static org.springframework.web.bind.annotation.RequestMethod.*
 
 @Controller
+@Log
 @RequestMapping("/checks")
 class CheckResource
 {
-	static Logger logger = Logger.getLogger(CheckResource.class.getName());
-
 	Checks checks;
 
 	CheckResource(Checks checks)
@@ -25,7 +23,7 @@ class CheckResource
 	@ResponseBody
 	Check update(@PathVariable("id") Long id, @RequestBody Check body)
 	{
-		logger.info("update check " + id + " with " + body)
+		log.info("update check " + id + " with " + body)
 		body.id = id
 		checks.patch(body)
 	}
