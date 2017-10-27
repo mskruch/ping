@@ -37,7 +37,7 @@ class CheckResource
 		checks.get(id)
 	}
 
-	@RequestMapping(value = "/", method = GET)
+	@RequestMapping(method = GET)
 	@ResponseBody
 	List<Check> list()
 	{
