@@ -63,7 +63,9 @@ class PingController
 		} else if (result.status == DOWN && outage){
 			log.info "another check failed, outage continue"
 			if (!outage.notified && (!check.notificationDelay || (secondsBetween(checkTime, outage.started) > (check.notificationDelay as long)))) {
-				notify(check, result, outage.started)
+				def since = TimeCategory.minus(checkTime, outage.started).toString()
+				log.info("check time $checkTime started $outage.started calculated string: $since")
+				notify(check, result,since)
 				outage.notified = new Date()
 				checks.save(outage)
 			}
@@ -81,7 +83,7 @@ class PingController
 		return result.status
 	}
 
-	private notify(Check check, Result result, Date since) throws IOException
+	private notify(Check check, Result result, String since) throws IOException
 	{
 		String name = check.name ?: check.url
 
@@ -102,7 +104,7 @@ class PingController
 					.param("subject", "$name is $result.status")
 					.param("url", check.url)
 					.param("reason", reason)
-					.param("since", since ? TimeCategory.minus(check.created, since).toString() : null)
+					.param("since", since ?: '')
 					.method(TaskOptions.Method.POST))
 		}
 	}
