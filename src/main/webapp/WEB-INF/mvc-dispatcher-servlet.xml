@@ -18,6 +18,10 @@
     <bean class="pl.mskruch.ping.check.Checks" autowire="constructor"/>
     <bean class="pl.mskruch.ping.check.ChecksRoot" autowire="constructor"/>
 
+    <bean class="pl.mskruch.ping.outage.OutageResource" autowire="constructor"/>
+    <bean class="pl.mskruch.ping.outage.Outages" autowire="constructor"/>
+    <bean class="pl.mskruch.ping.outage.OutagesRoot" autowire="constructor"/>
+
     <bean class="pl.mskruch.ping.engine.PingController" autowire="constructor" />
     <bean class="pl.mskruch.ping.engine.Pinger" autowire="constructor" />
 
