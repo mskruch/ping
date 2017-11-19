@@ -61,7 +61,7 @@ class Mailing
 		mailgun().sendHtml(to, subject, body, [image])
 	}
 
-	def sendDown(String to, String subject, String url, String reason)
+	def sendDown(String to, String subject, String url, String reason, String since)
 	{
 		if (!isProduction()) {
 			log.info "Email not sent (not production): $subject"
@@ -72,7 +72,7 @@ class Mailing
 
 		def body = """
 			<html>
-				<p>Oh no! Your site is <b>DOWN</b></p>
+				<p>Oh no! Your site is <b>DOWN</b>${since ? ' since ' + since : ''}</p>
 				<p><img src=\"cid:down.png\"></p>
 				<p>And the reason is $reason</p>
 				<p><a href="$url">$url</a></p>

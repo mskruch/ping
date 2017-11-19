@@ -43,10 +43,10 @@ class NotificationController
 
 	@RequestMapping(value = "/mail/down", method = POST)
 	@ResponseStatus(OK)
-	sendUpMail(@RequestParam("to") String to, @RequestParam String subject, @RequestParam String url, @RequestParam String reason)
+	sendUpMail(@RequestParam("to") String to, @RequestParam String subject, @RequestParam String url, @RequestParam String reason, @RequestParam String since)
 	{
 		logger.info("sending up email to $to")
 
-		mailing.sendDown(to, subject, url, reason)
+		mailing.sendDown(to, subject, url, reason, since)
 	}
 }

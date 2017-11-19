@@ -51,9 +51,8 @@ class Checks
 	Check patch(Check patch)
 	{
 		Check check = get(patch.getId());
-		if (patch.getNotificationDelayInMilliseconds() != null) {
-			check.setNotificationDelayInMilliseconds(
-					patch.getNotificationDelayInMilliseconds())
+		if (patch.notificationDelay != null) {
+			check.notificationDelay = patch.notificationDelay
 		}
 		if (patch.name) {
 			check.setName(patch.name)

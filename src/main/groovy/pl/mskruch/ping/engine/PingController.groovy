@@ -3,6 +3,7 @@ package pl.mskruch.ping.engine
 import com.google.appengine.api.taskqueue.Queue
 import com.google.appengine.api.taskqueue.QueueFactory
 import com.google.appengine.api.taskqueue.TaskOptions
+import groovy.time.TimeCategory
 import groovy.util.logging.Log
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.PathVariable
@@ -10,11 +11,12 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseBody
 import pl.mskruch.ping.check.Check
 import pl.mskruch.ping.check.ChecksRoot
-import pl.mskruch.ping.check.Status
 
 import static com.google.appengine.api.taskqueue.TaskOptions.Builder.withUrl
 import static org.springframework.web.bind.annotation.RequestMethod.GET
-
+import static pl.mskruch.common.DateUtils.secondsBetween
+import static pl.mskruch.ping.check.Status.DOWN
+import static pl.mskruch.ping.check.Status.UP
 
 @Controller
 @Log
@@ -40,23 +42,52 @@ class PingController
 
 		Result result = pinger.ping(check.getUrl());
 
-		log.fine("ping " + check.getUrl() + " " + result.status());
+		log.fine("ping " + check.getUrl() + " " + result.status);
 
-		boolean changed = checks.update(check.id, result.status(), checkTime)
+		boolean changed = checks.update(check.id, result.status, checkTime)
 		log.fine"status changed: $changed"
 		if (changed) {
-			log.info("status changed to $result.status, sending notification")
-			notify(check, result, checkTime)
+			log.info("status changed to $result.status")
+//			notify(check, result, null)
 		}
+
+		def outage = checks.outage(id)
+		if (result.status == DOWN && !outage){
+			log.info "check failed, outage detected"
+			outage = checks.createOutage(id, checkTime)
+			if (!check.notificationDelay){
+				notify(check, result, null)
+				outage.notified = new Date()
+				checks.save(outage)
+			}
+		} else if (result.status == DOWN && outage){
+			log.info "another check failed, outage continue"
+			if (!outage.notified && (!check.notificationDelay || (secondsBetween(checkTime, outage.started) > (check.notificationDelay as long)))) {
+				notify(check, result, outage.started)
+				outage.notified = new Date()
+				checks.save(outage)
+			}
+		} else if (result.status == UP && !outage){
+			log.fine "check passed"
+		} else if (result.status == UP && outage){
+			log.fine "outage is over"
+			if (outage.notified) {
+				notify(check, result, null)
+			}
+			outage.finished = checkTime
+			checks.save(outage)
+		}
+
+		return result.status
 	}
 
-	private notify(Check check, Result result, Date checkTime) throws IOException
+	private notify(Check check, Result result, Date since) throws IOException
 	{
 		String name = check.name ?: check.url
 
 		Queue queue = QueueFactory.getDefaultQueue()
 
-		if (result.status() == Status.UP) {
+		if (result.status == UP) {
 			queue.addAsync(withUrl("/task/mail/up")
 					.param("to", check.getOwnerEmail())
 					.param("subject", "$name is $result.status")
@@ -71,6 +102,7 @@ class PingController
 					.param("subject", "$name is $result.status")
 					.param("url", check.url)
 					.param("reason", reason)
+					.param("since", since ? TimeCategory.minus(check.created, since).toString() : null)
 					.method(TaskOptions.Method.POST))
 		}
 	}

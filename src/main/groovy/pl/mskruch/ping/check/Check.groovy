@@ -1,13 +1,11 @@
-package pl.mskruch.ping.check;
+package pl.mskruch.ping.check
 
-import com.googlecode.objectify.annotation.Entity;
-import com.googlecode.objectify.annotation.Id;
-import com.googlecode.objectify.annotation.Index;
-import groovy.transform.ToString;
-import org.ocpsoft.prettytime.PrettyTime;
+import com.googlecode.objectify.annotation.Entity
+import com.googlecode.objectify.annotation.Id
+import com.googlecode.objectify.annotation.Index
+import groovy.transform.ToString
 
-import java.util.Date;
-import java.util.Locale;
+import static pl.mskruch.common.FormatUtils.formatDurationSince
 
 @Entity
 @ToString
@@ -24,10 +22,10 @@ class Check
 	String url;
 
 	Date lastCheck;
-	Status status;
+	Status status
 	Date statusSince;
 
-	Long notificationDelayInMilliseconds;
+	def notificationDelay
 
 	Check()
 	{
@@ -73,41 +71,19 @@ class Check
 		return statusSince;
 	}
 
-	public String getStatusSinceDuration()
+	String getStatusSinceDuration()
 	{
-		return formatDurationSince(this.statusSince);
-
+		formatDurationSince(this.statusSince)
 	}
 
-	public String getLastCheckDuration()
+	String getLastCheckDuration()
 	{
-		return formatDurationSince(this.lastCheck);
+		formatDurationSince(this.lastCheck)
 	}
 
-	private String formatDurationSince(Date time)
+	public String getOwnerEmail()
 	{
-		if (time == null){
-			return null;
-		}
-		PrettyTime pt = new PrettyTime(Locale.ENGLISH);
-		return pt.format(time);
-	}
-
-	public Status getStatus()
-	{
-		return status;
-	}
-
-	public String getOwnerEmail() {
 		return ownerEmail;
-	}
-
-	public Long getNotificationDelayInMilliseconds() {
-		return notificationDelayInMilliseconds;
-	}
-
-	public void setNotificationDelayInMilliseconds(Long notificationDelayInMilliseconds) {
-		this.notificationDelayInMilliseconds = notificationDelayInMilliseconds;
 	}
 
 	public String getName()

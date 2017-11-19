@@ -1,6 +1,7 @@
 package pl.mskruch.ping.check
 
 import com.googlecode.objectify.Key
+import com.googlecode.objectify.Ref
 import groovy.util.logging.Log
 import pl.mskruch.exception.NotFound
 
@@ -68,6 +69,23 @@ class ChecksRoot
 	{
 		ofy().save().entity(check).now()
 		check
+	}
+
+	Outage save(Outage outage)
+	{
+		ofy().save().entity(outage).now()
+		outage
+	}
+
+	Outage createOutage(Long checkId, Date checkTime)
+	{
+		Key<Check> checkKey = Key.create(Check.class, checkId)
+		Ref<Check> ref = Ref.create(checkKey)
+		def outage = new Outage(ref, checkTime)
+
+		ofy().save().entity(outage).now()
+		log.fine "outage created $outage"
+		return outage
 	}
 
 	Outage outage(Long checkId)
