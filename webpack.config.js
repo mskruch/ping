@@ -2,6 +2,7 @@ const path = require('path');
 const root = path.resolve(__dirname, 'src/main/webapp');
 const src = path.resolve(root, 'javascript');
 const dest = path.resolve(__dirname, 'src/main/webapp/dist');
+const webpack = require('webpack');
 
 
 module.exports = {
@@ -23,10 +24,18 @@ module.exports = {
                 use: {
                     loader: 'babel-loader',
                     options: {
-                        presets: ['react','stage-2']
+                        presets: ['react', 'stage-2']
                     }
                 }
             }
         ]
-    }
+    },
+    plugins: [
+        new webpack.ProvidePlugin({
+            $: 'jquery',
+            jQuery: 'jquery',
+            'window.jQuery': 'jquery',
+            Popper: ['popper.js', 'default']
+        })
+    ]
 };
