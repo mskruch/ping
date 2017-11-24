@@ -14,12 +14,12 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.jsx$/,
-                exclude: /(node_modules|bower_components)/,
+                test: /\.jsx?$/,
+                exclude: /(node_modules)/,
                 use: {
                     loader: 'babel-loader',
                     options: {
-                        presets: ['react']
+                        presets: ['react','stage-2']
                     }
                 }
             }

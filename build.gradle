@@ -54,6 +54,7 @@ dependencies {
 appengine {  // App Engine tasks configuration
     run {
         port = 8080
+        clearDatastore = false
     }
 
     deploy {   // deploy configuration

@@ -1,7 +1,9 @@
 import ReactDOM from 'react-dom';
 import React from 'react';
+import App from './app.jsx';
+
 
 ReactDOM.render(
-    <h1>Ping</h1>,
+    <App/>,
     document.getElementById('root')
 );
