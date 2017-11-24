@@ -6,15 +6,19 @@ const dest = path.resolve(__dirname, 'src/main/webapp/dist');
 
 module.exports = {
     entry: src + '/index.jsx',
+    devtool: 'sourcemaps',
     output: {
         filename: 'bundle.js',
         path: dest
     },
-
+    resolve: {
+        extensions: ['.js', '.jsx']
+    },
     module: {
         rules: [
             {
-                test: /\.jsx?$/,
+                test: path.join(__dirname, '.'),
+                // test: /\.jsx?$/,
                 exclude: /(node_modules)/,
                 use: {
                     loader: 'babel-loader',
