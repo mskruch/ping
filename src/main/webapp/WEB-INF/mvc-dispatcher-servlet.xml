@@ -30,7 +30,6 @@
     <bean class="pl.mskruch.ping.user.UserController" autowire="constructor" />
     <bean class="pl.mskruch.ping.user.Users" autowire="constructor"/>
 
-    <bean class="pl.mskruch.ping.home.HomeController" autowire="constructor" />
     <bean class="pl.mskruch.ping.test.TestResource" autowire="constructor"/>
 
     <bean class="pl.mskruch.ping.notification.Mailing" autowire="constructor" />

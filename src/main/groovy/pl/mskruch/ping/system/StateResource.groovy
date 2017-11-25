@@ -29,7 +29,7 @@ class StateResource
 	{
 		['enabled'  : users.isEnabled(),
 		 'admin'    : auth.isAdmin(),
-		 'logoutUrl': users.logoutURL('/react/')]
+		 'logoutUrl': users.logoutURL('/')]
 	}
 
 }

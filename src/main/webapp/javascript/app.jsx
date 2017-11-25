@@ -48,10 +48,10 @@ const DisabledAccountInfo = (props) => {
 }
 
 export default class App extends Component {
-    state = {checks: [], enabled: true};
+    state = {checks: [], enabled: true, admin: false, logoutUrl: "/"};
 
     fetchChecks() {
-        fetch('/checks',
+        fetch('/api/checks',
             {credentials: 'same-origin'})
             .then((response) => response.json())
             .then((responseData) => {
@@ -87,10 +87,10 @@ export default class App extends Component {
                 </div>
                 {this.state.enabled ? '' : <DisabledAccountInfo/>}
                 <div className="container">
-                    <span className="float-right">
+                    {this.state.admin ? <span className="float-right">
                         <a href={this.state.logoutUrl} className="btn btn-info"
                            role="button">Log out</a>
-                    </span>
+                    </span> : ''}
                     {this.state.admin ?
                         <a href="/admin" className="btn btn-info"
                            role="button">Admin</a> : ''}

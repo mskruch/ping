@@ -9,7 +9,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.*
 
 @Controller
 @Log
-@RequestMapping("/checks")
+@RequestMapping(["/checks", "/api/checks"])
 class CheckResource
 {
 	Checks checks;
