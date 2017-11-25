@@ -1,21 +1,50 @@
 import React, {Component} from "react";
 import moment from "moment";
 
-const Check = (props) => {
-    var status = props.status ?
-        <span
-            className={"badge badge-" + (props.status == "UP" ? "success" : "danger")}>
-            {props.status + ' since ' + moment.duration(moment().diff(props.statusSince)).humanize()}
+class Check extends Component {
+    state = {processing: false}
+    delete = () => {
+        this.setState({processing: true})
+        fetch('/api/checks/' + this.props.id,
+            {
+                credentials: 'same-origin',
+                method: 'delete'
+            })
+            .then((response) => {
+                if (response.status >= 400) {
+                    throw new Error('check not deleted');
+                }
+                this.setState({processing: false});
+                this.props.deleteCheck(this.props.id);
+            }).catch((error) => {
+                console.error(error);
+                this.setState({processing: false});
+            }
+        );
+    }
+
+    render() {
+        var status = this.props.status ?
+            <span
+                className={"badge badge-" + (this.props.status == "UP" ? "success" : "danger")}>
+            {this.props.status + ' since ' + moment.duration(moment().diff(this.props.statusSince)).humanize()}
         </span> : '';
 
-    return (
-        <tr>
-            <th scope="row">{props.number}</th>
-            <td>{props.name}</td>
-            <td>{props.url}</td>
-            <td>{status}</td>
-        </tr>
-    );
+        return (
+            <tr>
+                <th scope="row">{this.props.number}</th>
+                <td>{this.props.name}</td>
+                <td>{this.props.url}</td>
+                <td>{status}</td>
+                <td>
+                    <button className="btn btn-primary" onClick={this.delete}
+                            disabled={this.state.processing}>
+                        Delete
+                    </button>
+                </td>
+            </tr>
+        );
+    }
 }
 
 class CheckForm extends Component {
@@ -78,6 +107,7 @@ class CheckForm extends Component {
                 <td><input name="url" className="form-control"
                            value={this.state.url} onChange={this.handleChange}
                            placeholder="Enter url"/></td>
+                <td></td>
                 <td>
                     <button onClick={this.submit} className="btn btn-primary"
                             disabled={this.state.processing}>Add
@@ -91,7 +121,7 @@ class CheckForm extends Component {
 export default class Checks extends Component {
     render() {
         var checks = this.props.checks.map((check, i) =>
-            <Check key={i} number={i + 1} {...check}/>
+            <Check key={i} number={i + 1} {...check} deleteCheck={this.props.deleteCheck}/>
         );
 
         return (
@@ -102,6 +132,7 @@ export default class Checks extends Component {
                     <th scope="col">Name</th>
                     <th scope="col">Url</th>
                     <th scope="col">Status</th>
+                    <th scope="col"></th>
                 </tr>
                 </thead>
                 <tbody>

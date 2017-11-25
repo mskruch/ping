@@ -58,11 +58,8 @@ class ChecksRoot
 
 	def delete(Check check)
 	{
-		try {
-			ofy().delete().entity(check);
-		} catch (NotFound e) {
-			/* already deleted - fine */
-		}
+		ofy().delete().entity(check)
+		ofy().delete().entities(outages(check.id))
 	}
 
 	Check save(Check check)
@@ -92,5 +89,11 @@ class ChecksRoot
 	{
 		def checkKey = Key.create(Check.class, checkId)
 		ofy().load().type(Outage.class).ancestor(checkKey).filter('finished = ', null).first().now()
+	}
+
+	List<Outage> outages(Long checkId)
+	{
+		def checkKey = Key.create(Check.class, checkId)
+		ofy().load().type(Outage.class).ancestor(checkKey).list()
 	}
 }

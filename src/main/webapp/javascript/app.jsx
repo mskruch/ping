@@ -46,6 +46,13 @@ export default class App extends Component {
         });
     }
 
+    deleteCheck = (id) => {
+        this.setState(previous => {
+            var checks = previous.checks;
+            return {checks: checks.filter(check => check.id != id)};
+        });
+    }
+
     render() {
         return (
             <div>
@@ -53,7 +60,8 @@ export default class App extends Component {
                     <h1>ping</h1>
                 </div>
                 <div className="container">
-                    <Checks checks={this.state.checks} addCheck={this.addCheck}/>
+                    <Checks checks={this.state.checks} addCheck={this.addCheck}
+                            deleteCheck={this.deleteCheck}/>
                 </div>
                 {this.state.enabled ? '' : <DisabledAccountInfo/>}
                 <div className="container">
