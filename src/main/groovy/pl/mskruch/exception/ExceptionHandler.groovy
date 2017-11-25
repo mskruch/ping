@@ -1,5 +1,6 @@
 package pl.mskruch.exception
 
+import org.springframework.http.converter.HttpMessageNotReadableException
 import org.springframework.web.HttpMediaTypeNotSupportedException
 import org.springframework.web.HttpRequestMethodNotSupportedException
 import org.springframework.web.bind.annotation.ControllerAdvice
@@ -80,4 +81,11 @@ class ExceptionHandler
 		 'supportedMethods': e.supportedHttpMethods]
 	}
 
+	@SpringExceptionHandler(HttpMessageNotReadableException.class)
+	@ResponseBody
+	@ResponseStatus(BAD_REQUEST)
+	illegalRequest(e)
+	{
+		['message': 'illegal request', 'details': e.message]
+	}
 }

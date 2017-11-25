@@ -4,6 +4,7 @@ import groovy.util.logging.Log
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
+import pl.mskruch.exception.BadRequest
 
 import static org.springframework.web.bind.annotation.RequestMethod.*
 
@@ -17,6 +18,17 @@ class CheckResource
 	CheckResource(Checks checks)
 	{
 		this.checks = checks
+	}
+
+	@RequestMapping(method = POST)
+	@ResponseBody
+	def create(@RequestBody request)
+	{
+		log.info"create check with $request"
+		if (!request.url?.trim()){
+			throw new BadRequest('url is required')
+		}
+		checks.create(request.url, request.name)
 	}
 
 	@RequestMapping(value = "/{id}", method = PATCH)

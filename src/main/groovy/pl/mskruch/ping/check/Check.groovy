@@ -38,25 +38,15 @@ class Check
 	{
 	}
 
-	public Check(String ownerEmail, String url)
+	Check(ownerEmail, url, name)
 	{
-		this.ownerEmail = ownerEmail;
-		this.url = url;
-		this.created = new Date();
-	}
-	// Boolean paused;
-
-	public Long getId()
-	{
-		return id;
+		this.ownerEmail = ownerEmail
+		this.name = name
+		this.url = url
+		this.created = new Date()
 	}
 
-	public String getUrl()
-	{
-		return url;
-	}
-
-	public boolean setStatus(Status status)
+	boolean setStatus(Status status)
 	{
 		Date now = new Date();
 		this.lastCheck = now;
@@ -68,33 +58,15 @@ class Check
 		return false;
 	}
 
-	public Date getLastCheck()
-	{
-		return lastCheck;
-	}
-
+	@Deprecated
 	String getStatusSinceDuration()
 	{
 		formatDurationSince(this.statusSince)
 	}
 
+	@Deprecated
 	String getLastCheckDuration()
 	{
 		formatDurationSince(this.lastCheck)
-	}
-
-	public String getOwnerEmail()
-	{
-		return ownerEmail;
-	}
-
-	public String getName()
-	{
-		return name;
-	}
-
-	public void setName(String name)
-	{
-		this.name = name;
 	}
 }

@@ -33,10 +33,10 @@ class Checks
 		root.ownedBy(auth.email())
 	}
 
-	Long add(String url)
+	def create(url, name)
 	{
 		def email = auth.email()
-		root.create(email, url)
+		root.create(email, url, name)
 	}
 
 	Check get(Long id)
@@ -55,7 +55,7 @@ class Checks
 			check.notificationDelay = patch.notificationDelay
 		}
 		if (patch.name) {
-			check.setName(patch.name)
+			check.name = patch.name
 		}
 		root.save(check)
 	}

@@ -34,15 +34,6 @@
 	</servlet-mapping>
 
 	<servlet>
-		<servlet-name>manage</servlet-name>
-		<servlet-class>pl.mskruch.servlet.ManageServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>manage</servlet-name>
-		<url-pattern>/manage/*</url-pattern>
-	</servlet-mapping>
-
-	<servlet>
 		<servlet-name>config</servlet-name>
 		<servlet-class>pl.mskruch.servlet.ConfigServlet</servlet-class>
 	</servlet>

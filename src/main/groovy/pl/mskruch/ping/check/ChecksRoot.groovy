@@ -25,7 +25,7 @@ class ChecksRoot
 				log.warning("last check was at $check.lastCheck and trying to update with check at $checkTime - ignore")
 				return
 			}
-			changed = check.setStatus(status)
+			changed = check.status = status
 			ofy().save().entity(check)
 			log.fine "saved changes in check $check returning $changed"
 		}
@@ -48,9 +48,9 @@ class ChecksRoot
 		check
 	}
 
-	Long create(String email, String url)
+	def create(email, url, name)
 	{
-		Check check = new Check(email, url)
+		Check check = new Check(email, url, name)
 		ofy().save().entity(check).now()
 		log.info("check created: " + check)
 		check.getId()

@@ -55,7 +55,7 @@ dependencies {
 appengine {  // App Engine tasks configuration
     run {
         port = 8080
-        clearDatastore = false
+        jvmFlags = ["-Dappengine.fullscan.seconds=5"]
     }
 
     deploy {   // deploy configuration
