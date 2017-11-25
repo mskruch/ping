@@ -53,7 +53,7 @@ class ChecksRoot
 		Check check = new Check(email, url, name)
 		ofy().save().entity(check).now()
 		log.info("check created: " + check)
-		check.getId()
+		return check
 	}
 
 	def delete(Check check)

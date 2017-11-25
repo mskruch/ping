@@ -1,44 +1,5 @@
 import React, {Component} from "react";
-import moment from "moment";
-
-const Check = (props) => {
-    var status = props.status ?
-        <span
-            className={"badge badge-" + (props.status == "UP" ? "success" : "danger")}>
-            {props.status + ' since ' + moment.duration(moment().diff(props.statusSince)).humanize()}
-        </span> : '';
-
-    return (
-        <tr>
-            <th scope="row">{props.number}</th>
-            <td>{props.name}</td>
-            <td>{props.url}</td>
-            <td>{status}</td>
-        </tr>
-    );
-}
-
-const CheckList = (props) => {
-    var checks = props.checks.map((check, i) =>
-        <Check key={i} number={i + 1} {...check}/>
-    );
-
-    return (
-        <table className="table table-hover">
-            <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Name</th>
-                <th scope="col">Url</th>
-                <th scope="col">Status</th>
-            </tr>
-            </thead>
-            <tbody>
-            {checks}
-            </tbody>
-        </table>
-    );
-}
+import Checks from "./checks";
 
 const DisabledAccountInfo = (props) => {
     return (
@@ -84,7 +45,7 @@ export default class App extends Component {
                     <h1>ping</h1>
                 </div>
                 <div className="container">
-                    <CheckList checks={this.state.checks}/>
+                    <Checks checks={this.state.checks}/>
                 </div>
                 {this.state.enabled ? '' : <DisabledAccountInfo/>}
                 <div className="container">
