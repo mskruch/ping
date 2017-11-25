@@ -38,6 +38,14 @@ export default class App extends Component {
         this.fetchChecks();
     }
 
+    addCheck = (check) => {
+        this.setState(previous => {
+            var checks = previous.checks;
+            checks.push(check)
+            return {checks: checks};
+        });
+    }
+
     render() {
         return (
             <div>
@@ -45,7 +53,7 @@ export default class App extends Component {
                     <h1>ping</h1>
                 </div>
                 <div className="container">
-                    <Checks checks={this.state.checks}/>
+                    <Checks checks={this.state.checks} addCheck={this.addCheck}/>
                 </div>
                 {this.state.enabled ? '' : <DisabledAccountInfo/>}
                 <div className="container">

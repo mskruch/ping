@@ -62,8 +62,12 @@ class Checks
 
 	def delete(Long id)
 	{
-		Check check = get(id)
-		root.delete(check)
+		try {
+			Check check = get(id)
+			root.delete(check)
+		} catch (NotFound e) {
+			/* already deleted - fine */
+		}
 	}
 
 }

@@ -38,14 +38,24 @@ class CheckForm extends Component {
                     "url": this.state.url
                 })
             })
-            .then((response) => response.json())
+            .then((response) => {
+                if (response.status != 200) {
+                    throw new Error('check not created');
+                }
+                return response.json();
+            })
             .then((responseData) => {
+                this.props.addCheck(responseData);
                 this.setState({
                     processing: false,
                     name: '',
                     url: ''
                 });
-            });
+            }).catch((error) => {
+                console.error(error);
+                this.setState({processing: false});
+            }
+        );
     }
 
     handleChange(event) {
@@ -96,7 +106,7 @@ export default class Checks extends Component {
                 </thead>
                 <tbody>
                 {checks}
-                <CheckForm/>
+                <CheckForm addCheck={this.props.addCheck}/>
                 </tbody>
             </table>
         );
