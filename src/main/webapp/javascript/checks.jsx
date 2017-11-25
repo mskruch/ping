@@ -72,33 +72,37 @@ class Check extends Component {
                 <th scope="row">{this.props.number}</th>
                 <td>{this.state.edit ?
                     <input name="name" className="form-control"
-                           value={this.state.name} onChange={utils.handleInputChange(this)}
+                           value={this.state.name}
+                           onChange={utils.handleInputChange(this)}
                            placeholder="Enter name"/> : this.props.name}</td>
                 <td>{this.props.url}</td>
                 <td>{status}</td>
                 <td className="action">
                     <span className={this.state.edit ? "" : "actionspan"}>
                     {!this.state.edit ?
-                        <button className="btn btn-primary btn-sm" onClick={this.edit}
+                        <button className="btn btn-primary btn-sm"
+                                onClick={this.edit}
                                 disabled={this.state.processing}>
                             Edit
                         </button> : ''}
-                    {!this.state.edit ?
-                        <button className="btn btn-danger btn-sm" onClick={this.delete}
-                                disabled={this.state.processing}>
-                            Delete
-                        </button> : ''}
-                    {this.state.edit ?
-                        <button className="btn btn-primary btn-sm" onClick={this.save}
-                                disabled={this.state.processing}>
-                            Save
-                        </button> : ''}
-                    {this.state.edit ?
-                        <button className="btn btn-secondary btn-sm"
-                                onClick={this.cancel}
-                                disabled={this.state.processing}>
-                            Cancel
-                        </button> : ''}
+                        {!this.state.edit ?
+                            <button className="btn btn-danger btn-sm"
+                                    onClick={this.delete}
+                                    disabled={this.state.processing}>
+                                Delete
+                            </button> : ''}
+                        {this.state.edit ?
+                            <button className="btn btn-primary btn-sm"
+                                    onClick={this.save}
+                                    disabled={this.state.processing}>
+                                Save
+                            </button> : ''}
+                        {this.state.edit ?
+                            <button className="btn btn-secondary btn-sm"
+                                    onClick={this.cancel}
+                                    disabled={this.state.processing}>
+                                Cancel
+                            </button> : ''}
                     </span>
                 </td>
             </tr>
@@ -107,7 +111,8 @@ class Check extends Component {
 }
 
 class CheckForm extends Component {
-    state = {processing: false, name: '', url: ''}
+    initialState = {processing: false, name: '', url: '', validated: false};
+    state = this.initialState;
 
     submit = () => {
         this.setState({processing: true});
@@ -129,28 +134,33 @@ class CheckForm extends Component {
             })
             .then((responseData) => {
                 this.props.addCheck(responseData);
-                this.setState({
-                    processing: false,
-                    name: '',
-                    url: ''
-                });
+                this.setState(this.initialState);
             }).catch((error) => {
                 console.error(error);
-                this.setState({processing: false});
+                this.setState({processing: false, validated: true});
             }
         );
-    }
+    };
 
     render() {
         return (
             <tr>
                 <th scope="row"></th>
-                <td><input name="name" className="form-control"
-                           value={this.state.name} onChange={utils.handleInputChange(this)}
+                <td><input name="name"
+                           className={"form-control " + (this.state.validated ? "is-valid" : "")}
+                           value={this.state.name}
+                           onChange={utils.handleInputChange(this)}
                            placeholder="Enter name"/></td>
-                <td><input name="url" className="form-control"
-                           value={this.state.url} onChange={utils.handleInputChange(this)}
-                           placeholder="Enter url"/></td>
+                <td><input name="url"
+                           className={"form-control " + (this.state.validated ? "is-invalid" : "")}
+                           value={this.state.url}
+                           onChange={utils.handleInputChange(this)}
+                           placeholder="Enter url"/>
+                    {this.state.validated ?
+                        <div class="invalid-feedback">
+                            Url is required
+                        </div> : ''}
+                </td>
                 <td></td>
                 <td className="action">
                     <button onClick={this.submit} className="btn btn-primary"
