@@ -1,13 +1,10 @@
 import React, {Component} from "react";
 import moment from "moment";
+import utils from "./utils";
+
 
 class Check extends Component {
     state = {processing: false, edit: false, name: this.props.name}
-
-    constructor(props) {
-        super(props);
-        this.handleChange = this.handleChange.bind(this);
-    }
 
     delete = () => {
         this.setState({processing: true})
@@ -27,16 +24,6 @@ class Check extends Component {
                 this.setState({processing: false});
             }
         );
-    }
-
-    handleChange(event) {
-        const target = event.target;
-        const value = target.type === 'checkbox' ? target.checked : target.value;
-        const name = target.name;
-
-        this.setState({
-            [name]: value
-        });
     }
 
     edit = () => {
@@ -85,7 +72,7 @@ class Check extends Component {
                 <th scope="row">{this.props.number}</th>
                 <td>{this.state.edit ?
                     <input name="name" className="form-control"
-                           value={this.state.name} onChange={this.handleChange}
+                           value={this.state.name} onChange={utils.handleInputChange(this)}
                            placeholder="Enter name"/> : this.props.name}</td>
                 <td>{this.props.url}</td>
                 <td>{status}</td>
@@ -122,11 +109,6 @@ class Check extends Component {
 class CheckForm extends Component {
     state = {processing: false, name: '', url: ''}
 
-    constructor(props) {
-        super(props);
-        this.handleChange = this.handleChange.bind(this);
-    }
-
     submit = () => {
         this.setState({processing: true});
         fetch('/api/checks',
@@ -159,25 +141,15 @@ class CheckForm extends Component {
         );
     }
 
-    handleChange(event) {
-        const target = event.target;
-        const value = target.type === 'checkbox' ? target.checked : target.value;
-        const name = target.name;
-
-        this.setState({
-            [name]: value
-        });
-    }
-
     render() {
         return (
             <tr>
                 <th scope="row"></th>
                 <td><input name="name" className="form-control"
-                           value={this.state.name} onChange={this.handleChange}
+                           value={this.state.name} onChange={utils.handleInputChange(this)}
                            placeholder="Enter name"/></td>
                 <td><input name="url" className="form-control"
-                           value={this.state.url} onChange={this.handleChange}
+                           value={this.state.url} onChange={utils.handleInputChange(this)}
                            placeholder="Enter url"/></td>
                 <td></td>
                 <td className="action">
