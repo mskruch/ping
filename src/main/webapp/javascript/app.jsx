@@ -46,6 +46,13 @@ export default class App extends Component {
         });
     }
 
+    updateCheck = (check) => {
+        this.setState(previous => {
+            var checks = previous.checks;
+            return {checks: checks.map(it => it.id === check.id ? check : it)};
+        });
+    }
+
     deleteCheck = (id) => {
         this.setState(previous => {
             var checks = previous.checks;
@@ -61,7 +68,7 @@ export default class App extends Component {
                 </div>
                 <div className="container">
                     <Checks checks={this.state.checks} addCheck={this.addCheck}
-                            deleteCheck={this.deleteCheck}/>
+                            deleteCheck={this.deleteCheck} updateCheck={this.updateCheck}/>
                 </div>
                 {this.state.enabled ? '' : <DisabledAccountInfo/>}
                 <div className="container">
