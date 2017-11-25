@@ -9,10 +9,29 @@ const DisabledAccountInfo = (props) => {
         </div>);
 }
 
+class PingButton extends Component {
+    state = {processing: false};
+
+    ping = () => {
+        this.setState({processing: true});
+        fetch('/ping',
+            {credentials: 'same-origin'})
+            .then((response) => {
+                this.setState({processing: false});
+                this.props.fetchChecks();
+            });
+    }
+
+    render() {
+        return <button className="btn btn-info" disabled={this.state.processing}
+                       onClick={this.ping}>Ping</button>
+    }
+}
+
 export default class App extends Component {
     state = {checks: [], enabled: true, admin: false, logoutUrl: "/"};
 
-    fetchChecks() {
+    fetchChecks = () => {
         fetch('/api/checks',
             {credentials: 'same-origin'})
             .then((response) => response.json())
@@ -68,7 +87,8 @@ export default class App extends Component {
                 </div>
                 <div className="container">
                     <Checks checks={this.state.checks} addCheck={this.addCheck}
-                            deleteCheck={this.deleteCheck} updateCheck={this.updateCheck}/>
+                            deleteCheck={this.deleteCheck}
+                            updateCheck={this.updateCheck}/>
                 </div>
                 {this.state.enabled ? '' : <DisabledAccountInfo/>}
                 <div className="container">
@@ -79,6 +99,8 @@ export default class App extends Component {
                     {this.state.admin ?
                         <a href="/admin" className="btn btn-info"
                            role="button">Admin</a> : ''}
+                    {this.state.admin ?
+                        <PingButton fetchChecks={this.fetchChecks}/> : ''}
                 </div>
             </div>
         );
