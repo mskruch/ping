@@ -39,8 +39,16 @@ const CheckList = (props) => {
     );
 }
 
+const DisabledAccountInfo = (props) => {
+    return (
+        <div className="container">
+            <p>Please contact the owner to enable the
+                account.</p>
+        </div>);
+}
+
 export default class App extends Component {
-    state = {checks: []};
+    state = {checks: [], enabled: true};
 
     fetchChecks() {
         fetch('/checks',
@@ -53,15 +61,40 @@ export default class App extends Component {
             });
     }
 
+    fetchState() {
+        fetch('/api/state',
+            {credentials: 'same-origin'})
+            .then((response) => response.json())
+            .then((responseData) => {
+                    this.setState(responseData);
+                }
+            );
+    }
+
     componentDidMount() {
+        this.fetchState();
         this.fetchChecks();
     }
 
     render() {
         return (
-            <div className="container">
-                <h1>ping</h1>
-                <CheckList checks={this.state.checks}/>
+            <div>
+                <div className="container">
+                    <h1>ping</h1>
+                </div>
+                <div className="container">
+                    <CheckList checks={this.state.checks}/>
+                </div>
+                {this.state.enabled ? '' : <DisabledAccountInfo/>}
+                <div className="container">
+                    <span className="float-right">
+                        <a href={this.state.logoutUrl} className="btn btn-info"
+                           role="button">Log out</a>
+                    </span>
+                    {this.state.admin ?
+                        <a href="/admin" className="btn btn-info"
+                           role="button">Admin</a> : ''}
+                </div>
             </div>
         );
     }

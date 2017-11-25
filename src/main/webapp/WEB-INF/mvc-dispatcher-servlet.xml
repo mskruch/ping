@@ -36,6 +36,8 @@
     <bean class="pl.mskruch.ping.notification.Mailing" autowire="constructor" />
     <bean class="pl.mskruch.ping.notification.NotificationController" autowire="constructor" />
 
+    <bean class="pl.mskruch.ping.system.StateResource" autowire="constructor" />
+
     <bean id="viewResolver"
           class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/WEB-INF/jsp/" />

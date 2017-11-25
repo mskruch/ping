@@ -1,8 +1,7 @@
 package pl.mskruch.ping.user;
 
 import com.google.appengine.api.users.UserService;
-import com.google.appengine.api.users.UserServiceFactory;
-import pl.mskruch.ping.user.User;
+import com.google.appengine.api.users.UserServiceFactory
 import pl.mskruch.exception.NotFound;
 
 import javax.servlet.http.HttpServletRequest
@@ -33,7 +32,12 @@ public class Users
 	public String logoutURL()
 	{
 		String thisUrl = req.getRequestURI();
-		return userService.createLogoutURL(thisUrl);
+		return logoutURL(thisUrl);
+	}
+
+	String logoutURL(String backUrl)
+	{
+		userService.createLogoutURL(backUrl)
 	}
 
 	public boolean isEnabled()
