@@ -1,10 +1,13 @@
 package pl.mskruch.ping.check
 
+import com.fasterxml.jackson.annotation.JsonFormat
 import com.googlecode.objectify.annotation.Entity
 import com.googlecode.objectify.annotation.Id
 import com.googlecode.objectify.annotation.Index
 import groovy.transform.ToString
 
+import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING
+import static pl.mskruch.common.FormatUtils.TIME_FORMAT
 import static pl.mskruch.common.FormatUtils.formatDurationSince
 
 @Entity
@@ -18,12 +21,16 @@ class Check
 	@Index
 	String name;
 
+	@JsonFormat(shape = STRING, pattern = TIME_FORMAT, timezone = "GMT")
 	Date created;
 	String url;
 
+	@JsonFormat(shape = STRING, pattern = TIME_FORMAT, timezone = "GMT")
 	Date lastCheck;
 	Status status
-	Date statusSince;
+
+	@JsonFormat(shape = STRING, pattern = TIME_FORMAT, timezone = "GMT")
+	Date statusSince
 
 	def notificationDelay
 
@@ -64,11 +71,6 @@ class Check
 	public Date getLastCheck()
 	{
 		return lastCheck;
-	}
-
-	public Date getStatusSince()
-	{
-		return statusSince;
 	}
 
 	String getStatusSinceDuration()

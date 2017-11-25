@@ -1,10 +1,11 @@
 import React, {Component} from "react";
+import moment from "moment";
 
 const Check = (props) => {
     var status = props.status ?
         <span
             className={"badge badge-" + (props.status == "UP" ? "success" : "danger")}>
-            {props.status + ' since ' + props.statusSinceDuration}
+            {props.status + ' since ' + moment.duration(moment().diff(props.statusSince)).humanize()}
         </span> : '';
 
     return (
