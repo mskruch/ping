@@ -226,7 +226,7 @@ export default class App extends Component {
                         <PingButton
                             fetchChecks={this.fetchChecks}/> : ''}
                     {this.state.admin ? <TestButton/> : ''}
-                    {/*<RefreshButton fetchChecks={this.fetchChecks}/>*/}
+                    <RefreshButton fetchChecks={this.fetchChecks}/>
                 </div>
                 <Outages outages={this.state.outages}
                          checkId={this.state.outagesCheckId}/>
