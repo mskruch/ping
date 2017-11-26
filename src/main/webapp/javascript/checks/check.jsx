@@ -79,7 +79,16 @@ export default class Check extends Component {
         return seconds ? moment.duration(seconds, 'seconds').humanize() : '';
     }
 
+    rowClicked = () => {
+        if (this.props.admin) {
+            console.log(this.props.id);
+            this.props.select(this.props.check);
+        }
+    }
+
     render() {
+        const {id, name, url} = {...this.props.check};
+
         var status = this.props.status ?
             <span
                 className={"badge badge-" + (this.props.status === "UP" ? "success" : "danger")}>
@@ -87,15 +96,15 @@ export default class Check extends Component {
         </span> : '';
 
         return (
-            <tr>
+            <tr onClick={this.rowClicked} style={{cursor: 'pointer'}}>
                 <th scope="row">{this.props.number}</th>
                 <td>{this.state.edit ?
                     <input name="name" className="form-control"
                            value={this.state.name}
                            onChange={utils.handleInputChange(this)}
-                           placeholder="Name"/> : this.props.name}
+                           placeholder="Name"/> : name}
                 </td>
-                <td>{this.props.url}</td>
+                <td>{url}</td>
                 <td>{this.state.edit ?
                     <input name="notificationDelay" className="form-control"
                            value={this.state.notificationDelay}
@@ -105,7 +114,7 @@ export default class Check extends Component {
                 <td>
                     <button className="btn btn-info btn-sm"
                             onClick={this.toggleOutages}>
-                            <i className={"fa fa-caret-square-o-" + (this.props.outages ? "up" : "down")}></i>
+                        <i className={"fa fa-caret-square-o-" + (this.props.outages ? "up" : "down")}></i>
                     </button>
                     {status}
                 </td>

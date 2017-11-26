@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import moment from "moment";
 import Checks from "./checks";
+import CheckPage from "./check";
 
 const DisabledAccountInfo = (props) => {
     return (
@@ -116,7 +117,8 @@ export default class App extends Component {
         admin: false,
         logoutUrl: "/",
         outages: [],
-        outagesCheckId: null
+        outagesCheckId: null,
+        selected: null
     };
 
     fetchChecks = () => {
@@ -191,20 +193,27 @@ export default class App extends Component {
             );
     }
 
+    select = (check) => {
+        this.setState({
+            selected: check
+        })
+    }
+
     render() {
         return (
             <div>
-                <div className="container">
-                    <h1>ping</h1>
-                </div>
-                <div className="container">
+                {this.state.enabled ? '' : <DisabledAccountInfo/>}
+                {this.state.selected ?
+                    <CheckPage check={this.state.selected} select={this.select}/>
+                    :
                     <Checks checks={this.state.checks} addCheck={this.addCheck}
                             deleteCheck={this.deleteCheck}
                             updateCheck={this.updateCheck}
                             outagesCheckId={this.state.outagesCheckId}
-                            toggleOutages={this.toggleOutages}/>
-                </div>
-                {this.state.enabled ? '' : <DisabledAccountInfo/>}
+                            toggleOutages={this.toggleOutages}
+                            admin={this.state.admin}
+                            select={this.select}/>
+                }
                 <div className="container">
                     {this.state.admin ? <span className="float-right">
                         <a href={this.state.logoutUrl} className="btn btn-info"
@@ -217,11 +226,10 @@ export default class App extends Component {
                         <PingButton
                             fetchChecks={this.fetchChecks}/> : ''}
                     {this.state.admin ? <TestButton/> : ''}
-                    <RefreshButton fetchChecks={this.fetchChecks}/>
-                    <Outages outages={this.state.outages}
-                             checkId={this.state.outagesCheckId}/>
+                    {/*<RefreshButton fetchChecks={this.fetchChecks}/>*/}
                 </div>
-                <Outages/>
+                <Outages outages={this.state.outages}
+                         checkId={this.state.outagesCheckId}/>
             </div>
         );
     }
