@@ -1,5 +1,6 @@
 package pl.mskruch.ping.test
 
+import com.google.appengine.api.memcache.MemcacheServiceFactory
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -13,20 +14,21 @@ import static org.springframework.web.bind.annotation.RequestMethod.PUT
 @RequestMapping("/test")
 class TestResource
 {
-	def up
+	private cache = MemcacheServiceFactory.getMemcacheService()
 
 	@RequestMapping(method = PUT)
 	@ResponseBody
 	update(@RequestBody request)
 	{
-		up = request.up
-		return ['up': up]
+		this.cache.put('up', request.up)
+		return ['up': this.cache.get('up')]
 	}
 
 	@RequestMapping(method = GET)
 	@ResponseBody
 	get()
 	{
+		def up = cache.get('up')
 		if (!up) {
 			throw new BadRequest('test is down')
 		}
