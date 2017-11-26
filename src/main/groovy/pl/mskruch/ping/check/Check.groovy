@@ -32,7 +32,11 @@ class Check
 	@JsonFormat(shape = STRING, pattern = TIME_FORMAT, timezone = "GMT")
 	Date statusSince
 
-	def notificationDelay
+	Long getNotificationDelay()
+	{
+		return notificationDelay ?: 0
+	}
+	Long notificationDelay
 
 	Check()
 	{

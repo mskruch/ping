@@ -122,6 +122,7 @@ export default class App extends Component {
     updateCheck = (check) => {
         this.setState(previous => {
             var checks = previous.checks;
+            console.log(checks, check)
             return {checks: checks.map(it => it.id === check.id ? check : it)};
         });
     }

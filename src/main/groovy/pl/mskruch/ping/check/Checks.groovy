@@ -1,15 +1,15 @@
 package pl.mskruch.ping.check
 
+import groovy.util.logging.Log
 import pl.mskruch.exception.NotFound
 import pl.mskruch.ping.security.Auth
 
 import javax.servlet.http.HttpServletRequest
 import java.util.logging.Logger
 
+@Log
 class Checks
 {
-	static Logger logger = Logger.getLogger(Checks.class.getName());
-
 	private final Auth auth
 	private final ChecksRoot root
 
@@ -48,14 +48,14 @@ class Checks
 		return check;
 	}
 
-	Check patch(Check patch)
+	Check patch(Long id, name = null, notificationDelay = null)
 	{
-		Check check = get(patch.getId());
-		if (patch.notificationDelay != null) {
-			check.notificationDelay = patch.notificationDelay
+		Check check = get(id);
+		if (notificationDelay != null) {
+			check.notificationDelay = notificationDelay
 		}
-		if (patch.name) {
-			check.name = patch.name
+		if (name != null) {
+			check.name = name
 		}
 		root.save(check)
 	}

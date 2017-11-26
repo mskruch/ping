@@ -24,8 +24,8 @@ class CheckResource
 	@ResponseBody
 	def create(@RequestBody request)
 	{
-		log.info"create check with $request"
-		if (!request.url?.trim()){
+		log.info "create check with $request"
+		if (!request.url?.trim()) {
 			throw new BadRequest('url is required')
 		}
 		checks.create(request.url, request.name)
@@ -33,11 +33,12 @@ class CheckResource
 
 	@RequestMapping(value = "/{id}", method = PATCH)
 	@ResponseBody
-	Check update(@PathVariable("id") Long id, @RequestBody Check body)
+	Check update(@PathVariable("id") Long id, @RequestBody request)
 	{
-		log.info("update check " + id + " with " + body)
-		body.id = id
-		checks.patch(body)
+		log.info("update check $id with $request (${request.getClass()})")
+		def name = request.name
+		def notificationDelay = request.containsKey('notificationDelay') ? (request.notificationDelay ? request.notificationDelay as Long : 0) : null
+		checks.patch(id, name, notificationDelay)
 	}
 
 	@RequestMapping(value = "/{id}", method = GET)
