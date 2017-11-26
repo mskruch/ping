@@ -177,7 +177,10 @@ export default class App extends Component {
 
     toggleOutages = (id) => {
         this.setState(previous => {
-            return {outagesCheckId: id != previous.outagesCheckId ? id : null}
+            return {
+                outagesCheckId: id != previous.outagesCheckId ? id : null,
+                outages: []
+            }
         });
         fetch('/api/checks/' + id + "/outages",
             {credentials: 'same-origin'})
