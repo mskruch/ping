@@ -1,12 +1,12 @@
 package pl.mskruch.ping.check
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.googlecode.objectify.Ref
 import com.googlecode.objectify.annotation.Entity
 import com.googlecode.objectify.annotation.Id
 import com.googlecode.objectify.annotation.Index
 import com.googlecode.objectify.annotation.Parent
 import groovy.transform.ToString
-import org.codehaus.jackson.annotate.JsonIgnore
 
 @Entity
 @ToString

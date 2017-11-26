@@ -13,6 +13,6 @@ class OutagesRoot
 	def find(checkId)
 	{
 		def checkKey = Key.create(Check.class, checkId)
-		ofy().load().type(Outage.class).ancestor(checkKey).list()
+		ofy().load().type(Outage.class).ancestor(checkKey).order('-started').list()
 	}
 }

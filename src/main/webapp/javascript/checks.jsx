@@ -7,7 +7,9 @@ export default class Checks extends Component {
         var checks = this.props.checks.map((check, i) =>
             <Check key={check.id} number={i + 1} {...check}
                    deleteCheck={this.props.deleteCheck}
-                   updateCheck={this.props.updateCheck}/>
+                   updateCheck={this.props.updateCheck}
+                   outages={check.id === this.props.outagesCheckId}
+                   toggleOutages={this.props.toggleOutages}/>
         );
 
         return (

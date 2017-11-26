@@ -30,6 +30,10 @@ export default class Check extends Component {
         );
     }
 
+    toggleOutages = () => {
+        this.props.toggleOutages(this.props.id);
+    }
+
     edit = () => {
         this.setState({edit: true});
     }
@@ -98,7 +102,13 @@ export default class Check extends Component {
                            onChange={utils.handleInputChange(this)}
                            placeholder="Seconds"/> : this.formatDuration(this.props.notificationDelay)}
                 </td>
-                <td>{status}</td>
+                <td>
+                    <button className="btn btn-info btn-sm"
+                            onClick={this.toggleOutages}>
+                            <i className={"fa fa-caret-square-o-" + (this.props.outages ? "up" : "down")}></i>
+                    </button>
+                    {status}
+                </td>
                 <td className="action">
                     <span className={this.state.edit ? "" : "actionspan"}>
                 {!this.state.edit ?

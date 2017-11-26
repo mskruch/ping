@@ -7,11 +7,12 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseBody
 import pl.mskruch.ping.check.Outage
 
+import static java.lang.Enum.valueOf
 import static org.springframework.web.bind.annotation.RequestMethod.GET
 
 @Controller
 @Log
-@RequestMapping("/checks/{checkId}/outages")
+@RequestMapping(["/checks", "/api/checks"])
 class OutageResource
 {
 	Outages outages
@@ -21,7 +22,7 @@ class OutageResource
 		this.outages = outages
 	}
 
-	@RequestMapping(method = GET)
+	@RequestMapping(value = "/{checkId}/outages", method = GET)
 	@ResponseBody
 	List<Outage> list(@PathVariable("checkId") Long checkId)
 	{

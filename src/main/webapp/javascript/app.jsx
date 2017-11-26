@@ -1,4 +1,5 @@
 import React, {Component} from "react";
+import moment from "moment";
 import Checks from "./checks";
 
 const DisabledAccountInfo = (props) => {
@@ -6,7 +7,33 @@ const DisabledAccountInfo = (props) => {
         <div className="container">
             <p>Please contact the owner to enable the
                 account.</p>
-        </div>);
+        </div>
+    );
+}
+
+const Outages = (props) => {
+    if (!props.checkId) {
+        return null;
+    }
+    return (
+        <div className="container">
+            <h3>Outages</h3>
+            <table className="table">
+                <tbody>
+                {props.outages.map((outage, i) =>
+                    <tr key={i}>
+                        <td width="35%">{moment(outage.started).format('YYYY-MM-DD HH:mm')}</td>
+                        <td width="35%">{outage.finished ? moment(outage.finished).from(outage.started, true) :
+                            <span
+                                className="badge badge-danger">outage</span>}</td>
+                        <td width="30%">{outage.notified ? 'notified ' + moment(outage.notified).format('YYYY-MM-DD HH:mm') : ''}</td>
+                    </tr>
+                )}
+                </tbody>
+            </table>
+        </div>
+    )
+        ;
 }
 
 class PingButton extends Component {
@@ -83,7 +110,14 @@ class TestButton extends Component {
 }
 
 export default class App extends Component {
-    state = {checks: [], enabled: true, admin: false, logoutUrl: "/"};
+    state = {
+        checks: [],
+        enabled: true,
+        admin: false,
+        logoutUrl: "/",
+        outages: [],
+        outagesCheckId: null
+    };
 
     fetchChecks = () => {
         fetch('/api/checks',
@@ -141,6 +175,19 @@ export default class App extends Component {
         });
     }
 
+    toggleOutages = (id) => {
+        this.setState(previous => {
+            return {outagesCheckId: id != previous.outagesCheckId ? id : null}
+        });
+        fetch('/api/checks/' + id + "/outages",
+            {credentials: 'same-origin'})
+            .then((response) => response.json())
+            .then((responseData) => {
+                    this.setState({outages: responseData});
+                }
+            );
+    }
+
     render() {
         return (
             <div>
@@ -150,7 +197,9 @@ export default class App extends Component {
                 <div className="container">
                     <Checks checks={this.state.checks} addCheck={this.addCheck}
                             deleteCheck={this.deleteCheck}
-                            updateCheck={this.updateCheck}/>
+                            updateCheck={this.updateCheck}
+                            outagesCheckId={this.state.outagesCheckId}
+                            toggleOutages={this.toggleOutages}/>
                 </div>
                 {this.state.enabled ? '' : <DisabledAccountInfo/>}
                 <div className="container">
@@ -166,7 +215,10 @@ export default class App extends Component {
                             fetchChecks={this.fetchChecks}/> : ''}
                     {this.state.admin ? <TestButton/> : ''}
                     <RefreshButton fetchChecks={this.fetchChecks}/>
+                    <Outages outages={this.state.outages}
+                             checkId={this.state.outagesCheckId}/>
                 </div>
+                <Outages/>
             </div>
         );
     }
