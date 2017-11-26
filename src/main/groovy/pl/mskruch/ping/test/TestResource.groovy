@@ -1,33 +1,35 @@
 package pl.mskruch.ping.test
 
 import org.springframework.stereotype.Controller
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseBody
-import pl.mskruch.exception.NotFound
+import pl.mskruch.exception.BadRequest
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET
+import static org.springframework.web.bind.annotation.RequestMethod.PUT
 
 @Controller
 @RequestMapping("/test")
 class TestResource
 {
-	boolean value
+	def up
 
-	@RequestMapping(value = "/change", method = GET)
+	@RequestMapping(method = PUT)
 	@ResponseBody
-	change()
+	update(@RequestBody request)
 	{
-		value = !value
-		return value
+		up = request.up
+		return ['up': up]
 	}
 
-	@RequestMapping(value = "/get", method = GET)
+	@RequestMapping(method = GET)
 	@ResponseBody
 	get()
 	{
-		if (!value) {
-			throw new NotFound('test',0L)
+		if (!up) {
+			throw new BadRequest('test is down')
 		}
-		return 'totoro'
+		return ['up': up]
 	}
 }

@@ -28,6 +28,60 @@ class PingButton extends Component {
     }
 }
 
+class RefreshButton extends Component {
+    refresh = () => {
+        this.props.fetchChecks();
+    }
+
+    render() {
+        return <button className="btn btn-info" onClick={this.refresh}>
+            Refresh</button>
+    }
+}
+
+class TestButton extends Component {
+    state = {processing: false, ready: false};
+
+    switch = () => {
+        this.setState({processing: true});
+        fetch('/test',
+            {
+                credentials: 'same-origin',
+                method: 'PUT',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    "up": (this.state.up ? false : true)
+                })
+            })
+            .then((response) => {
+                return response.json();
+            })
+            .then((responseData) => {
+                this.setState({processing: false, up: responseData.up});
+            });
+    }
+
+    fetchState = () => {
+        fetch('/test',
+            {credentials: 'same-origin'})
+            .then((response) => response.json())
+            .then((responseData) => {
+                this.setState({up: responseData.up, ready: true});
+            });
+    }
+
+    componentDidMount() {
+        this.fetchState();
+    }
+
+    render() {
+        return <button
+            className={"btn btn-" + (this.state.ready ? (this.state.up ? "success" : "danger") : "info")}
+            disabled={this.state.processing}
+            onClick={this.switch}>Test</button>
+    }
+}
+
 export default class App extends Component {
     state = {checks: [], enabled: true, admin: false, logoutUrl: "/"};
 
@@ -100,7 +154,10 @@ export default class App extends Component {
                         <a href="/admin" className="btn btn-info"
                            role="button">Admin</a> : ''}
                     {this.state.admin ?
-                        <PingButton fetchChecks={this.fetchChecks}/> : ''}
+                        <PingButton
+                            fetchChecks={this.fetchChecks}/> : ''}
+                    {this.state.admin ? <TestButton/> : ''}
+                    <RefreshButton fetchChecks={this.fetchChecks}/>
                 </div>
             </div>
         );
