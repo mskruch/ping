@@ -109,12 +109,19 @@ export default class App extends Component {
     componentDidMount() {
         this.fetchState();
         this.fetchChecks();
+        this.intervalId = setInterval(this.fetchChecks, 2000);
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.intervalId);
     }
 
     addCheck = (check) => {
         this.setState(previous => {
             var checks = previous.checks;
-            checks.push(check)
+            if (!checks.find(it => it.id === check.id)) {
+                checks.push(check)
+            }
             return {checks: checks};
         });
     }
