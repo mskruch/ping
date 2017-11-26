@@ -145,11 +145,11 @@ export default class App extends Component {
     componentDidMount() {
         this.fetchState();
         this.fetchChecks();
-        this.intervalId = setInterval(this.fetchChecks, 2000);
+        // this.intervalId = setInterval(this.fetchChecks, 2000);
     }
 
     componentWillUnmount() {
-        clearInterval(this.intervalId);
+        // clearInterval(this.intervalId);
     }
 
     addCheck = (check) => {
@@ -194,9 +194,9 @@ export default class App extends Component {
     }
 
     select = (check) => {
-        this.setState({
-            selected: check
-        })
+        // this.setState({
+        //     selected: check
+        // })
     }
 
     render() {
