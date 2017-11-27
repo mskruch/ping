@@ -1,5 +1,6 @@
 package pl.mskruch.ping.check
 
+import com.google.appengine.api.memcache.MemcacheServiceFactory
 import com.googlecode.objectify.Key
 import com.googlecode.objectify.Ref
 import groovy.util.logging.Log
@@ -10,6 +11,8 @@ import static com.googlecode.objectify.ObjectifyService.ofy
 @Log
 class ChecksRoot
 {
+	private checksCache = MemcacheServiceFactory.getMemcacheService("checks")
+
 	List<Check> all()
 	{
 		return ofy().load().type(Check.class).list();
@@ -27,6 +30,7 @@ class ChecksRoot
 			}
 			changed = check.status = status
 			ofy().save().entity(check)
+			checksCache.delete(check.ownerEmail)
 			log.fine "saved changes in check $check returning $changed"
 		}
 		log.fine("returning $changed from the update method")
@@ -35,8 +39,16 @@ class ChecksRoot
 
 	List<Check> ownedBy(String email)
 	{
-		return ofy().load().type(Check.class)
-				.filter("ownerEmail", email).list();
+		def cached = checksCache.get(email)
+		return cached ?: fetchOwnedBy(email);
+	}
+
+	private List<Check> fetchOwnedBy(String email)
+	{
+		log.info "fetching checks for $email"
+		def list = ofy().load().type(Check.class).filter("ownerEmail", email).list()
+		checksCache.put(email, list)
+		return list
 	}
 
 	Check get(long id)
@@ -50,6 +62,7 @@ class ChecksRoot
 
 	def create(email, url, name)
 	{
+		checksCache.delete(email)
 		Check check = new Check(email, url, name)
 		ofy().save().entity(check).now()
 		log.info("check created: " + check)
@@ -58,12 +71,14 @@ class ChecksRoot
 
 	def delete(Check check)
 	{
+		checksCache.delete(check.ownerEmail)
 		ofy().delete().entity(check)
 		ofy().delete().entities(outages(check.id))
 	}
 
 	Check save(Check check)
 	{
+		checksCache.delete(check.ownerEmail)
 		ofy().save().entity(check).now()
 		check
 	}

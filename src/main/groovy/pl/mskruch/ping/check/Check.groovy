@@ -12,7 +12,7 @@ import static pl.mskruch.common.FormatUtils.formatDurationSince
 
 @Entity
 @ToString
-class Check
+class Check implements Serializable
 {
 	@Id
 	Long id;
