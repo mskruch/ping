@@ -81,7 +81,6 @@ export default class Check extends Component {
 
     rowClicked = () => {
         if (this.props.admin) {
-            console.log(this.props.id);
             this.props.select(this.props.check);
         }
     }
