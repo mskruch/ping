@@ -4,8 +4,9 @@ const src = path.resolve(root, 'javascript');
 const dest = path.resolve(__dirname, 'src/main/webapp/dist');
 const webpack = require('webpack');
 
+const prod = process.argv.indexOf('-p') !== -1;
 
-module.exports = {
+const config = {
     entry: src + '/index.jsx',
     devtool: 'sourcemaps',
     output: {
@@ -19,23 +20,31 @@ module.exports = {
         rules: [
             {
                 test: path.join(__dirname, '.'),
-                // test: /\.jsx?$/,
                 exclude: /(node_modules)/,
                 use: {
                     loader: 'babel-loader',
                     options: {
-                        presets: ['react', 'stage-2']
+                        presets: ['env','stage-2']
                     }
                 }
             }
         ]
-    },
-    plugins: [
-        new webpack.ProvidePlugin({
-            $: 'jquery',
-            jQuery: 'jquery',
-            'window.jQuery': 'jquery',
-            Popper: ['popper.js', 'default']
-        })
-    ]
+    }
 };
+
+config.plugins = config.plugins||[];
+if (prod) {
+    config.plugins.push(new webpack.DefinePlugin({
+        'process.env': {
+            'NODE_ENV': `"production"`
+        }
+    }));
+} else {
+    config.plugins.push(new webpack.DefinePlugin({
+        'process.env': {
+            'NODE_ENV': `""`
+        }
+    }));
+}
+
+module.exports = config;
