@@ -8,13 +8,13 @@ let formatDuration = (seconds) => {
 }
 
 let LabelDelay = (props) => {
-    let button = <a href="javascript:void(0)"><i
+    let button = <span> <a href="javascript:void(0)"><i
         className="fa fa-pencil-square-o edit"
         onClick={props.edit}
-        style={{cursor: 'pointer'}}></i></a>
+        style={{cursor: 'pointer'}}></i></a></span>
     if (props.delay) {
         return <span>Notification will be sent after {formatDuration(props.delay)} {button}
-            &nbsp;of outage</span>
+            outage</span>
     } else {
         return <span
             className="text-muted">Notification delay is not set {button}</span>
@@ -82,7 +82,7 @@ export default class Delay extends Component {
                                  disabled={this.state.processing}>
                                 <i className="fa fa-times"></i></div>
                         </div>
-                        &nbsp;<label>of outage</label>
+                        &nbsp;<label>outage</label>
                     </div>
                     :
                     <div><LabelDelay edit={this.edit}
