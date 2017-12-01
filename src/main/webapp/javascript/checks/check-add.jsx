@@ -35,31 +35,32 @@ export default class CheckAdd extends Component {
 
     render() {
         return (
-            <tr>
-                <th scope="row"></th>
-                <td><input name="name"
-                           className={"form-control " + (this.state.validated ? "is-valid" : "")}
-                           value={this.state.name}
-                           onChange={utils.handleInputChange(this)}
-                           placeholder="Enter name"/></td>
-                <td><input name="url"
-                           className={"form-control " + (this.state.validated ? "is-invalid" : "")}
-                           value={this.state.url}
-                           onChange={utils.handleInputChange(this)}
-                           placeholder="Enter url"/>
-                    {this.state.validated ?
-                        <div class="invalid-feedback">
-                            Url is required
-                        </div> : ''}
-                </td>
-                <td></td>
-                <td></td>
-                <td className="action">
-                    <button onClick={this.submit} className="btn btn-primary"
-                            disabled={this.state.processing}>Add
-                    </button>
-                </td>
-            </tr>
+            <div className="card">
+                <div className="card-body">
+                    <div className="form-group">
+                        <input name="name"
+                               className={"form-control " + (this.state.validated ? "is-valid" : "")}
+                               value={this.state.name}
+                               onChange={utils.handleInputChange(this)}
+                               placeholder="Name"/>
+                    </div>
+                    <div className="form-group">
+                        <input name="url"
+                               className={"form-control " + (this.state.validated ? "is-invalid" : "")}
+                               value={this.state.url}
+                               onChange={utils.handleInputChange(this)}
+                               placeholder="URL"/>
+                        {this.state.validated ?
+                            <div className="invalid-feedback">
+                                Url is required
+                            </div> : ''}
+                    </div>
+                    <div className="form-group">
+                        <button onClick={this.submit} className="btn btn-primary btn-block"
+                                disabled={this.state.processing}>Add</button>
+                    </div>
+                </div>
+            </div>
         );
     }
 }

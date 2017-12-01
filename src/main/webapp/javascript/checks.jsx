@@ -4,7 +4,7 @@ import AddCheck from "./checks/check-add";
 
 export default class Checks extends Component {
     render() {
-        var checks = this.props.checks.map((check, i) =>
+        let checks = this.props.checks.map((check, i) =>
             <Check key={check.id} number={i + 1} {...check}
                    deleteCheck={this.props.deleteCheck}
                    updateCheck={this.props.updateCheck}
@@ -12,30 +12,14 @@ export default class Checks extends Component {
                    toggleOutages={this.props.toggleOutages}
                    admin={this.props.admin}
                    select={this.props.select}
+                   selected={this.props.selected && this.props.selected.id === check.id}
                    check={check}/>
         );
 
         return (
             <div className="container">
-                <h1>ping</h1>
-
-                <table className="table table-hover">
-                    <thead>
-                    <tr>
-                        <th scope="col action" width="0%">#</th>
-                        <th scope="col" width="20%">Name</th>
-                        <th scope="col" width="30%">Url</th>
-                        <th scope="col" width="10%">Delay</th>
-                        <th scope="col" width="20%">Status</th>
-                        <th scope="col action" width="20%"></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {checks}
-                    <AddCheck addCheck={this.props.addCheck}/>
-                    </tbody>
-                </table>
-            </div>
-        );
+                {checks}
+                <AddCheck addCheck={this.props.addCheck}/>
+            </div>);
     }
 }

@@ -1,7 +1,6 @@
 import React, {Component} from "react";
 import moment from "moment";
 import Checks from "./checks";
-import CheckPage from "./check";
 
 const DisabledAccountInfo = (props) => {
     return (
@@ -129,6 +128,7 @@ export default class App extends Component {
                 this.setState({
                     checks: responseData,
                 });
+                tooltips();
             });
     }
 
@@ -165,7 +165,6 @@ export default class App extends Component {
     updateCheck = (check) => {
         this.setState(previous => {
             var checks = previous.checks;
-            console.log(checks, check)
             return {checks: checks.map(it => it.id === check.id ? check : it)};
         });
     }
@@ -194,38 +193,39 @@ export default class App extends Component {
     }
 
     select = (check) => {
-        // this.setState({
-        //     selected: check
-        // })
+        this.setState({
+            selected: check
+        })
     }
 
     render() {
         return (
             <div>
                 {this.state.enabled ? '' : <DisabledAccountInfo/>}
-                {this.state.selected ?
-                    <CheckPage check={this.state.selected} select={this.select}/>
-                    :
-                    <Checks checks={this.state.checks} addCheck={this.addCheck}
-                            deleteCheck={this.deleteCheck}
-                            updateCheck={this.updateCheck}
-                            outagesCheckId={this.state.outagesCheckId}
-                            toggleOutages={this.toggleOutages}
-                            admin={this.state.admin}
-                            select={this.select}/>
-                }
+                <Checks checks={this.state.checks} addCheck={this.addCheck}
+                        deleteCheck={this.deleteCheck}
+                        updateCheck={this.updateCheck}
+                        outagesCheckId={this.state.outagesCheckId}
+                        toggleOutages={this.toggleOutages}
+                        admin={this.state.admin}
+                        select={this.select}
+                        selected={this.state.selected}/>
                 <div className="container">
                     {this.state.admin ? <span className="float-right">
                         <a href={this.state.logoutUrl} className="btn btn-info"
                            role="button">Log out</a>
                     </span> : ''}
+                    &nbsp;
                     {this.state.admin ?
                         <a href="/admin" className="btn btn-info"
                            role="button">Admin</a> : ''}
+                    &nbsp;
                     {this.state.admin ?
                         <PingButton
                             fetchChecks={this.fetchChecks}/> : ''}
+                    &nbsp;
                     {this.state.admin ? <TestButton/> : ''}
+                    &nbsp;
                     <RefreshButton fetchChecks={this.fetchChecks}/>
                 </div>
                 <Outages outages={this.state.outages}
