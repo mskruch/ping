@@ -104,7 +104,6 @@ export default class App extends Component {
                     checks: responseData,
                     ready: true
                 });
-                tooltips();
             });
     }
 
@@ -129,7 +128,10 @@ export default class App extends Component {
     componentWillUnmount() {
         // clearInterval(this.intervalId);
         document.body.removeEventListener('click', this.handleClickOutside);
+    }
 
+    componentDidUpdate(){
+        tooltips();
     }
 
     handleClickOutside = (event) => {
