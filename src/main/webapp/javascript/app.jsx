@@ -177,6 +177,7 @@ export default class App extends Component {
     }
 
     select = (check) => {
+        hideTooltips();
         this.setState({
             selected: check
         })

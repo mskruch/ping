@@ -19,10 +19,9 @@
     var tooltips = function () {
         $('[data-toggle="tooltip"]').tooltip()
     };
-
-    $(function () {
-        tooltips();
-    });
+    var hideTooltips = function () {
+        $('[data-toggle="tooltip"]').tooltip('hide')
+    };
 </script>
 <script src="../dist/bundle.js"></script>
 </body>
