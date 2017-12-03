@@ -40,21 +40,21 @@ public class Users
 		userService.createLogoutURL(backUrl)
 	}
 
-	public boolean isEnabled()
+	boolean isEnabled()
 	{
 		if (req.getUserPrincipal() == null || req.getUserPrincipal().getName() == null) {
 			return false;
 		}
 		String name = req.getUserPrincipal().getName();
-		User fetched = find(name);
+		User user = find(name);
 
-		if (fetched == null) {
-			User user = new User(name);
-			ofy().save().entity(user).now(); // async without the now()
-			return req.isUserInRole("admin");
+		if (user == null) {
+			user = new User(name)
+			user.enabled = req.isUserInRole("admin")
+			ofy().save().entity(user).now()
 		}
 
-		return req.isUserInRole("admin") || fetched.isEnabled();
+		return user.isEnabled();
 	}
 
 	public User find(String email)

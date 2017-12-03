@@ -14,6 +14,7 @@ import pl.mskruch.exception.InvalidURL
 import pl.mskruch.ping.check.Check
 import pl.mskruch.ping.check.ChecksRoot
 import pl.mskruch.ping.outage.OutagesRoot
+import pl.mskruch.ping.user.Users
 
 import static com.google.appengine.api.taskqueue.TaskOptions.Builder.withUrl
 import static com.google.appengine.api.taskqueue.TaskOptions.Method.POST
@@ -30,6 +31,7 @@ class PingController
 	ChecksRoot checks
 	OutagesRoot outages
 	Pinger pinger
+	Users users
 
 	private Queue queue = QueueFactory.getDefaultQueue()
 
@@ -39,11 +41,11 @@ class PingController
 	{
 		log.info 'starting ping engine'
 
-		def all = checks.all()
-		log.fine "${all.size()} checks found"
-
-		all.findAll { !it.paused }.each {
-			queue.addAsync(withUrl("/ping/${it.id}").method(TaskOptions.Method.GET))
+		users.all().findAll { it.enabled }.each { user ->
+			checks.ownedBy(user.email).findAll { !it.paused }.each { check ->
+				queue.addAsync(withUrl("/ping/${check.id}").method(TaskOptions.Method.GET))
+				log.fine("scheduled ping for $check.url")
+			}
 		}
 	}
 

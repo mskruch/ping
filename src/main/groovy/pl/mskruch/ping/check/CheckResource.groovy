@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 import pl.mskruch.exception.BadRequest
+import pl.mskruch.ping.user.Users
 
 import static org.springframework.web.bind.annotation.RequestMethod.*
 
@@ -15,7 +16,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.*
 @TupleConstructor
 class CheckResource
 {
-	Checks checks;
+	Checks checks
 
 	@RequestMapping(method = POST)
 	@ResponseBody
@@ -24,6 +25,9 @@ class CheckResource
 		log.info "create check with $request"
 		if (!request.url?.trim()) {
 			throw new BadRequest('url is required')
+		}
+		if (checks.list().size() >= 10){
+			throw new BadRequest('limit of 10 checks reached')
 		}
 		checks.create(request.url, request.name)
 	}
