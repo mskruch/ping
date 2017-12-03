@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import moment from "moment";
 import Name from "./name";
 import Delay from "./delay";
+import utils from "../utils";
 
 let CheckStatus = (props) => {
     if (!props.status)
@@ -65,17 +66,26 @@ class Footer extends Component {
     state = {outages: null}
 
     componentDidMount() {
-        fetch('/api/checks/' + this.props.checkId + "/outages",
-            {credentials: 'same-origin'})
+        this.loading = utils.makeCancelable(fetch('/api/checks/' + this.props.checkId + "/outages",
+            {credentials: 'same-origin'}))
+        this.loading
+            .promise
             .then((response) => response.json())
             .then((responseData) => {
                     this.setState({outages: responseData});
                 }
-            );
+            )
+            .catch((reason) => console.log('checks fetch canceled ', reason.isCanceled));
+    }
+
+    componentWillUnmount() {
+        if (this.loading) {
+            this.loading.cancel();
+        }
     }
 
     render() {
-        if (this.state.outages != null && this.state.outages.length == 0){
+        if (this.state.outages != null && this.state.outages.length == 0) {
             return null;
         }
         return <div className="card-footer text-center">
@@ -125,7 +135,7 @@ export default class Check extends Component {
         return (
             <div onClick={this.clicked}
                  style={this.props.selected ? {} : {cursor: 'pointer'}}
-                 className={"card check" + (this.props.selected ? "selected" : "") + " mb-3"}>
+                 className={"card check" + (this.props.selected ? "-selected" : "") + " mb-3"}>
                 {this.props.selected ? <div className="card-header">
                     <ul className="nav nav-pills card-header-pills mr-auto">
                         <li className="nav-item mr-auto">

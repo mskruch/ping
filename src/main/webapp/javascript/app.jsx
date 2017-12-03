@@ -146,10 +146,31 @@ export default class App extends Component {
         this.fetchState();
         this.fetchChecks();
         // this.intervalId = setInterval(this.fetchChecks, 2000);
+        document.body.addEventListener('click', this.handleClickOutside);
     }
 
     componentWillUnmount() {
         // clearInterval(this.intervalId);
+        document.body.removeEventListener('click', this.handleClickOutside);
+
+    }
+
+    handleClickOutside = (event) => {
+        if (!this.state.selected) {
+            return;
+        }
+
+        let checks = document.querySelector('.check');
+        let selected = document.querySelector('.check-selected');
+
+        if (checks && checks.contains(event.target)) {
+            // console.log('clicked not selected check');
+        } else if (selected && selected.contains(event.target)){
+            // console.log('clicked selected check');
+        } else {
+            // console.log('clicked outside');
+            this.select(null);
+        }
     }
 
     addCheck = (check) => {
