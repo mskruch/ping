@@ -11,31 +11,6 @@ const DisabledAccountInfo = (props) => {
     );
 }
 
-const Outages = (props) => {
-    if (!props.checkId) {
-        return null;
-    }
-    return (
-        <div className="container">
-            <h3>Outages</h3>
-            <table className="table">
-                <tbody>
-                {props.outages.map((outage, i) =>
-                    <tr key={i}>
-                        <td width="35%">{moment(outage.started).format('YYYY-MM-DD HH:mm')}</td>
-                        <td width="35%">{outage.finished ? moment(outage.finished).from(outage.started, true) :
-                            <span
-                                className="badge badge-danger">outage</span>}</td>
-                        <td width="30%">{outage.notified ? 'notified ' + moment(outage.notified).format('YYYY-MM-DD HH:mm') : ''}</td>
-                    </tr>
-                )}
-                </tbody>
-            </table>
-        </div>
-    )
-        ;
-}
-
 class PingButton extends Component {
     state = {processing: false};
 
@@ -115,10 +90,9 @@ export default class App extends Component {
         enabled: true,
         admin: false,
         logoutUrl: "/",
-        outages: [],
-        outagesCheckId: null,
         selected: null,
-        debug: false
+        debug: false,
+        ready: false
     };
 
     fetchChecks = () => {
@@ -128,6 +102,7 @@ export default class App extends Component {
             .then((responseData) => {
                 this.setState({
                     checks: responseData,
+                    ready: true
                 });
                 tooltips();
             });
@@ -199,22 +174,6 @@ export default class App extends Component {
         });
     }
 
-    toggleOutages = (id) => {
-        this.setState(previous => {
-            return {
-                outagesCheckId: id != previous.outagesCheckId ? id : null,
-                outages: []
-            }
-        });
-        fetch('/api/checks/' + id + "/outages",
-            {credentials: 'same-origin'})
-            .then((response) => response.json())
-            .then((responseData) => {
-                    this.setState({outages: responseData});
-                }
-            );
-    }
-
     select = (check) => {
         this.setState({
             selected: check
@@ -228,11 +187,10 @@ export default class App extends Component {
                 <Checks checks={this.state.checks} addCheck={this.addCheck}
                         deleteCheck={this.deleteCheck}
                         updateCheck={this.updateCheck}
-                        outagesCheckId={this.state.outagesCheckId}
-                        toggleOutages={this.toggleOutages}
                         admin={this.state.admin}
                         select={this.select}
-                        selected={this.state.selected}/>
+                        selected={this.state.selected}
+                        ready={this.state.ready}/>
                 {this.state.debug ? <div className="container">
                     {this.state.admin ? <span className="float-right">
                         <a href={this.state.logoutUrl} className="btn btn-info"
@@ -251,8 +209,6 @@ export default class App extends Component {
                     &nbsp;
                     <RefreshButton fetchChecks={this.fetchChecks}/>
                 </div> : null}
-                <Outages outages={this.state.outages}
-                         checkId={this.state.outagesCheckId}/>
             </div>
         );
     }

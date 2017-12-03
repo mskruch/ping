@@ -140,10 +140,6 @@ export default class Check extends Component {
             });
     }
 
-    toggleOutages = () => {
-        this.props.toggleOutages(this.props.id);
-    }
-
     clicked = () => {
         if (!this.props.selected) {
             this.props.select(this.props.check);

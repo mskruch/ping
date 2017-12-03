@@ -1,5 +1,6 @@
 package pl.mskruch.ping.check
 
+import groovy.transform.TupleConstructor
 import groovy.util.logging.Log
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Controller
@@ -11,14 +12,10 @@ import static org.springframework.web.bind.annotation.RequestMethod.*
 @Controller
 @Log
 @RequestMapping(["/checks", "/api/checks"])
+@TupleConstructor
 class CheckResource
 {
 	Checks checks;
-
-	CheckResource(Checks checks)
-	{
-		this.checks = checks
-	}
 
 	@RequestMapping(method = POST)
 	@ResponseBody
