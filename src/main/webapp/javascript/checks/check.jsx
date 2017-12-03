@@ -21,6 +21,25 @@ const Outages = (props) => {
     );
 }
 
+class ErrorBoundary extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {hasError: false};
+    }
+
+    componentDidCatch(error, info) {
+        this.setState({hasError: true});
+        console.log(error, info);
+    }
+
+    render() {
+        if (this.state.hasError) {
+            return <span className="status badge badge-danger">Something went wrong</span>;
+        }
+        return this.props.children;
+    }
+}
+
 class Footer extends Component {
     state = {outages: null}
 
@@ -34,7 +53,7 @@ class Footer extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.render && this.state.outages == null){
+        if (nextProps.render && this.state.outages == null) {
             this.fetchOutages();
         }
     }
@@ -62,7 +81,8 @@ class Footer extends Component {
         return <div className="card-footer text-center">
             {this.state.outages == null ?
                 <img src="/images/ajax-loader.gif"/> :
-                <Outages outages={this.state.outages}/>}
+                <ErrorBoundary><Outages
+                    outages={this.state.outages}/></ErrorBoundary>}
         </div>
     }
 }
