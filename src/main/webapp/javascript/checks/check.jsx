@@ -43,47 +43,47 @@ class SelectedCheckBody extends Component {
     }
 }
 
-class Outages extends Component {
-    state = {outages: [], ready: false}
+const Outages = (props) => {
+    return (
+        <small>
+            <table className="table table-sm outages">
+                <tbody>
+                {props.outages.map((outage, i) =>
+                    <tr key={i} className={outage.finished ? '' : 'down'}>
+                        <td width="35%">{moment(outage.started).format('YYYY-MM-DD HH:mm')}</td>
+                        <td width="35%">{outage.finished ? moment(outage.finished).from(outage.started, true) : null}</td>
+                        <td width="30%">{outage.notified ? 'notified ' + moment(outage.notified).format('YYYY-MM-DD HH:mm') : ''}</td>
+                    </tr>
+                )}
+                </tbody>
+            </table>
+        </small>
+    );
+}
+
+class Footer extends Component {
+    state = {outages: null}
 
     componentDidMount() {
         fetch('/api/checks/' + this.props.checkId + "/outages",
             {credentials: 'same-origin'})
             .then((response) => response.json())
             .then((responseData) => {
-                    this.setState({outages: responseData, ready: true});
+                    this.setState({outages: responseData});
                 }
             );
     }
 
     render() {
-        if (!this.state.ready){
-            return <img src="/images/ajax-loader.gif"></img>
+        if (this.state.outages != null && this.state.outages.length == 0){
+            return null;
         }
-        return (
-            <small>
-                <table className="table table-sm outages">
-                    <tbody>
-                    {this.state.outages.map((outage, i) =>
-                        <tr key={i} className={outage.finished ? '' : 'down'}>
-                            <td width="35%">{moment(outage.started).format('YYYY-MM-DD HH:mm')}</td>
-                            <td width="35%">{outage.finished ? moment(outage.finished).from(outage.started, true) : null}</td>
-                            <td width="30%">{outage.notified ? 'notified ' + moment(outage.notified).format('YYYY-MM-DD HH:mm') : ''}</td>
-                        </tr>
-                    )}
-                    </tbody>
-                </table>
-            </small>
-        );
+        return <div className="card-footer text-center">
+            {this.state.outages == null ?
+                <img src="/images/ajax-loader.gif"/> :
+                <Outages outages={this.state.outages}/>}
+        </div>
     }
-}
-
-const Footer = (props) => {
-    if (!props.render)
-        return null;
-    return <div className="card-footer text-center">
-        <Outages checkId={props.checkId}/>
-    </div>
 }
 
 export default class Check extends Component {
@@ -152,8 +152,10 @@ export default class Check extends Component {
                                  status={this.props.status}
                                  statusSince={this.props.statusSince}/>
                 }
-                <Footer render={this.props.selected}
-                        checkId={this.props.check.id}/>
+                {this.props.selected ?
+                    <Footer render={this.props.selected}
+                            checkId={this.props.check.id}/> :
+                    null}
 
             </div>
         );
