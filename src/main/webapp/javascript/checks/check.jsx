@@ -25,6 +25,21 @@ class Footer extends Component {
     state = {outages: null}
 
     componentDidMount() {
+    }
+
+    componentWillUnmount() {
+        if (this.loading) {
+            this.loading.cancel();
+        }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.render && this.state.outages == null){
+            this.fetchOutages();
+        }
+    }
+
+    fetchOutages() {
         this.loading = utils.makeCancelable(fetch('/api/checks/' + this.props.checkId + "/outages",
             {credentials: 'same-origin'}))
         this.loading
@@ -37,13 +52,10 @@ class Footer extends Component {
             .catch((reason) => console.log('checks fetch canceled ', reason.isCanceled));
     }
 
-    componentWillUnmount() {
-        if (this.loading) {
-            this.loading.cancel();
-        }
-    }
-
     render() {
+        if (!this.props.render) {
+            return null;
+        }
         if (this.state.outages != null && this.state.outages.length == 0) {
             return null;
         }
@@ -102,11 +114,8 @@ export default class Check extends Component {
                       selected={this.props.selected}
                       delete={this.delete}
                       processing={this.processing}/>
-                {this.props.selected ?
-                    <Footer render={this.props.selected}
-                            checkId={this.props.check.id}/> :
-                    null}
-
+                <Footer render={this.props.selected}
+                        checkId={this.props.check.id}/>
             </div>
         );
 
