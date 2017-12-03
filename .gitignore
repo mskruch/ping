@@ -3,3 +3,6 @@ appengine-generated/
 .gradle/
 .idea/
 build/
+node_modules/
+out/
+src/main/webapp/dist/
