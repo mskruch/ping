@@ -34,7 +34,7 @@ class ErrorBoundary extends React.Component {
 
     render() {
         if (this.state.hasError) {
-            return <span className="status badge badge-danger">Something went wrong</span>;
+            return <div className="text-center"><span className="status badge badge-danger">Something went wrong</span></div>;
         }
         return this.props.children;
     }
@@ -78,7 +78,7 @@ class Footer extends Component {
         if (this.state.outages != null && this.state.outages.length == 0) {
             return null;
         }
-        return <div className="card-footer text-center">
+        return <div className="card-footer">
             {this.state.outages == null ?
                 <img src="/images/ajax-loader.gif"/> :
                 <ErrorBoundary><Outages
