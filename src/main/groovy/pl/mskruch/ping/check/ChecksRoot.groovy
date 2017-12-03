@@ -3,16 +3,21 @@ package pl.mskruch.ping.check
 import com.google.appengine.api.memcache.MemcacheServiceFactory
 import com.googlecode.objectify.Key
 import com.googlecode.objectify.Ref
+import groovy.transform.TupleConstructor
 import groovy.util.logging.Log
 import pl.mskruch.exception.NotFound
 import pl.mskruch.ping.outage.Outage
+import pl.mskruch.ping.outage.OutagesRoot
 
 import static com.googlecode.objectify.ObjectifyService.ofy
 
 @Log
+@TupleConstructor
 class ChecksRoot
 {
 	private checksCache = MemcacheServiceFactory.getMemcacheService("checks")
+
+	OutagesRoot outagesRoot
 
 	List<Check> all()
 	{
@@ -74,7 +79,7 @@ class ChecksRoot
 	{
 		checksCache.delete(check.ownerEmail)
 		ofy().delete().entity(check)
-		ofy().delete().entities(outages(check.id))
+		ofy().delete().entities(outagesRoot.outages(check.id))
 	}
 
 	Check save(Check check)
@@ -82,34 +87,5 @@ class ChecksRoot
 		checksCache.delete(check.ownerEmail)
 		ofy().save().entity(check).now()
 		check
-	}
-
-	Outage save(Outage outage)
-	{
-		ofy().save().entity(outage).now()
-		outage
-	}
-
-	Outage createOutage(Long checkId, Date checkTime)
-	{
-		Key<Check> checkKey = Key.create(Check.class, checkId)
-		Ref<Check> ref = Ref.create(checkKey)
-		def outage = new Outage(ref, checkTime)
-
-		ofy().save().entity(outage).now()
-		log.fine "outage created $outage"
-		return outage
-	}
-
-	Outage outage(Long checkId)
-	{
-		def checkKey = Key.create(Check.class, checkId)
-		ofy().load().type(Outage.class).ancestor(checkKey).filter('finished = ', null).first().now()
-	}
-
-	List<Outage> outages(Long checkId)
-	{
-		def checkKey = Key.create(Check.class, checkId)
-		ofy().load().type(Outage.class).ancestor(checkKey).list()
 	}
 }

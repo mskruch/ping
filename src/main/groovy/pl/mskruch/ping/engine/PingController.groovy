@@ -4,6 +4,7 @@ import com.google.appengine.api.taskqueue.Queue
 import com.google.appengine.api.taskqueue.QueueFactory
 import com.google.appengine.api.taskqueue.TaskOptions
 import groovy.time.TimeCategory
+import groovy.transform.TupleConstructor
 import groovy.util.logging.Log
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.PathVariable
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseBody
 import pl.mskruch.ping.check.Check
 import pl.mskruch.ping.check.ChecksRoot
+import pl.mskruch.ping.outage.OutagesRoot
 
 import static com.google.appengine.api.taskqueue.TaskOptions.Builder.withUrl
 import static org.springframework.web.bind.annotation.RequestMethod.GET
@@ -20,16 +22,12 @@ import static pl.mskruch.ping.check.Status.UP
 
 @Controller
 @Log
+@TupleConstructor
 class PingController
 {
 	ChecksRoot checks
+	OutagesRoot outages
 	Pinger pinger
-
-	PingController(ChecksRoot checks, Pinger pinger)
-	{
-		this.checks = checks
-		this.pinger = pinger
-	}
 
 	@RequestMapping(value = "/ping/{id}", method = GET)
 	@ResponseBody
@@ -51,14 +49,14 @@ class PingController
 //			notify(check, result, null)
 		}
 
-		def outage = checks.outage(id)
+		def outage = outages.outage(id)
 		if (result.status == DOWN && !outage){
 			log.info "check failed, outage detected"
-			outage = checks.createOutage(id, checkTime)
+			outage = outages.createOutage(id, checkTime)
 			if (!check.notificationDelay){
 				notify(check, result, null)
 				outage.notified = new Date()
-				checks.save(outage)
+				outages.save(outage)
 			}
 		} else if (result.status == DOWN && outage){
 			log.info "another check failed, outage continue"
@@ -67,7 +65,7 @@ class PingController
 				log.info("check time $checkTime started $outage.started calculated string: $since")
 				notify(check, result,since)
 				outage.notified = new Date()
-				checks.save(outage)
+				outages.save(outage)
 			}
 		} else if (result.status == UP && !outage){
 			log.fine "check passed"
@@ -77,7 +75,7 @@ class PingController
 				notify(check, result, null)
 			}
 			outage.finished = checkTime
-			checks.save(outage)
+			outages.save(outage)
 		}
 
 		return result.status
