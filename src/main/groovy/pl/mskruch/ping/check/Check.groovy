@@ -15,22 +15,24 @@ import static pl.mskruch.common.FormatUtils.formatDurationSince
 class Check implements Serializable
 {
 	@Id
-	Long id;
+	Long id
 	@Index
-	String ownerEmail;
+	String ownerEmail
 	@Index
-	String name;
+	String name
 
 	@JsonFormat(shape = STRING, pattern = TIME_FORMAT, timezone = "GMT")
-	Date created;
-	String url;
+	Date created
+	String url
 
 	@JsonFormat(shape = STRING, pattern = TIME_FORMAT, timezone = "GMT")
-	Date lastCheck;
+	Date lastCheck
 	Status status
 
 	@JsonFormat(shape = STRING, pattern = TIME_FORMAT, timezone = "GMT")
 	Date statusSince
+
+	Boolean paused
 
 	Long getNotificationDelay()
 	{
@@ -52,25 +54,13 @@ class Check implements Serializable
 
 	boolean setStatus(Status status)
 	{
-		Date now = new Date();
-		this.lastCheck = now;
+		Date now = new Date()
+		this.lastCheck = now
 		if (this.status != status) {
-			this.status = status;
-			this.statusSince = now;
-			return true;
+			this.status = status
+			this.statusSince = now
+			return true
 		}
-		return false;
-	}
-
-	@Deprecated
-	String getStatusSinceDuration()
-	{
-		formatDurationSince(this.statusSince)
-	}
-
-	@Deprecated
-	String getLastCheckDuration()
-	{
-		formatDurationSince(this.lastCheck)
+		return false
 	}
 }

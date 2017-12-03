@@ -33,12 +33,13 @@ class CheckResource
 
 	@RequestMapping(value = "/{id}", method = PATCH)
 	@ResponseBody
-	Check update(@PathVariable("id") Long id, @RequestBody request)
+	Check patch(@PathVariable("id") Long id, @RequestBody request)
 	{
 		log.info("update check $id with $request (${request.getClass()})")
 		def name = request.name
+		def paused = request.paused
 		def notificationDelay = request.containsKey('notificationDelay') ? (request.notificationDelay ? request.notificationDelay as Long : 0) : null
-		checks.patch(id, name, notificationDelay)
+		checks.patch(id, name, notificationDelay, paused)
 	}
 
 	@RequestMapping(value = "/{id}", method = GET)

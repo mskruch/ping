@@ -112,6 +112,34 @@ export default class Check extends Component {
         );
     }
 
+    pause = () => {
+        this.patchPaused(true);
+    }
+
+    resume = () => {
+        this.patchPaused(false);
+    }
+
+    patchPaused = (value) => {
+        this.setState({processing: true});
+        fetch('/api/checks/' + this.props.check.id,
+            {
+                credentials: 'same-origin',
+                method: 'PATCH',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    "paused": value
+                })
+            })
+            .then((response) => {
+                return response.json();
+            })
+            .then((responseData) => {
+                this.props.updateCheck(responseData);
+                this.setState({processing: false});
+            });
+    }
+
     toggleOutages = () => {
         this.props.toggleOutages(this.props.id);
     }
@@ -123,16 +151,21 @@ export default class Check extends Component {
     }
 
     render() {
+        let className = "card mb-3 check"
+            + (this.props.selected ? "-selected" : "")
+            + (this.props.paused ? " text-muted" : "");
         return (
             <div onClick={this.clicked}
                  style={this.props.selected ? {} : {cursor: 'pointer'}}
-                 className={"card check" + (this.props.selected ? "-selected" : "") + " mb-3"}>
+                 className={className}>
                 <Body check={this.props.check}
                       status={this.props.status}
                       statusSince={this.props.statusSince}
                       updateCheck={this.props.updateCheck}
                       selected={this.props.selected}
                       delete={this.delete}
+                      pause={this.pause}
+                      resume={this.resume}
                       processing={this.processing}/>
                 <Footer render={this.props.selected}
                         checkId={this.props.check.id}/>

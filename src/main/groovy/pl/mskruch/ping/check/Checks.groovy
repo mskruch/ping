@@ -48,7 +48,7 @@ class Checks
 		return check;
 	}
 
-	Check patch(Long id, name = null, notificationDelay = null)
+	Check patch(Long id, name = null, notificationDelay = null, paused = null)
 	{
 		Check check = get(id);
 		if (notificationDelay != null) {
@@ -56,6 +56,9 @@ class Checks
 		}
 		if (name != null) {
 			check.name = name
+		}
+		if (paused != null) {
+			check.paused = paused
 		}
 		root.save(check)
 	}

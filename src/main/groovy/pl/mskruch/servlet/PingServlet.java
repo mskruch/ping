@@ -32,9 +32,11 @@ public class PingServlet extends HttpServlet
 
 		Queue queue = QueueFactory.getDefaultQueue();
 		for (Check check : all) {
+			if (Boolean.TRUE == check.getPaused()){
+				continue;
+			}
 			queue.addAsync(TaskOptions.Builder.withUrl("/ping/" + check.getId())
 				.method(TaskOptions.Method.GET));
 		}
 	}
-
 }

@@ -16,10 +16,17 @@ let CheckStatus = (props) => {
 
 let Actions = (props) => {
     return <div className="text-right">
-        <button className="btn btn-info btn-sm"
-                disabled={props.processing}
-                onClick={props.delete}>Delete
-        </button>
+        {props.check.paused ?
+            <span><button className="btn btn-info btn-sm"
+                          disabled={props.processing}
+                          onClick={props.resume}>Resume
+            </button> <button className="btn btn-info btn-sm"
+                              disabled={props.processing}
+                              onClick={props.delete}>Delete
+            </button></span> : <button className="btn btn-info btn-sm"
+                                       disabled={props.processing}
+                                       onClick={props.pause}>Pause
+            </button>}
     </div>
 }
 
