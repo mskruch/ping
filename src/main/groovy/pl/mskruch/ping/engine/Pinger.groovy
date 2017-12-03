@@ -1,6 +1,7 @@
 package pl.mskruch.ping.engine
 
 import groovy.util.logging.Log
+import pl.mskruch.exception.InvalidURL
 import pl.mskruch.exception.MultipleFailure
 import pl.mskruch.ping.system.Config
 
@@ -57,7 +58,7 @@ class Pinger
 			def message = last instanceof SocketTimeoutException ? 'socket timeout' : "<i>$last.message (${last.getClass()})</i>"
 			return new Result(DOWN, message)
 		} catch (MalformedURLException e) {
-			return new Result(DOWN, 'invalid url')
+			throw new InvalidURL(urlString)
 		}
 	}
 }

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseBody
+import pl.mskruch.exception.InvalidURL
 import pl.mskruch.ping.check.Check
 import pl.mskruch.ping.check.ChecksRoot
 import pl.mskruch.ping.outage.OutagesRoot
@@ -51,21 +52,26 @@ class PingController
 	def processSingleCheck(@PathVariable("id") Long id)
 	{
 		def checkTime = new Date()
+
 		log.info("processing $id at $checkTime")
 
 		def check = checks.get(id)
 
-		Result result = pinger.ping(check.getUrl());
-
-		log.fine("ping " + check.getUrl() + " " + result.status);
-
-		boolean changed = checks.update(check.id, result.status, checkTime)
-		log.fine "status changed: $changed"
-		if (changed) {
-			log.info("status changed to $result.status")
-//			notify(check, result, null)
+		try {
+			Result result = pinger.ping(check.getUrl())
+			log.fine("ping " + check.getUrl() + " " + result.status);
+			updateCheck(check, result, checkTime)
+			updateOutages(id, result, checkTime, check)
+			return result.status
+		} catch (InvalidURL e) {
+			log.info "pause check due to $e.message"
+			checks.pause(id)
+			return e.message
 		}
+	}
 
+	private void updateOutages(long id, Result result, Date checkTime, Check check)
+	{
 		def outage = outages.outage(id)
 		if (result.status == DOWN && !outage) {
 			log.info "check failed, outage detected"
@@ -94,8 +100,15 @@ class PingController
 			outage.finished = checkTime
 			outages.save(outage)
 		}
+	}
 
-		return result.status
+	private void updateCheck(Check check, Result result, Date checkTime)
+	{
+		boolean changed = checks.update(check.id, result.status, checkTime)
+		log.fine "status changed: $changed"
+		if (changed) {
+			log.info("status changed to $result.status")
+		}
 	}
 
 	private notify(Check check, Result result, String since) throws IOException

@@ -117,7 +117,8 @@ export default class App extends Component {
         logoutUrl: "/",
         outages: [],
         outagesCheckId: null,
-        selected: null
+        selected: null,
+        debug: false
     };
 
     fetchChecks = () => {
@@ -147,6 +148,7 @@ export default class App extends Component {
         this.fetchChecks();
         // this.intervalId = setInterval(this.fetchChecks, 2000);
         document.body.addEventListener('click', this.handleClickOutside);
+        this.setState({debug: window.location.hostname === 'localhost'});
     }
 
     componentWillUnmount() {
@@ -165,7 +167,7 @@ export default class App extends Component {
 
         if (checks && checks.contains(event.target)) {
             // console.log('clicked not selected check');
-        } else if (selected && selected.contains(event.target)){
+        } else if (selected && selected.contains(event.target)) {
             // console.log('clicked selected check');
         } else {
             // console.log('clicked outside');
@@ -231,7 +233,7 @@ export default class App extends Component {
                         admin={this.state.admin}
                         select={this.select}
                         selected={this.state.selected}/>
-                <div className="container">
+                {this.state.debug ? <div className="container">
                     {this.state.admin ? <span className="float-right">
                         <a href={this.state.logoutUrl} className="btn btn-info"
                            role="button">Log out</a>
@@ -248,7 +250,7 @@ export default class App extends Component {
                     {this.state.admin ? <TestButton/> : ''}
                     &nbsp;
                     <RefreshButton fetchChecks={this.fetchChecks}/>
-                </div>
+                </div> : null}
                 <Outages outages={this.state.outages}
                          checkId={this.state.outagesCheckId}/>
             </div>

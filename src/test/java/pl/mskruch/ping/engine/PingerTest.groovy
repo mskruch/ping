@@ -1,8 +1,7 @@
 package pl.mskruch.ping.engine
 
+import pl.mskruch.exception.InvalidURL
 import pl.mskruch.ping.system.Config
-
-import static pl.mskruch.ping.check.Status.DOWN
 
 class PingerTest extends GroovyTestCase
 {
@@ -17,9 +16,10 @@ class PingerTest extends GroovyTestCase
 	{
 		def pinger = new Pinger(config)
 
-		def result = pinger.ping("foo")
-
-		assert result.status == DOWN
-		assert result.message == 'invalid url'
+		shouldFail(InvalidURL) {
+			def result = pinger.ping("foo")
+		}
+//		assert result.status == DOWN
+//		assert result.message == 'invalid url'
 	}
 }

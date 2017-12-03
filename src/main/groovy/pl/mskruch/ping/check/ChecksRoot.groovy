@@ -88,4 +88,11 @@ class ChecksRoot
 		ofy().save().entity(check).now()
 		check
 	}
+
+	def pause(long id)
+	{
+		def check = get(id)
+		check.paused = true
+		save(check)
+	}
 }
