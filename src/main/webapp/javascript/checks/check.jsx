@@ -57,6 +57,9 @@ class Outages extends Component {
     }
 
     render() {
+        if (!this.state.ready){
+            return <img src="/images/ajax-loader.gif"></img>
+        }
         return (
             <small>
                 <table className="table table-sm outages">
@@ -78,7 +81,7 @@ class Outages extends Component {
 const Footer = (props) => {
     if (!props.render)
         return null;
-    return <div className="card-footer">
+    return <div className="card-footer text-center">
         <Outages checkId={props.checkId}/>
     </div>
 }
@@ -112,7 +115,7 @@ export default class Check extends Component {
         this.props.toggleOutages(this.props.id);
     }
 
-    rowClicked = () => {
+    clicked = () => {
         if (!this.props.selected) {
             this.props.select(this.props.check);
         }
@@ -120,9 +123,9 @@ export default class Check extends Component {
 
     render() {
         return (
-            <div onClick={this.rowClicked}
+            <div onClick={this.clicked}
                  style={this.props.selected ? {} : {cursor: 'pointer'}}
-                 className="card check mb-3">
+                 className={"card check" + (this.props.selected ? "selected" : "") + " mb-3"}>
                 {this.props.selected ? <div className="card-header">
                     <ul className="nav nav-pills card-header-pills mr-auto">
                         <li className="nav-item mr-auto">

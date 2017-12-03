@@ -1,14 +1,5 @@
-.action {
-    white-space: nowrap;
-    text-align: center;
-}
-
 tr:hover .actionspan {
     visibility: visible;
-}
-
-tr .actionspan {
-    visibility: hidden;
 }
 
 .container {
