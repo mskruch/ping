@@ -37,27 +37,24 @@ export default class CheckAdd extends Component {
         return (
             <div className="card">
                 <div className="card-body">
-                    <div className="form-group">
-                        <input name="name"
-                               className={"form-control " + (this.state.validated ? "is-valid" : "")}
-                               value={this.state.name}
-                               onChange={utils.handleInputChange(this)}
-                               placeholder="Name"/>
-                    </div>
-                    <div className="form-group">
-                        <input name="url"
-                               className={"form-control " + (this.state.validated ? "is-invalid" : "")}
-                               value={this.state.url}
-                               onChange={utils.handleInputChange(this)}
-                               placeholder="URL"/>
-                        {this.state.validated ?
-                            <div className="invalid-feedback">
-                                Url is required
-                            </div> : ''}
-                    </div>
-                    <div className="form-group">
-                        <button onClick={this.submit} className="btn btn-primary btn-block"
-                                disabled={this.state.processing}>Add</button>
+                    <div className="row">
+                        <div className="col-sm-10">
+                            <input name="url"
+                                   className={"form-control " + (this.state.validated ? "is-invalid" : "")}
+                                   value={this.state.url}
+                                   onChange={utils.handleInputChange(this)}
+                                   placeholder="URL"/>
+                            {this.state.validated ?
+                                <div className="invalid-feedback">
+                                    URL is required
+                                </div> : ''}
+                        </div>
+                        <div className="col-sm-2">
+                            <button onClick={this.submit}
+                                    className="btn btn-primary btn-block"
+                                    disabled={this.state.processing}>Add
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
