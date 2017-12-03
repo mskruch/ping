@@ -15,6 +15,7 @@ import pl.mskruch.ping.check.ChecksRoot
 import pl.mskruch.ping.outage.OutagesRoot
 
 import static com.google.appengine.api.taskqueue.TaskOptions.Builder.withUrl
+import static com.google.appengine.api.taskqueue.TaskOptions.Method.POST
 import static org.springframework.web.bind.annotation.RequestMethod.GET
 import static pl.mskruch.common.DateUtils.secondsBetween
 import static pl.mskruch.ping.check.Status.DOWN
@@ -28,6 +29,22 @@ class PingController
 	ChecksRoot checks
 	OutagesRoot outages
 	Pinger pinger
+
+	private Queue queue = QueueFactory.getDefaultQueue()
+
+	@RequestMapping(value = "/ping", method = GET)
+	@ResponseBody
+	def runEngine()
+	{
+		log.info 'starting ping engine'
+
+		def all = checks.all()
+		log.fine "${all.size()} checks found"
+
+		all.findAll { !it.paused }.each {
+			queue.addAsync(withUrl("/ping/${it.id}").method(TaskOptions.Method.GET))
+		}
+	}
 
 	@RequestMapping(value = "/ping/{id}", method = GET)
 	@ResponseBody
@@ -43,33 +60,33 @@ class PingController
 		log.fine("ping " + check.getUrl() + " " + result.status);
 
 		boolean changed = checks.update(check.id, result.status, checkTime)
-		log.fine"status changed: $changed"
+		log.fine "status changed: $changed"
 		if (changed) {
 			log.info("status changed to $result.status")
 //			notify(check, result, null)
 		}
 
 		def outage = outages.outage(id)
-		if (result.status == DOWN && !outage){
+		if (result.status == DOWN && !outage) {
 			log.info "check failed, outage detected"
 			outage = outages.createOutage(id, checkTime)
-			if (!check.notificationDelay){
+			if (!check.notificationDelay) {
 				notify(check, result, null)
 				outage.notified = new Date()
 				outages.save(outage)
 			}
-		} else if (result.status == DOWN && outage){
+		} else if (result.status == DOWN && outage) {
 			log.info "another check failed, outage continue"
 			if (!outage.notified && (!check.notificationDelay || (secondsBetween(checkTime, outage.started) > (check.notificationDelay as long)))) {
 				def since = TimeCategory.minus(checkTime, outage.started).toString()
 				log.info("check time $checkTime started $outage.started calculated string: $since")
-				notify(check, result,since)
+				notify(check, result, since)
 				outage.notified = new Date()
 				outages.save(outage)
 			}
-		} else if (result.status == UP && !outage){
+		} else if (result.status == UP && !outage) {
 			log.fine "check passed"
-		} else if (result.status == UP && outage){
+		} else if (result.status == UP && outage) {
 			log.fine "outage is over"
 			if (outage.notified) {
 				notify(check, result, null)
@@ -92,7 +109,7 @@ class PingController
 					.param("to", check.getOwnerEmail())
 					.param("subject", "$name is $result.status")
 					.param("url", check.url)
-					.method(TaskOptions.Method.POST))
+					.method(POST))
 		} else {
 			def reason = result.responseCode ?
 					"response status code $result.responseCode" :
@@ -103,7 +120,7 @@ class PingController
 					.param("url", check.url)
 					.param("reason", reason)
 					.param("since", since ?: '')
-					.method(TaskOptions.Method.POST))
+					.method(POST))
 		}
 	}
 }
