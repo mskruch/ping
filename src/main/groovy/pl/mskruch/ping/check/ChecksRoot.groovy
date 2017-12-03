@@ -5,6 +5,7 @@ import com.googlecode.objectify.Key
 import com.googlecode.objectify.Ref
 import groovy.util.logging.Log
 import pl.mskruch.exception.NotFound
+import pl.mskruch.ping.outage.Outage
 
 import static com.googlecode.objectify.ObjectifyService.ofy
 

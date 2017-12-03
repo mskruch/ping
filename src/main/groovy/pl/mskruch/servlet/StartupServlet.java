@@ -4,7 +4,7 @@ import com.googlecode.objectify.ObjectifyService;
 import pl.mskruch.ping.check.Check;
 import pl.mskruch.ping.data.ConfigEntry;
 import pl.mskruch.ping.user.User;
-import pl.mskruch.ping.check.Outage;
+import pl.mskruch.ping.outage.Outage;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;

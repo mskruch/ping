@@ -1,4 +1,4 @@
-package pl.mskruch.ping.check
+package pl.mskruch.ping.outage
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.googlecode.objectify.Ref
@@ -7,6 +7,7 @@ import com.googlecode.objectify.annotation.Id
 import com.googlecode.objectify.annotation.Index
 import com.googlecode.objectify.annotation.Parent
 import groovy.transform.ToString
+import pl.mskruch.ping.check.Check
 
 @Entity
 @ToString
