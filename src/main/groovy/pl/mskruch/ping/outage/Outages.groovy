@@ -1,23 +1,20 @@
 package pl.mskruch.ping.outage
 
+import groovy.transform.TupleConstructor
 import groovy.util.logging.Log
+import pl.mskruch.ping.check.Check
 import pl.mskruch.ping.check.Checks
 
 @Log
+@TupleConstructor
 class Outages
 {
-	private final OutagesRoot root
-	private final Checks checks
+	final OutagesRoot root
+	final Checks checks
 
-	Outages(OutagesRoot root, Checks checks)
+	List<Check> find(long checkId)
 	{
-		this.root = root
-		this.checks = checks
-	}
-
-	def find(long checkId)
-	{
-		def check = checks.get(checkId)
+		Check check = checks.get(checkId)
 		root.find(check.id)
 	}
 }

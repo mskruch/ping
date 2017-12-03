@@ -7,10 +7,9 @@ import pl.mskruch.ping.check.Outage
 
 import static com.googlecode.objectify.ObjectifyService.ofy
 
-@Log
 class OutagesRoot
 {
-	def find(checkId)
+	List<Check> find(checkId)
 	{
 		def checkKey = Key.create(Check.class, checkId)
 		ofy().load().type(Outage.class).ancestor(checkKey).order('-started').list()
