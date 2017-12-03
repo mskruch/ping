@@ -8,7 +8,7 @@ let LabelUrl = (props) => {
 let LabelName = (props) => {
     return (
         <span
-            className={props.name ? '' : 'text-muted'}>{props.name || 'Unnamed'}
+            className={props.name ? '' : 'text-muted'}>{props.name ? <strong>{props.name}</strong> : 'Unnamed'}
             <span> </span>
             <a href="javascript:void(0)"><i
                 className="fa fa-pencil-square-o edit"

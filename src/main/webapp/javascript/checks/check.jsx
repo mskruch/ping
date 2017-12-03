@@ -1,48 +1,7 @@
 import React, {Component} from "react";
 import moment from "moment";
-import Name from "./name";
-import Delay from "./delay";
 import utils from "../utils";
-
-let CheckStatus = (props) => {
-    if (!props.status)
-        return null;
-    return (
-        <span
-            className={"status badge badge-" + (props.status === "UP" ? "success" : "danger")}
-            data-toggle="tooltip" data-placement="right"
-            title={"since " + moment.duration(moment().diff(props.since)).humanize()}>
-            {props.status}</span>);
-}
-
-class CheckBody extends Component {
-    render() {
-        const {id, name, url} = {...this.props.check};
-
-        let status = <CheckStatus status={this.props.status}
-                                  since={this.props.statusSince}/>
-
-        return (
-            <div className="card-body">
-                {name ?
-                    <span>{name}{status}<br/><small>{url}</small></span>
-                    :
-                    <span>{url}{status}</span>}
-            </div>);
-    }
-}
-
-class SelectedCheckBody extends Component {
-    render() {
-        return (
-            <div className="card-body">
-                <Name check={this.props.check}
-                      updateCheck={this.props.updateCheck}/>
-                <Delay check={this.props.check}
-                       updateCheck={this.props.updateCheck}/>
-            </div>);
-    }
-}
+import Body from "./body";
 
 const Outages = (props) => {
     return (
@@ -136,32 +95,13 @@ export default class Check extends Component {
             <div onClick={this.clicked}
                  style={this.props.selected ? {} : {cursor: 'pointer'}}
                  className={"card check" + (this.props.selected ? "-selected" : "") + " mb-3"}>
-                {this.props.selected ? <div className="card-header">
-                    <ul className="nav nav-pills card-header-pills mr-auto">
-                        <li className="nav-item mr-auto">
-                            <button className="btn btn-danger btn-sm"
-                                    disabled={this.state.processing}
-                                    onClick={this.delete}>Delete
-                            </button>
-                        </li>
-                        <li className="nav-item ml-auto">
-                            <button className="btn btn-info btn-sm"
-                                    onClick={() => {
-                                        this.props.select(null)
-                                    }}>Close
-                            </button>
-                        </li>
-                    </ul>
-                </div> : null}
-                {this.props.selected ?
-                    <SelectedCheckBody check={this.props.check}
-                                       status={this.props.status}
-                                       statusSince={this.props.statusSince}
-                                       updateCheck={this.props.updateCheck}/>
-                    : <CheckBody check={this.props.check}
-                                 status={this.props.status}
-                                 statusSince={this.props.statusSince}/>
-                }
+                <Body check={this.props.check}
+                      status={this.props.status}
+                      statusSince={this.props.statusSince}
+                      updateCheck={this.props.updateCheck}
+                      selected={this.props.selected}
+                      delete={this.delete}
+                      processing={this.processing}/>
                 {this.props.selected ?
                     <Footer render={this.props.selected}
                             checkId={this.props.check.id}/> :
