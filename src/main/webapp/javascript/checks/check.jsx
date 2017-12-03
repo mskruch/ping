@@ -10,9 +10,9 @@ const Outages = (props) => {
                 <tbody>
                 {props.outages.map((outage, i) =>
                     <tr key={i} className={outage.finished ? '' : 'down'}>
-                        <td width="35%">{moment(outage.started).format('YYYY-MM-DD HH:mm')}</td>
-                        <td width="35%">{outage.finished ? moment(outage.finished).from(outage.started, true) : null}</td>
-                        <td width="30%">{outage.notified ? 'notified ' + moment(outage.notified).format('YYYY-MM-DD HH:mm') : ''}</td>
+                        <td width="50%">{moment(outage.started).format('YYYY-MM-DD HH:mm')}</td>
+                        <td width="30%">{outage.finished ? moment(outage.finished).from(outage.started, true) : null}</td>
+                        <td width="20%">{outage.notified ? 'notified' : ''}</td>
                     </tr>
                 )}
                 </tbody>
