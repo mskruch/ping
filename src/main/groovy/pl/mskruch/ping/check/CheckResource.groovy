@@ -6,7 +6,6 @@ import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 import pl.mskruch.exception.BadRequest
-import pl.mskruch.ping.user.Users
 
 import static org.springframework.web.bind.annotation.RequestMethod.*
 
@@ -34,14 +33,17 @@ class CheckResource
 
 	@RequestMapping(value = "/{id}", method = PATCH)
 	@ResponseBody
-	Check patch(@PathVariable("id") Long id, @RequestBody request)
+	Check patch(@PathVariable("id") Long id, @RequestBody Check request)
 	{
 		log.info("update check $id with $request (${request.getClass()})")
+
 		def name = request.name
 		def paused = request.paused
-		def notificationDelay = request.containsKey('notificationDelay') ? (request.notificationDelay ? request.notificationDelay as Long : 0) : null
+		def notificationDelay = request.notificationDelay
+
 		checks.patch(id, name, notificationDelay, paused)
 	}
+
 
 	@RequestMapping(value = "/{id}", method = GET)
 	@ResponseBody
