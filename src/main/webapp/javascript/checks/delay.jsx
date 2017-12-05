@@ -2,9 +2,12 @@ import React, {Component} from "react";
 import utils from "../utils";
 import moment from "moment";
 
-
 let formatDuration = (seconds) => {
-    return seconds ? moment.duration(seconds, 'seconds').humanize() : '';
+    return seconds && moment.duration(seconds, 'seconds').humanize();
+}
+
+let formatDelay = (seconds) => {
+    return seconds ? 'after ' + formatDuration(seconds) : 'instantly';
 }
 
 let LabelDelay = (props) => {
@@ -13,26 +16,29 @@ let LabelDelay = (props) => {
         onClick={props.edit}
         style={{cursor: 'pointer'}}></i></a></span>
     if (props.delay) {
-        return <span>Notification will be sent after {formatDuration(props.delay)} {button}
-            outage</span>
+        return <span>Notification will be sent after {formatDuration(props.delay)} {button}</span>
     } else {
         return <span
-            className="text-muted">Notification delay is not set {button}</span>
+            className="text-muted">Notification will be sent instantly {button}</span>
     }
 };
 
 export default class Delay extends Component {
+    static defaultProps = {
+        options: [0, 300, 600, 1800, 3600, 14400, 86400]
+    }
+
     state = {edit: false, processing: false}
 
     edit = () => {
-        this.setState({edit: true, delay: this.props.check.notificationDelay});
+        this.setState({edit: true});
     };
 
     cancel = () => {
         this.setState({edit: false});
     }
 
-    save = () => {
+    save = (delay) => {
         this.setState({processing: true});
         fetch('/api/checks/' + this.props.check.id,
             {
@@ -40,7 +46,7 @@ export default class Delay extends Component {
                 method: 'PATCH',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
-                    "notificationDelay": this.state.delay
+                    "notificationDelay": delay
                 })
             })
             .then((response) => {
@@ -59,30 +65,30 @@ export default class Delay extends Component {
         );
     }
 
+    onChange = (event) => {
+        const target = event.target;
+        const value = target.value;
+        this.save(value);
+    }
+
     render() {
         return (
             <div className="selected-check-property">
                 {this.state.edit ?
                     <div className="form-inline">
-                        <label>Notification will be sent after</label>&nbsp;
+                        <label>Notification will be sent </label>&nbsp;
                         <div className="input-group">
-                            <input name="delay"
-                                   className="form-control form-control-sm"
-                                   style={{maxWidth: '6em'}}
-                                   value={this.state.delay}
-                                   onChange={utils.handleInputChange(this)}
-                                   placeholder="seconds"/>
-                            <div className="input-group-addon"
-                                 style={{cursor: 'pointer'}} onClick={this.save}
-                                 disabled={this.state.processing}>
-                                <i className="fa fa-check"></i></div>
-                            <div className="input-group-addon"
-                                 style={{cursor: 'pointer'}}
-                                 onClick={this.cancel}
-                                 disabled={this.state.processing}>
-                                <i className="fa fa-times"></i></div>
+                            <select name="delay"
+                                    className="form-control form-control-sm"
+                                    style={{maxWidth: '10em'}}
+                                    value={this.props.check.notificationDelay}
+                                    onChange={this.onChange}>
+                                {this.props.options.map((option, index) =>
+                                    <option label={formatDelay(option)}
+                                            key={option}>{option}</option>
+                                )}
+                            </select>
                         </div>
-                        &nbsp;<label>outage</label>
                     </div>
                     :
                     <div><LabelDelay edit={this.edit}
