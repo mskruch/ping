@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import Checks from "./checks";
 import DebugButtons from "./debug";
+import AddCheck from "./checks/check-add";
 
 const DisabledAccountInfo = (props) => {
     return (
@@ -113,13 +114,15 @@ export default class App extends Component {
                 {this.state.enabled || <DisabledAccountInfo/>}
 
                 <Checks checks={this.state.checks}
-                        addCheck={this.addCheck}
                         deleteCheck={this.deleteCheck}
                         updateCheck={this.updateCheck}
                         admin={this.state.admin}
                         select={this.select}
                         selected={this.state.selected}
                         ready={this.state.ready}/>
+
+
+                <AddCheck addCheck={this.addCheck}/>
 
                 {this.state.debug &&
                 <DebugButtons admin={this.state.admin}

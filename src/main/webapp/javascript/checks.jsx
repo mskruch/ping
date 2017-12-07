@@ -1,10 +1,10 @@
 import React, {Component} from "react";
 import Check from "./checks/check";
-import AddCheck from "./checks/check-add";
+
 
 export default class Checks extends Component {
     render() {
-        const checks = this.props.ready ?
+        let checks = this.props.ready ?
             this.props.checks.map((check, i) =>
                 <Check key={check.id} number={i + 1} {...check}
                        deleteCheck={this.props.deleteCheck}
@@ -22,7 +22,6 @@ export default class Checks extends Component {
         return (
             <div className="container">
                 {checks}
-                <AddCheck addCheck={this.props.addCheck}/>
             </div>);
     }
 }
