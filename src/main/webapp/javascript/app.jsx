@@ -1,5 +1,4 @@
 import React, {Component} from "react";
-import moment from "moment";
 import Checks from "./checks";
 import DebugButtons from "./debug";
 
@@ -82,7 +81,7 @@ export default class App extends Component {
     addCheck = (check) => {
         this.setState(previous => {
             var checks = previous.checks;
-            if (!checks.find(it => it.id === check.id)) {
+            if (!checks.find(it => it.id == check.id)) {
                 checks.push(check)
             }
             return {checks: checks};
@@ -91,15 +90,13 @@ export default class App extends Component {
 
     updateCheck = (check) => {
         this.setState(previous => {
-            var checks = previous.checks;
-            return {checks: checks.map(it => it.id === check.id ? check : it)};
+            return {checks: previous.checks.map(it => it.id == check.id ? check : it)};
         });
     }
 
     deleteCheck = (id) => {
         this.setState(previous => {
-            var checks = previous.checks;
-            return {checks: checks.filter(check => check.id != id)};
+            return {checks: previous.checks.filter(check => check.id != id)};
         });
     }
 
@@ -113,9 +110,10 @@ export default class App extends Component {
     render() {
         return (
             <div>
-                {this.state.enabled ? '' : <DisabledAccountInfo/>}
+                {this.state.enabled || <DisabledAccountInfo/>}
 
-                <Checks checks={this.state.checks} addCheck={this.addCheck}
+                <Checks checks={this.state.checks}
+                        addCheck={this.addCheck}
                         deleteCheck={this.deleteCheck}
                         updateCheck={this.updateCheck}
                         admin={this.state.admin}
