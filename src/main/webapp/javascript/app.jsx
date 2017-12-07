@@ -1,87 +1,14 @@
 import React, {Component} from "react";
 import moment from "moment";
 import Checks from "./checks";
+import DebugButtons from "./debug";
 
 const DisabledAccountInfo = (props) => {
     return (
         <div className="container">
-            <p>Please contact the owner to enable the
-                account.</p>
+            <p>The account is not active and must be verified</p>
         </div>
     );
-}
-
-class PingButton extends Component {
-    state = {processing: false};
-
-    ping = () => {
-        this.setState({processing: true});
-        fetch('/ping',
-            {credentials: 'same-origin'})
-            .then((response) => {
-                this.setState({processing: false});
-                this.props.fetchChecks();
-            });
-    }
-
-    render() {
-        return <button className="btn btn-info" disabled={this.state.processing}
-                       onClick={this.ping}>Ping</button>
-    }
-}
-
-class RefreshButton extends Component {
-    refresh = () => {
-        this.props.fetchChecks();
-    }
-
-    render() {
-        return <button className="btn btn-info" onClick={this.refresh}>
-            Refresh</button>
-    }
-}
-
-class TestButton extends Component {
-    state = {processing: false, ready: false};
-
-    switch = () => {
-        this.setState({processing: true});
-        fetch('/test',
-            {
-                credentials: 'same-origin',
-                method: 'PUT',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({
-                    "up": (this.state.up ? false : true)
-                })
-            })
-            .then((response) => {
-                return response.json();
-            })
-            .then((responseData) => {
-                this.setState({processing: false, up: responseData.up});
-            });
-    }
-
-    fetchState = () => {
-        fetch('/test',
-            {credentials: 'same-origin'})
-            .then((response) => response.json())
-            .then((responseData) => {
-                this.setState({up: responseData.up, ready: true});
-            });
-    }
-
-    componentDidMount() {
-        this.fetchState();
-    }
-
-    render() {
-        return <button
-            className={"btn btn-" + (this.state.ready ? (this.state.up ? "success" : "danger") : "info")}
-            disabled={this.state.processing}
-            onClick={this.switch}>Test</button>
-    }
 }
 
 export default class App extends Component {
@@ -130,7 +57,7 @@ export default class App extends Component {
         document.body.removeEventListener('click', this.handleClickOutside);
     }
 
-    componentDidUpdate(){
+    componentDidUpdate() {
         tooltips();
     }
 
@@ -187,6 +114,7 @@ export default class App extends Component {
         return (
             <div>
                 {this.state.enabled ? '' : <DisabledAccountInfo/>}
+
                 <Checks checks={this.state.checks} addCheck={this.addCheck}
                         deleteCheck={this.deleteCheck}
                         updateCheck={this.updateCheck}
@@ -194,24 +122,11 @@ export default class App extends Component {
                         select={this.select}
                         selected={this.state.selected}
                         ready={this.state.ready}/>
-                {this.state.debug ? <div className="container">
-                    {this.state.admin ? <span className="float-right">
-                        <a href={this.state.logoutUrl} className="btn btn-info"
-                           role="button">Log out</a>
-                    </span> : ''}
-                    &nbsp;
-                    {this.state.admin ?
-                        <a href="/admin" className="btn btn-info"
-                           role="button">Admin</a> : ''}
-                    &nbsp;
-                    {this.state.admin ?
-                        <PingButton
-                            fetchChecks={this.fetchChecks}/> : ''}
-                    &nbsp;
-                    {this.state.admin ? <TestButton/> : ''}
-                    &nbsp;
-                    <RefreshButton fetchChecks={this.fetchChecks}/>
-                </div> : null}
+
+                {this.state.debug &&
+                <DebugButtons admin={this.state.admin}
+                              fetchChecks={this.fetchChecks}
+                              logoutUrl={this.state.logoutUrl}/>}
             </div>
         );
     }
