@@ -1,25 +1,7 @@
 import React, {Component} from "react";
-import moment from "moment";
 import utils from "../utils";
+import Outages from "./outages";
 import Body from "./body";
-
-const Outages = (props) => {
-    return (
-        <small>
-            <table className="table table-sm outages">
-                <tbody>
-                {props.outages.map((outage, i) =>
-                    <tr key={i} className={outage.finished ? '' : 'down'}>
-                        <td width="50%">{moment(outage.started).format('YYYY-MM-DD HH:mm')}</td>
-                        <td width="30%">{outage.finished ? moment(outage.finished).from(outage.started, true) : null}</td>
-                        <td width="20%">{outage.notified ? 'notified' : ''}</td>
-                    </tr>
-                )}
-                </tbody>
-            </table>
-        </small>
-    );
-}
 
 class ErrorBoundary extends React.Component {
     constructor(props) {
@@ -45,13 +27,14 @@ class ErrorBoundary extends React.Component {
 class Footer extends Component {
     state = {outages: null}
 
-    componentDidMount() {
-    }
-
     componentWillUnmount() {
         if (this.loading) {
             this.loading.cancel();
         }
+    }
+
+    componentDidUpdate() {
+        tooltips();
     }
 
     componentWillReceiveProps(nextProps) {
