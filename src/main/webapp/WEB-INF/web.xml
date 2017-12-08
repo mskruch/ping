@@ -56,6 +56,7 @@
 			<url-pattern>/ping</url-pattern>
 			<url-pattern>/task/*</url-pattern>
 			<url-pattern>/admin/*</url-pattern>
+			<url-pattern>/api/properties/*</url-pattern>
 		</web-resource-collection>
 		<auth-constraint>
 			<role-name>admin</role-name>

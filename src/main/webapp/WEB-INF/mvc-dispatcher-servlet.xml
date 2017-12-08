@@ -13,6 +13,7 @@
     <mvc:annotation-driven />
 
     <bean class="pl.mskruch.ping.system.Config" autowire="constructor" />
+    <bean class="pl.mskruch.ping.system.PropertyResource" autowire="constructor" />
 
     <bean class="pl.mskruch.ping.check.CheckResource" autowire="constructor" />
     <bean class="pl.mskruch.ping.check.Checks" autowire="constructor"/>
