@@ -85,7 +85,7 @@ export default class DebugButtons extends Component {
                            role="button">Log out</a>
                 </span> <a href="/admin" className="btn btn-info"
                            role="button">Admin</a> <PingButton
-                    fetchChecks={this.fetchChecks}/> <TestButton/>
+                    fetchChecks={this.props.fetchChecks}/> <TestButton/>
                 </span>} <RefreshButton fetchChecks={this.props.fetchChecks}/>
             </div>
         );

@@ -67,21 +67,18 @@ export default class App extends Component {
         tooltips();
     }
 
+    setRef = (ref) => {
+        this.appRef = ref;
+    }
+
     handleClickOutside = (event) => {
-        if (!this.state.selected) {
+        if (event.target == this.appRef || event.target.tagName.toUpperCase() == 'BODY') {
+            this.select(null);
             return;
         }
-
-        let checks = document.querySelector('.check');
-        let selected = document.querySelector('.check-selected');
-
-        if (checks && checks.contains(event.target)) {
-            // console.log('clicked not selected check');
-        } else if (selected && selected.contains(event.target)) {
-            // console.log('clicked selected check');
-        } else {
-            // console.log('clicked outside');
+        if (event.target.className && event.target.className.indexOf('container') != -1) {
             this.select(null);
+            return;
         }
     }
 
@@ -116,7 +113,7 @@ export default class App extends Component {
 
     render() {
         return (
-            <div>
+            <div id="app" ref={this.setRef}>
                 {this.state.enabled || <DisabledAccountInfo/>}
 
                 <Checks checks={this.state.checks}

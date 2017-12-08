@@ -61,18 +61,19 @@ class Footer extends Component {
         if (!this.props.render) {
             return null;
         }
-        if (this.state.fetched && !this.state.outages) {
+        if (this.state.fetched && (!this.state.outages.length)) {
             return null;
         }
         return (
             <div className="card-footer">
-                {!this.state.fetched ?
-                    <div className="text-center">
-                        <img src="/images/ajax-loader.gif"/>
-                    </div> :
-                    <ErrorBoundary>
-                        <Outages outages={this.state.outages}/>
-                    </ErrorBoundary>}
+                {!this.state.fetched &&
+                <div className="text-center">
+                    <img src="/images/ajax-loader.gif"/>
+                </div>}
+                {this.state.outages &&
+                <ErrorBoundary>
+                    <Outages outages={this.state.outages}/>
+                </ErrorBoundary>}
             </div>
         );
     }
