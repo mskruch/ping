@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import utils from "../utils";
 import Outages from "./outages";
 import Body from "./body";
+import moment from "moment";
 
 class ErrorBoundary extends React.Component {
     constructor(props) {
@@ -25,7 +26,7 @@ class ErrorBoundary extends React.Component {
 }
 
 class Footer extends Component {
-    state = {outages: null}
+    state = {fetched: null}
 
     componentWillUnmount() {
         if (this.loading) {
@@ -38,7 +39,7 @@ class Footer extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.render && this.state.outages == null) {
+        if (nextProps.render && (!this.state.fetched || this.state.fetched.isBefore(this.props.refreshed))) {
             this.fetchOutages();
         }
     }
@@ -50,7 +51,7 @@ class Footer extends Component {
             .promise
             .then((response) => response.json())
             .then((responseData) => {
-                    this.setState({outages: responseData});
+                    this.setState({outages: responseData, fetched: moment()});
                 }
             )
             .catch((reason) => console.log('checks fetch canceled ', reason.isCanceled));
@@ -60,16 +61,20 @@ class Footer extends Component {
         if (!this.props.render) {
             return null;
         }
-        if (this.state.outages != null && this.state.outages.length == 0) {
+        if (this.state.fetched && !this.state.outages) {
             return null;
         }
-        return <div className="card-footer">
-            {this.state.outages == null ?
-                <div className="text-center"><img
-                    src="/images/ajax-loader.gif"/></div> :
-                <ErrorBoundary><Outages
-                    outages={this.state.outages}/></ErrorBoundary>}
-        </div>
+        return (
+            <div className="card-footer">
+                {!this.state.fetched ?
+                    <div className="text-center">
+                        <img src="/images/ajax-loader.gif"/>
+                    </div> :
+                    <ErrorBoundary>
+                        <Outages outages={this.state.outages}/>
+                    </ErrorBoundary>}
+            </div>
+        );
     }
 }
 
@@ -150,7 +155,8 @@ export default class Check extends Component {
                       resume={this.resume}
                       processing={this.processing}/>
                 <Footer render={this.props.selected}
-                        checkId={this.props.check.id}/>
+                        checkId={this.props.check.id}
+                        refreshed={this.props.refreshed}/>
             </div>
         );
 

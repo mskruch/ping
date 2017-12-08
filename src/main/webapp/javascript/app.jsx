@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import Checks from "./checks";
 import DebugButtons from "./debug";
 import AddCheck from "./checks/check-add";
+import moment from "moment";
 
 const DisabledAccountInfo = (props) => {
     return (
@@ -19,10 +20,15 @@ export default class App extends Component {
         logoutUrl: "/",
         selected: null,
         debug: false,
-        ready: false
+        ready: false,
+        refreshed: moment()
     };
 
     fetchChecks = () => {
+        this.setState({
+            refreshed: moment()
+        });
+
         fetch('/api/checks',
             {credentials: 'same-origin'})
             .then((response) => response.json())
@@ -119,7 +125,8 @@ export default class App extends Component {
                         admin={this.state.admin}
                         select={this.select}
                         selected={this.state.selected}
-                        ready={this.state.ready}/>
+                        ready={this.state.ready}
+                        refreshed={this.state.refreshed}/>
 
 
                 <AddCheck addCheck={this.addCheck}/>
