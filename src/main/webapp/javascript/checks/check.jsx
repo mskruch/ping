@@ -87,6 +87,7 @@ export default class Check extends Component {
                 <Body check={this.props.check}
                       status={this.props.status}
                       updateCheck={this.props.updateCheck}
+                      statusSince={this.props.statusSince}
                       selected={this.props.selected}
                       delete={this.delete}
                       pause={this.pause}

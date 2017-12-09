@@ -7,9 +7,9 @@ let CheckStatus = (props) => {
     if (!props.status)
         return null;
     return (
-        <span
+        <span style={{width: '5em', display: 'inline-block'}}
             className={"status badge badge-" + (props.status === "UP" ? "success" : "danger")}
-            data-toggle="tooltip" data-placement="right"
+            data-toggle="tooltip" data-placement="top"
             title={"since " + moment.duration(moment().diff(props.since)).humanize()}>
             {props.status}</span>);
 }
@@ -54,9 +54,9 @@ export default class Body extends Component {
         return (
             <div className="card-body">
                 {name ?
-                    <span><strong>{name}</strong>{status}<br/><small>{url}</small></span>
+                    <span>{status} <strong>{name}</strong><br/><small>{url}</small></span>
                     :
-                    <span><strong>{url}</strong>{status}</span>}
+                    <span>{status} <strong>{url}</strong></span>}
             </div>);
     }
 }

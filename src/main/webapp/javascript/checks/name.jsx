@@ -9,12 +9,11 @@ let LabelName = (props) => {
     return (
         <span
             className={props.name ? '' : 'text-muted'}>{props.name ?
-            <strong>{props.name}</strong> : 'Unnamed'}
-            <span> </span>
-            <a href="javascript:void(0)"><i
-                className="fa fa-pencil-square-o edit"
-                onClick={props.edit}
-                style={{cursor: 'pointer'}}></i></a>
+            <strong>{props.name}</strong> : 'Unnamed'} <a
+            href="javascript:void(0)"><i
+            className="fa fa-pencil-square-o edit"
+            onClick={props.edit}
+            style={{cursor: 'pointer'}}></i></a>
         </span>);
 };
 
@@ -71,8 +70,8 @@ export default class Name extends Component {
                                      disabled={this.state.processing}
                                      cancel={this.cancel}/>
                     :
-                    <div><LabelName edit={this.edit}
-                                    name={name}/>{this.props.status}</div>
+                    <div>{this.props.status} <LabelName edit={this.edit}
+                                                       name={name}/></div>
                 }
                 <div><LabelUrl url={url}/></div>
             </span>);
