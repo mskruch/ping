@@ -8,7 +8,8 @@ let LabelUrl = (props) => {
 let LabelName = (props) => {
     return (
         <span
-            className={props.name ? '' : 'text-muted'}>{props.name ? <strong>{props.name}</strong> : 'Unnamed'}
+            className={props.name ? '' : 'text-muted'}>{props.name ?
+            <strong>{props.name}</strong> : 'Unnamed'}
             <span> </span>
             <a href="javascript:void(0)"><i
                 className="fa fa-pencil-square-o edit"
@@ -18,17 +19,13 @@ let LabelName = (props) => {
 };
 
 export default class Name extends Component {
-    state = {edit: false, processing: false}
+    state = {processing: false}
 
     edit = () => {
-        this.setState({edit: true, name: this.props.check.name});
+        this.props.edit();
     };
 
-    cancel = () => {
-        this.setState({edit: false});
-    }
-
-    save = () => {
+    save = (value) => {
         this.setState({processing: true});
         fetch('/api/checks/' + this.props.check.id,
             {
@@ -36,7 +33,7 @@ export default class Name extends Component {
                 method: 'PATCH',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
-                    "name": this.state.name
+                    "name": value
                 })
             })
             .then((response) => {
@@ -47,12 +44,18 @@ export default class Name extends Component {
             })
             .then((responseData) => {
                 this.props.updateCheck(responseData);
-                this.setState({processing: false, edit: false});
+                this.props.edit(false);
+                this.setState({processing: false});
             }).catch((error) => {
                 console.error(error);
-                this.setState({processing: false, edit: false});
+                this.props.edit(false);
+                this.setState({processing: false});
             }
         );
+    }
+
+    cancel = () => {
+        this.props.edit(false);
     }
 
     render() {
@@ -60,27 +63,61 @@ export default class Name extends Component {
 
         return (
             <span className="selected-check-property">
-                {this.state.edit ?
-                    <div className="input-group mb-2 mb-sm-0">
-                        <input name="name" className="form-control form-control-sm"
-                               style={{maxWidth: '30em'}}
-                               value={this.state.name}
-                               onChange={utils.handleInputChange(this)}
-                               placeholder="Name"/>
-                        <div className="input-group-addon"
-                             style={{cursor: 'pointer'}} onClick={this.save}
-                             disabled={this.state.processing}>
-                            <i className="fa fa-check"></i></div>
-                        <div className="input-group-addon"
-                             style={{cursor: 'pointer'}}
-                             onClick={this.cancel}
-                             disabled={this.state.processing}>
-                            <i className="fa fa-times"></i></div>
-                    </div>
+                {this.props.editing ?
+                    <InlineTextInput style={{maxWidth: '30em'}}
+                                     value={this.props.check.name}
+                                     placeholder="Name"
+                                     save={this.save}
+                                     disabled={this.state.processing}
+                                     cancel={this.cancel}/>
                     :
-                    <div><LabelName edit={this.edit} name={name}/></div>
+                    <div><LabelName edit={this.edit}
+                                    name={name}/>{this.props.status}</div>
                 }
                 <div><LabelUrl url={url}/></div>
             </span>);
+    }
+}
+
+class InlineTextInput extends Component {
+    state = {value: this.props.value || ''}
+
+    save = () => {
+        this.props.save(this.state.value);
+    }
+
+    componentDidMount() {
+        // this.input.focus();
+        this.input.select();
+    }
+
+    setInput = (input) => {
+        this.input = input;
+    }
+
+    onKeyDown = (event) => {
+        if (event.key == 'Enter') {
+            this.save();
+        } else if (event.key == 'Escape') {
+            this.props.cancel();
+        }
+    }
+
+    render() {
+        return (
+            <div className="input-group mb-2 mb-sm-0">
+                <input name="value" ref={this.setInput}
+                       className="form-control form-control-sm"
+                       style={this.props.style}
+                       value={this.state.value}
+                       onChange={utils.handleInputChange(this)}
+                       placeholder={this.props.placeholder}
+                       onKeyDown={this.onKeyDown}/>
+                <div className="input-group-addon"
+                     style={{cursor: 'pointer'}} onClick={this.save}
+                     disabled={this.props.disabled}>
+                    <i className="fa fa-check"></i></div>
+            </div>
+        );
     }
 }

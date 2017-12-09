@@ -14,6 +14,12 @@ export default class CheckAdd extends Component {
         return false;
     }
 
+    onKeyDown = (event) => {
+        if (event.key == 'Enter') {
+            this.submit();
+        }
+    }
+
     submit = () => {
         if (!this.validate()) {
             return;
@@ -56,7 +62,8 @@ export default class CheckAdd extends Component {
                                        className={"form-control " + (this.state.urlError && "is-invalid")}
                                        value={this.state.url}
                                        onChange={utils.handleInputChange(this)}
-                                       placeholder="http://google.com"/>
+                                       placeholder="http://google.com"
+                                       onKeyDown={this.onKeyDown}/>
                                 {this.state.urlError &&
                                 <div className="invalid-feedback">
                                     {this.state.urlError}

@@ -32,11 +32,17 @@ let Actions = (props) => {
 
 export default class Body extends Component {
     render() {
+        let status = <CheckStatus status={this.props.status}
+                                  since={this.props.statusSince}/>
+
         if (this.props.selected) {
             return (
                 <div className="card-body">
                     <Name check={this.props.check}
-                          updateCheck={this.props.updateCheck}/>
+                          updateCheck={this.props.updateCheck}
+                          status={status}
+                          editing={this.props.editingName}
+                          edit={this.props.editName}/>
                     <Delay check={this.props.check}
                            updateCheck={this.props.updateCheck}/>
                     <Actions {...this.props}/>
@@ -44,9 +50,6 @@ export default class Body extends Component {
         }
 
         const {id, name, url} = {...this.props.check};
-
-        let status = <CheckStatus status={this.props.status}
-                                  since={this.props.statusSince}/>
 
         return (
             <div className="card-body">
