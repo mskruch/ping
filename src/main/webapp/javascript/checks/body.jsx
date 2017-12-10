@@ -8,9 +8,9 @@ let CheckStatus = (props) => {
         return null;
     return (
         <span style={{width: '5em', display: 'inline-block'}}
-            className={"status badge badge-" + (props.status === "UP" ? "success" : "danger")}
-            data-toggle="tooltip" data-placement="top"
-            title={"since " + moment.duration(moment().diff(props.since)).humanize()}>
+              className={"status badge badge-" + (props.status === "UP" ? "success" : "danger")}
+              data-toggle="tooltip" data-placement="top"
+              title={"since " + moment.duration(moment().diff(props.since)).humanize()}>
             {props.status}</span>);
 }
 
@@ -44,7 +44,9 @@ export default class Body extends Component {
                           editing={this.props.editingName}
                           edit={this.props.editName}/>
                     <Delay check={this.props.check}
-                           updateCheck={this.props.updateCheck}/>
+                           updateCheck={this.props.updateCheck}
+                           editing={this.props.editingDelay}
+                           edit={this.props.editDelay}/>
                     <Actions {...this.props}/>
                 </div>);
         }

@@ -5,7 +5,8 @@ import Footer from "./footer"
 export default class Check extends Component {
     state = {
         processing: false,
-        editingName: false
+        editingName: false,
+        editingDelay: false
     };
 
     delete = () => {
@@ -63,6 +64,9 @@ export default class Check extends Component {
             if (this.state.editingName && event.target.tagName.toUpperCase() != 'INPUT') {
                 this.editName(false);
             }
+            if (this.state.editingDelay && event.target.tagName.toUpperCase() != 'SELECT') {
+                this.editDelay(false);
+            }
         }
     }
 
@@ -70,9 +74,13 @@ export default class Check extends Component {
         this.setState({editingName: value});
     }
 
+    editDelay = (value = true) => {
+        this.setState({editingDelay: value});
+    }
+
     componentWillReceiveProps(nextProps) {
         if (!nextProps.selected) {
-            this.editName(false);
+            this.setState({editingName: false, editingDelay: false});
         }
     }
 
@@ -94,7 +102,9 @@ export default class Check extends Component {
                       resume={this.resume}
                       processing={this.processing}
                       editingName={this.state.editingName}
-                      editName={this.editName}/>
+                      editName={this.editName}
+                      editingDelay={this.state.editingDelay}
+                      editDelay={this.editDelay}/>
                 <Footer render={this.props.selected}
                         checkId={this.props.check.id}
                         refreshed={this.props.refreshed}/>

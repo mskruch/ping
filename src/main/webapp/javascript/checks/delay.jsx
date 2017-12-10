@@ -28,17 +28,9 @@ export default class Delay extends Component {
         options: [0, 300, 600, 1800, 3600, 14400, 86400]
     }
 
-    state = {edit: false, processing: false}
+    state = {processing: false}
 
-    edit = () => {
-        this.setState({edit: true});
-    };
-
-    cancel = () => {
-        this.setState({edit: false});
-    }
-
-    save = (delay) => {
+    save = (value) => {
         this.setState({processing: true});
         fetch('/api/checks/' + this.props.check.id,
             {
@@ -46,7 +38,7 @@ export default class Delay extends Component {
                 method: 'PATCH',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
-                    "notificationDelay": delay
+                    "notificationDelay": value
                 })
             })
             .then((response) => {
@@ -57,10 +49,12 @@ export default class Delay extends Component {
             })
             .then((responseData) => {
                 this.props.updateCheck(responseData);
-                this.setState({processing: false, edit: false});
+                this.props.edit(false);
+                this.setState({processing: false});
             }).catch((error) => {
                 console.error(error);
-                this.setState({processing: false, edit: false});
+                this.props.edit(false);
+                this.setState({processing: false});
             }
         );
     }
@@ -74,15 +68,18 @@ export default class Delay extends Component {
     render() {
         return (
             <div className="selected-check-property">
-                {this.state.edit ?
+                {this.props.editing ?
                     <div className="form-inline">
                         <label>Notification will be sent </label>&nbsp;
                         <div className="input-group">
-                            <select name="delay"
+                            <select name="delay" ref={(select) => {
+                                select && select.focus()
+                            }}
                                     className="form-control form-control-sm"
                                     style={{maxWidth: '10em'}}
                                     value={this.props.check.notificationDelay}
-                                    onChange={this.onChange}>
+                                    onChange={this.onChange}
+                                    disabled={this.state.processing}>
                                 {this.props.options.map((option, index) =>
                                     <option label={formatDelay(option)}
                                             key={option}>{option}</option>
@@ -91,7 +88,7 @@ export default class Delay extends Component {
                         </div>
                     </div>
                     :
-                    <div><LabelDelay edit={this.edit}
+                    <div><LabelDelay edit={this.props.edit}
                                      delay={this.props.check.notificationDelay}/>
                     </div>
                 }
