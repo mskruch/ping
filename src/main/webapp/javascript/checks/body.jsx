@@ -6,9 +6,15 @@ import moment from "moment";
 let CheckStatus = (props) => {
     if (!props.status)
         return null;
+
+    let actual = moment().subtract(5, 'minutes').isBefore(props.checked);
+    let actualClassName = props.status === "UP" ? "badge-success" : "badge-danger";
+
+    let className = actual ? actualClassName : "badge-info";
+
     return (
         <span style={{width: '5em', display: 'inline-block'}}
-              className={"status badge badge-" + (props.status === "UP" ? "success" : "danger")}
+              className={"status badge " + className}
               data-toggle="tooltip" data-placement="top"
               title={"since " + moment.duration(moment().diff(props.since)).humanize()}>
             {props.status}</span>);
@@ -33,7 +39,8 @@ let Actions = (props) => {
 export default class Body extends Component {
     render() {
         let status = <CheckStatus status={this.props.status}
-                                  since={this.props.statusSince}/>
+                                  since={this.props.check.statusSince}
+                                  checked={this.props.check.lastCheck}/>
 
         if (this.props.selected) {
             return (

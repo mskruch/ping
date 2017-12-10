@@ -16,7 +16,7 @@ export default class Checks extends Component {
         }
 
         let checks = this.props.checks.map((check, i) =>
-            <Check key={check.id} number={i + 1} {...check}
+            <Check key={check.id} number={i + 1}
                    deleteCheck={this.props.deleteCheck}
                    updateCheck={this.props.updateCheck}
                    admin={this.props.admin}

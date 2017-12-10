@@ -11,7 +11,7 @@ export default class Check extends Component {
 
     delete = () => {
         this.setState({processing: true})
-        fetch('/api/checks/' + this.props.id,
+        fetch('/api/checks/' + this.props.check.id,
             {
                 credentials: 'same-origin',
                 method: 'delete'
@@ -21,7 +21,7 @@ export default class Check extends Component {
                     throw new Error('check not deleted');
                 }
                 this.setState({processing: false});
-                this.props.deleteCheck(this.props.id);
+                this.props.deleteCheck(this.props.check.id);
             }).catch((error) => {
                 console.error(error);
                 this.setState({processing: false});
@@ -87,15 +87,14 @@ export default class Check extends Component {
     render() {
         let className = "card mb-3 check"
             + (this.props.selected ? "-selected" : "")
-            + (this.props.paused ? " text-muted" : "");
+            + (this.props.check.paused ? " text-muted" : "");
         return (
             <div onClick={this.clicked}
                  style={this.props.selected ? {} : {cursor: 'pointer'}}
                  className={className}>
                 <Body check={this.props.check}
-                      status={this.props.status}
+                      status={this.props.check.status}
                       updateCheck={this.props.updateCheck}
-                      statusSince={this.props.statusSince}
                       selected={this.props.selected}
                       delete={this.delete}
                       pause={this.pause}
