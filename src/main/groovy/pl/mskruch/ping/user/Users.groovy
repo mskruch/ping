@@ -1,43 +1,20 @@
-package pl.mskruch.ping.user;
+package pl.mskruch.ping.user
 
-import com.google.appengine.api.users.UserService;
-import com.google.appengine.api.users.UserServiceFactory
-import pl.mskruch.exception.NotFound;
+import pl.mskruch.exception.NotFound
 
 import javax.servlet.http.HttpServletRequest
 
-import static com.googlecode.objectify.ObjectifyService.ofy;
+import static com.googlecode.objectify.ObjectifyService.ofy
 
-public class Users
+class Users
 {
-	private HttpServletRequest req;
-	private UserService userService = UserServiceFactory.getUserService();
+	private HttpServletRequest req
 
-	public Users(HttpServletRequest req)
+	/** for servlet */
+	@Deprecated
+	Users(HttpServletRequest req)
 	{
-		this.req = req;
-	}
-
-	public boolean isLoggedIn()
-	{
-		return req.getUserPrincipal() != null;
-	}
-
-	public String loginURL()
-	{
-		String thisUrl = req.getRequestURI();
-		return userService.createLoginURL(thisUrl);
-	}
-
-	public String logoutURL()
-	{
-		String thisUrl = req.getRequestURI();
-		return logoutURL(thisUrl);
-	}
-
-	String logoutURL(String backUrl)
-	{
-		userService.createLogoutURL(backUrl)
+		this.req = req
 	}
 
 	boolean isEnabled()
@@ -57,13 +34,13 @@ public class Users
 		return user.isEnabled();
 	}
 
-	public User find(String email)
+	User find(String email)
 	{
 		return ofy().load().type(User.class).filter("email", email)
 				.first().now();
 	}
 
-	public List<User> all()
+	List<User> all()
 	{
 		return ofy().load().type(User.class).list();
 	}

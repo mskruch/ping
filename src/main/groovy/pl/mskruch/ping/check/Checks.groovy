@@ -1,32 +1,16 @@
 package pl.mskruch.ping.check
 
+import groovy.transform.TupleConstructor
 import groovy.util.logging.Log
 import pl.mskruch.exception.NotFound
 import pl.mskruch.ping.security.Auth
 
-import javax.servlet.http.HttpServletRequest
-import java.util.logging.Logger
-
 @Log
+@TupleConstructor
 class Checks
 {
-	private final Auth auth
-	private final ChecksRoot root
-
-	Checks(Auth auth, ChecksRoot checksRoot)
-	{
-		this.auth = auth
-		this.root = checksRoot
-	}
-
-	/* only for servlets */
-
-	@Deprecated
-	Checks(HttpServletRequest req)
-	{
-		this.auth = new Auth(req)
-		this.root = new ChecksRoot()
-	}
+	final Auth auth
+	final ChecksRoot root
 
 	List<Check> list()
 	{
