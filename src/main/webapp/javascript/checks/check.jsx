@@ -100,7 +100,7 @@ export default class Check extends Component {
                       delete={this.delete}
                       pause={this.pause}
                       resume={this.resume}
-                      processing={this.processing}
+                      processing={this.state.processing}
                       editingName={this.state.editingName}
                       editName={this.editName}
                       editingDelay={this.state.editingDelay}

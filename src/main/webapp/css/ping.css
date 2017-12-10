@@ -37,3 +37,11 @@ html, body {
     margin: 0px;
     padding: 0px;
 }
+
+button {
+    cursor: pointer;
+}
+
+button:disabled {
+    cursor: auto;
+}

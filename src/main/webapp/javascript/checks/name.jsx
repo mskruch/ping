@@ -71,7 +71,7 @@ export default class Name extends Component {
                                      cancel={this.cancel}/>
                     :
                     <div>{this.props.status} <LabelName edit={this.edit}
-                                                       name={name}/></div>
+                                                        name={name}/></div>
                 }
                 <div><LabelUrl url={url}/></div>
             </span>);
@@ -111,7 +111,8 @@ class InlineTextInput extends Component {
                        value={this.state.value}
                        onChange={utils.handleInputChange(this)}
                        placeholder={this.props.placeholder}
-                       onKeyDown={this.onKeyDown}/>
+                       onKeyDown={this.onKeyDown}
+                       disabled={this.props.disabled}/>
                 <div className="input-group-addon"
                      style={{cursor: 'pointer'}} onClick={this.save}
                      disabled={this.props.disabled}>
