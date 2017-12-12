@@ -1,4 +1,4 @@
-package pl.mskruch.ping.data;
+package pl.mskruch.ping.system;
 
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;

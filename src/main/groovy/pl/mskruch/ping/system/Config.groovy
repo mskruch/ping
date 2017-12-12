@@ -2,7 +2,6 @@ package pl.mskruch.ping.system
 
 import com.googlecode.objectify.Key
 import groovy.util.logging.Log
-import pl.mskruch.ping.data.ConfigEntry
 
 import static com.googlecode.objectify.ObjectifyService.ofy
 import static pl.mskruch.common.FormatUtils.toIntegerOrNull
