@@ -1,9 +1,11 @@
 package pl.mskruch.ping.system
 
+import groovy.transform.TupleConstructor
 import groovy.util.logging.Log
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseBody
+import pl.mskruch.ping.check.ChecksConfig
 import pl.mskruch.ping.security.Auth
 import pl.mskruch.ping.user.Users
 
@@ -11,25 +13,22 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET
 
 @Controller
 @Log
-@RequestMapping("/api/state")
-class StateResource
+@RequestMapping(["/api/state", "api/session"])
+@TupleConstructor
+class SessionResource
 {
 	Users users
 	Auth auth
-
-	StateResource(Users users, Auth auth)
-	{
-		this.users = users
-		this.auth = auth
-	}
+	ChecksConfig checksConfig
 
 	@RequestMapping(method = GET)
 	@ResponseBody
-	state()
+	session()
 	{
-		['enabled'  : users.isEnabled(),
-		 'admin'    : auth.isAdmin(),
-		 'logoutUrl': auth.logoutURL('/')]
+		['enabled'    : users.isEnabled(),
+		 'admin'      : auth.isAdmin(),
+		 'checksLimit': checksConfig.getLimit(),
+		 'logoutUrl'  : auth.logoutURL('/')]
 	}
 
 }

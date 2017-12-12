@@ -52,6 +52,8 @@ export default class CheckAdd extends Component {
     };
 
     render() {
+        let limitReached = this.props.checksLimit && this.props.checksCount >= this.props.checksLimit;
+        let disabled = limitReached || this.state.processing;
         return (
             <div className="container">
                 <div className="card">
@@ -63,7 +65,8 @@ export default class CheckAdd extends Component {
                                        value={this.state.url}
                                        onChange={utils.handleInputChange(this)}
                                        placeholder="http://google.com"
-                                       onKeyDown={this.onKeyDown}/>
+                                       onKeyDown={this.onKeyDown}
+                                       disabled={disabled}/>
                                 {this.state.urlError &&
                                 <div className="invalid-feedback">
                                     {this.state.urlError}
@@ -72,10 +75,15 @@ export default class CheckAdd extends Component {
                             <div className="col-sm-2">
                                 <button onClick={this.submit}
                                         className="btn btn-primary btn-block"
-                                        disabled={this.state.processing}>Add
+                                        disabled={disabled}>
+                                    Add
                                 </button>
                             </div>
                         </div>
+                        {limitReached &&
+                        <small>
+                            You have reached the maximum checks limit ({this.props.checksLimit}).
+                        </small>}
                     </div>
                 </div>
             </div>

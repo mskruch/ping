@@ -15,13 +15,11 @@ const DisabledAccountInfo = (props) => {
 export default class App extends Component {
     state = {
         checks: [],
-        enabled: true,
-        admin: false,
-        logoutUrl: "/",
         selected: null,
         debug: false,
         ready: false,
-        refreshed: moment()
+        refreshed: moment(),
+        session: {enabled: true, admin: false, logoutUrl: "/", checksLimit: null}
     };
 
     fetchChecks = () => {
@@ -40,18 +38,18 @@ export default class App extends Component {
             });
     }
 
-    fetchState() {
-        fetch('/api/state',
+    fetchSession() {
+        fetch('/api/session',
             {credentials: 'same-origin'})
             .then((response) => response.json())
             .then((responseData) => {
-                    this.setState(responseData);
+                    this.setState({session: responseData});
                 }
             );
     }
 
     componentDidMount() {
-        this.fetchState();
+        this.fetchSession();
         this.fetchChecks();
         // this.intervalId = setInterval(this.fetchChecks, 2000);
         document.body.addEventListener('click', this.handleClickOutside);
@@ -114,24 +112,26 @@ export default class App extends Component {
     render() {
         return (
             <div id="app" ref={this.setRef}>
-                {this.state.enabled || <DisabledAccountInfo/>}
+                {this.state.session.enabled || <DisabledAccountInfo/>}
 
                 <Checks checks={this.state.checks}
                         deleteCheck={this.deleteCheck}
                         updateCheck={this.updateCheck}
-                        admin={this.state.admin}
+                        admin={this.state.session.admin}
                         select={this.select}
                         selected={this.state.selected}
                         ready={this.state.ready}
                         refreshed={this.state.refreshed}/>
 
 
-                <AddCheck addCheck={this.addCheck}/>
+                <AddCheck addCheck={this.addCheck}
+                          checksCount={this.state.checks.length}
+                          checksLimit={this.state.session.checksLimit}/>
 
                 {this.state.debug &&
-                <DebugButtons admin={this.state.admin}
+                <DebugButtons admin={this.state.session.admin}
                               fetchChecks={this.fetchChecks}
-                              logoutUrl={this.state.logoutUrl}/>}
+                              logoutUrl={this.state.session.logoutUrl}/>}
             </div>
         );
     }
