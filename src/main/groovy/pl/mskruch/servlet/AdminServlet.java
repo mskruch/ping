@@ -15,7 +15,7 @@ public class AdminServlet extends HttpServlet {
         Users users = new Users(req);
 
         req.setAttribute("users", users.all());
-        req.setAttribute("configEntries", new Config().all());
+        req.setAttribute("configEntries", new Config().list());
         req.getRequestDispatcher("/WEB-INF/jsp/admin.jsp").forward(req, resp);
     }
 }

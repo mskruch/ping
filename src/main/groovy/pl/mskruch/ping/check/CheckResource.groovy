@@ -25,9 +25,6 @@ class CheckResource
 		if (!request.url?.trim()) {
 			throw new BadRequest('url is required')
 		}
-		if (checks.list().size() >= 10){
-			throw new BadRequest('limit of 10 checks reached')
-		}
 		checks.create(request.url, request.name)
 	}
 

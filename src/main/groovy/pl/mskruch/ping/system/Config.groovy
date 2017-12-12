@@ -1,63 +1,94 @@
 package pl.mskruch.ping.system
 
+import com.googlecode.objectify.Key
+import groovy.util.logging.Log
 import pl.mskruch.ping.data.ConfigEntry
 
 import static com.googlecode.objectify.ObjectifyService.ofy
+import static pl.mskruch.common.FormatUtils.toIntegerOrNull
 
-public class Config
+@Log
+class Config
 {
-	public List<ConfigEntry> all()
+	List<ConfigEntry> list()
 	{
 		return ofy().load().type(ConfigEntry.class).list();
 	}
 
-	public Long update(String key, String value)
+	Long update(String key, String value)
 	{
-		ConfigEntry fetched = ofy().load().type(ConfigEntry.class)
-			.filter("key", key).first().now();
-		if (fetched != null) {
-			ofy().delete().type(ConfigEntry.class).id(fetched.getId());
+		ConfigEntry entry = find(key)
+		if (entry && entry.value == value) {
+			log.info "property $key is already set to $value"
+			return entry.id
 		}
 
-		ConfigEntry entity = new ConfigEntry(key, value);
-		ofy().save().entity(entity).now();
+		if (entry) {
+			entry.value = value
+			entry.auto = false
+		} else {
+			entry = new ConfigEntry(key, value, false)
+		}
+		save(entry)
 
-		new AdminMail().notify("Ping config changed: " + key,
-			key + ": " + value);
-		return entity.getId();
+		new AdminMail().notify("$key property updated", "$key: $value")
+
+		return entry.id
+	}
+
+	private Key<ConfigEntry> save(ConfigEntry entity)
+	{
+		ofy().save().entity(entity).now()
 	}
 
 	String get(String key)
 	{
-		def value = _get(key)
+		def value = getOrRegister(key)
 		if (!value) {
-			throw new IllegalStateException("<$key not configured")
+			throw new IllegalStateException("$key property not configured")
 		}
 		return value
 	}
 
-	private String _get(String key)
+	private ConfigEntry find(String key)
 	{
-		ConfigEntry fetched = ofy().load().type(ConfigEntry.class).filter("key", key).first().now()
-		return fetched?.value
+		ofy().load().type(ConfigEntry.class).filter("key", key).first().now()
 	}
 
-	public int getInt(String key, int defaultValue)
+	int getAsInt(String key, int defaultValue)
 	{
-		String value = _get(key);
-		if (value == null) {
-			return defaultValue;
+		def value = getOrRegister(key, defaultValue.toString())
+		def asInteger = value ? toIntegerOrNull(value) : null
+		return asInteger ?: defaultValue
+	}
+
+	private String getOrRegister(String key, String defaultValue = null)
+	{
+		ConfigEntry entry = find(key)
+		def notAutoEntryPresent = entry && !entry.auto
+		if (notAutoEntryPresent) {
+			return entry.value
 		}
-		Integer number = toInteger(value);
-		return number != null ? number.intValue() : defaultValue;
+
+		log.fine "config entry fetched from datastore: $entry"
+
+		if (!entry) {
+			entry = new ConfigEntry(key, defaultValue, true)
+			save(entry)
+		} else if (entry.value != defaultValue) {
+			entry.value = defaultValue
+			save(entry)
+		}
+		return null
 	}
 
-	private Integer toInteger(String value)
+	def delete(id)
 	{
-		try {
-			return Integer.parseInt(value);
-		} catch (NumberFormatException e) {
-			return null;
+		ConfigEntry entry = ofy().load().type(ConfigEntry.class).id(id).now()
+		if (entry) {
+			ofy().delete().entity(entry)
+			new AdminMail().notify("$key property deleted", "$entry.key: $entry.value")
+			return entry
 		}
 	}
 }

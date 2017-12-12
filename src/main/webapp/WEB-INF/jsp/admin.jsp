@@ -30,12 +30,14 @@
         <th>id</th>
         <th>key</th>
         <th>value</th>
+        <th>auto</th>
     </tr>
     <c:forEach items="${configEntries}" var="entry">
         <tr>
             <td>${entry.id}</td>
             <td><c:out value="${entry.key}"/></td>
             <td><c:out value="${entry.value}"/></td>
+            <td><c:out value="${entry.auto}"/></td>
         </tr>
     </c:forEach>
 </table>

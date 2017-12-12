@@ -31,8 +31,8 @@ class Pinger
 	private Result pingInternal(String urlString)
 	{
 		try {
-			int connectTimeout = config.getInt("http.connectTimeout", 10000)
-			int readTimeout = config.getInt("http.readTimeout", 30000)
+			int connectTimeout = config.getAsInt("http.connectTimeout", 10000)
+			int readTimeout = config.getAsInt("http.readTimeout", 30000)
 
 			URL url = new URL(urlString)
 

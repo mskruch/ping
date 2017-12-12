@@ -2,6 +2,7 @@ package pl.mskruch.ping.check
 
 import groovy.transform.TupleConstructor
 import groovy.util.logging.Log
+import pl.mskruch.exception.BadRequest
 import pl.mskruch.exception.NotFound
 import pl.mskruch.ping.security.Auth
 
@@ -11,6 +12,7 @@ class Checks
 {
 	final Auth auth
 	final ChecksRoot root
+	final ChecksConfig config
 
 	List<Check> list()
 	{
@@ -19,6 +21,11 @@ class Checks
 
 	def create(url, name)
 	{
+		def limit = config.limit
+		def belowLimit = list().size() < limit
+		if (!belowLimit) {
+			throw new BadRequest("limit of $limit checks reached")
+		}
 		def email = auth.email()
 		root.create(email, url, name)
 	}

@@ -10,4 +10,14 @@ class FormatUtils
 	{
 		time ? new PrettyTime(Locale.ENGLISH).format(time) : null
 	}
+
+	static Integer toIntegerOrNull(String value)
+	{
+		try {
+			return Integer.parseInt(value);
+		} catch (NumberFormatException e) {
+			return null;
+		}
+	}
+
 }

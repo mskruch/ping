@@ -18,6 +18,7 @@
     <bean class="pl.mskruch.ping.check.CheckResource" autowire="constructor" />
     <bean class="pl.mskruch.ping.check.Checks" autowire="constructor"/>
     <bean class="pl.mskruch.ping.check.ChecksRoot" autowire="constructor"/>
+    <bean class="pl.mskruch.ping.check.ChecksConfig" autowire="constructor"/>
 
     <bean class="pl.mskruch.ping.outage.OutageResource" autowire="constructor"/>
     <bean class="pl.mskruch.ping.outage.Outages" autowire="constructor"/>
