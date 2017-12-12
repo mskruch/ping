@@ -19,7 +19,7 @@ export default class Footer extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.render && (!this.state.fetched || this.state.fetched.isBefore(this.props.refreshed))) {
+        if (nextProps.render && (!this.state.fetched || this.state.fetched.isBefore(this.props.fetched))) {
             this.fetchOutages();
         }
     }

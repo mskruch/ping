@@ -18,13 +18,13 @@ export default class App extends Component {
         selected: null,
         debug: false,
         ready: false,
-        refreshed: moment(),
+        fetched: moment(),
         session: {enabled: true, admin: false, logoutUrl: "/", checksLimit: null}
     };
 
     fetchChecks = () => {
         this.setState({
-            refreshed: moment()
+            fetched: moment()
         });
 
         fetch('/api/checks',
@@ -121,7 +121,7 @@ export default class App extends Component {
                         select={this.select}
                         selected={this.state.selected}
                         ready={this.state.ready}
-                        refreshed={this.state.refreshed}/>
+                        fetched={this.state.fetched}/>
 
 
                 <AddCheck addCheck={this.addCheck}

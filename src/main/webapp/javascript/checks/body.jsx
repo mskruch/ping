@@ -7,7 +7,7 @@ let CheckStatus = (props) => {
     if (!props.status)
         return null;
 
-    let actual = moment().subtract(5, 'minutes').isBefore(props.checked);
+    let actual = moment(props.fetched).subtract(5, 'minutes').isBefore(props.checked);
     let actualClassName = props.status === "UP" ? "badge-success" : "badge-danger";
 
     let className = actual ? actualClassName : "badge-info";
@@ -40,7 +40,8 @@ export default class Body extends Component {
     render() {
         let status = <CheckStatus status={this.props.status}
                                   since={this.props.check.statusSince}
-                                  checked={this.props.check.lastCheck}/>
+                                  checked={this.props.check.lastCheck}
+                                  fetched={this.props.fetched}/>
 
         if (this.props.selected) {
             return (

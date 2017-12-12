@@ -23,7 +23,7 @@ export default class Checks extends Component {
                    select={this.props.select}
                    selected={this.props.selected && this.props.selected.id === check.id}
                    check={check}
-                   refreshed={this.props.refreshed}/>);
+                   fetched={this.props.fetched}/>);
 
         return (
             <div className="container">

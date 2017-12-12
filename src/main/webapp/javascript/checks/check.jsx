@@ -103,10 +103,11 @@ export default class Check extends Component {
                       editingName={this.state.editingName}
                       editName={this.editName}
                       editingDelay={this.state.editingDelay}
-                      editDelay={this.editDelay}/>
+                      editDelay={this.editDelay}
+                      fetched={this.props.fetched}/>
                 <Footer render={this.props.selected}
                         checkId={this.props.check.id}
-                        refreshed={this.props.refreshed}/>
+                        fetched={this.props.fetched}/>
             </div>
         );
 
