@@ -43,7 +43,7 @@ dependencies {
     compile 'com.google.appengine:appengine:+'
 //  compile 'com.google.apis:google-api-services-appengine:+'
     compile 'com.google.appengine:appengine-api-1.0-sdk:+'
-    compile 'com.googlecode.objectify:objectify:+'
+    compile 'com.googlecode.objectify:objectify:5.1.21'
 
     compile 'org.ocpsoft.prettytime:prettytime:3.2.5.Final'
     compile 'com.sun.jersey:jersey-client:1.17'
@@ -80,8 +80,8 @@ appengine {  // App Engine tasks configuration
 group = 'pl.mskruch'   // Generated output GroupId
 version = '1.0-SNAPSHOT'          // Version in generated output
 
-sourceCompatibility = 1.7  // App Engine Standard uses Java 7
-targetCompatibility = 1.7  // App Engine Standard uses Java 7
+sourceCompatibility = 1.8  // App Engine Standard uses Java 7
+targetCompatibility = 1.8  // App Engine Standard uses Java 7
 
 task webpack(type: NodeTask) {
     script = file('node_modules/webpack/bin/webpack')
