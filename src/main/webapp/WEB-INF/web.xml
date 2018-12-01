@@ -1,4 +1,8 @@
-<web-app xmlns="http://java.sun.com/xml/ns/javaee" version="2.5">
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+		 http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+		 version="3.1">
 	<filter>
 		<filter-name>ObjectifyFilter</filter-name>
 		<filter-class>com.googlecode.objectify.ObjectifyFilter</filter-class>
@@ -43,17 +47,20 @@
 	<security-constraint>
 		<web-resource-collection>
 			<web-resource-name>standard user area</web-resource-name>
-			<!--<url-pattern>/manage/*</url-pattern>-->
+			<!--<url-pattern>/manage</url-pattern>-->
 			<url-pattern>/*</url-pattern>
 		</web-resource-collection>
 		<auth-constraint>
 			<role-name>*</role-name>
 		</auth-constraint>
+        <user-data-constraint>
+            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+        </user-data-constraint>
 	</security-constraint>
 	<security-constraint>
 		<web-resource-collection>
 			<web-resource-name>ping secure resources</web-resource-name>
-			<url-pattern>/ping</url-pattern>
+			<url-pattern>/ping/*</url-pattern>
 			<url-pattern>/task/*</url-pattern>
 			<url-pattern>/admin/*</url-pattern>
 			<url-pattern>/api/properties/*</url-pattern>
