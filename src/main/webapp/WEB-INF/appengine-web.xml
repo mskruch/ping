@@ -3,6 +3,8 @@
   <application>ping</application><!-- unused for Cloud SDK based tooling -->
   <version>1</version><!-- unused for Cloud SDK based tooling -->
   <threadsafe>true</threadsafe>
+  <runtime>java8</runtime>
+  
 
   <system-properties>
     <property name="java.util.logging.config.file" value="WEB-INF/logging.properties"/>

@@ -9,7 +9,7 @@ buildscript {    // Configuration for building
         }
     }
     dependencies {
-        classpath 'com.google.cloud.tools:appengine-gradle-plugin:+'    // latest App Engine Gradle tasks
+        classpath 'com.google.cloud.tools:appengine-gradle-plugin:1.3.5'    // latest App Engine Gradle tasks
         classpath "com.moowork.gradle:gradle-node-plugin:1.2.0"
     }
 }
@@ -80,8 +80,8 @@ appengine {  // App Engine tasks configuration
 group = 'pl.mskruch'   // Generated output GroupId
 version = '1.0-SNAPSHOT'          // Version in generated output
 
-sourceCompatibility = 1.7  // App Engine Standard uses Java 7
-targetCompatibility = 1.7  // App Engine Standard uses Java 7
+sourceCompatibility = 1.8  // App Engine Standard uses Java 7
+targetCompatibility = 1.8  // App Engine Standard uses Java 7
 
 task webpack(type: NodeTask) {
     script = file('node_modules/webpack/bin/webpack')
