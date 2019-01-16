@@ -18,6 +18,7 @@ export default class App extends Component {
         selected: null,
         debug: false,
         ready: false,
+        admin: false,
         fetched: moment(),
         session: {enabled: true, admin: false, logoutUrl: "/", checksLimit: null}
     };
@@ -109,6 +110,12 @@ export default class App extends Component {
         })
     }
 
+    switchAdmin = () => {
+        this.setState(previous => {
+            return {admin: !previous.admin}
+        });
+    }
+
     render() {
         return (
             <div id="app" ref={this.setRef}>
@@ -130,8 +137,11 @@ export default class App extends Component {
 
                 {this.state.debug &&
                 <DebugButtons admin={this.state.session.admin}
+                              switchAdmin={this.switchAdmin}
                               fetchChecks={this.fetchChecks}
                               logoutUrl={this.state.session.logoutUrl}/>}
+
+                {this.state.admin && <div>TODO Admin Panel</div>}
             </div>
         );
     }
