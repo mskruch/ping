@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
 echo "Running Project Level npm"
-.gradle/nodejs/node-v8.9.1-win-x64/npm "$@"
+.gradle/nodejs/node-v8.9.1-darwin-x64/bin/npm "$@"
